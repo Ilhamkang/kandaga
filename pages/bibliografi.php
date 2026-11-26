@@ -178,7 +178,7 @@ if (!empty($kategori)) { $url_params .= "&kat_bib=" . urlencode($kategori); }
 
                                         <div class="bib-manuscript-link mt-3">
                                             <?php if (($row['kategori'] ?? '') !== 'katalog' && $linkedItems): ?>
-                                                <button type="button" class="btn btn-outline-primary btn-sm btn-linked-manuscripts" data-bs-toggle="modal" data-bs-target="#linkedManuscriptsModal" data-bib-title="<?= htmlspecialchars($row['judul'] ?? '', ENT_QUOTES, 'UTF-8') ?>" data-bib-cover="<?= htmlspecialchars($cover ?: '', ENT_QUOTES, 'UTF-8') ?>" data-bib-citation="<?= htmlspecialchars($cite_apsa, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" data-items="<?= htmlspecialchars(json_encode($linkedItems, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, 'UTF-8') ?>">
+                                                <button type="button" class="btn btn-outline-primary btn-sm btn-linked-manuscripts" data-bs-toggle="modal" data-bs-target="#linkedManuscriptsModal" data-bib-cover="<?= htmlspecialchars($cover ?: '', ENT_QUOTES, 'UTF-8') ?>" data-bib-citation="<?= htmlspecialchars($cite_apsa, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" data-items="<?= htmlspecialchars(json_encode($linkedItems, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, 'UTF-8') ?>">
                                                     <i class="fa-solid fa-link me-1"></i> Lihat <?= number_format(count($linkedItems)) ?> naskah terkait
                                                 </button>
                                             <?php elseif (($row['kategori'] ?? '') !== 'katalog'): ?>
@@ -214,11 +214,39 @@ if (!empty($kategori)) { $url_params .= "&kat_bib=" . urlencode($kategori); }
                             <?php endif; ?>
                         </div>
 
-                        <div class="modal fade" id="linkedManuscriptsModal" tabindex="-1" role="dialog" aria-labelledby="linkedManuscriptsTitle" aria-hidden="true">
+                        <div class="modal fade" id="linkedManuscriptsModal" tabindex="-1" role="dialog" aria-labelledby="linkedManuscriptsCitation" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable bibliography-related-modal-dialog" role="document"><div class="modal-content border-0 shadow-lg bibliography-related-modal">
-                                <div class="modal-header bibliography-related-modal-header"><img id="linkedBibliographyCover" class="linked-bibliography-cover d-none" src="" alt="Cover monograf"><div class="bibliography-related-heading"><div class="small text-white-50 mb-1">Bibliografi</div><h5 class="modal-title mb-1" id="linkedManuscriptsTitle"></h5><div id="linkedManuscriptsCitation" class="small bibliographic-citation"></div></div><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+                                <div class="modal-header bibliography-related-modal-header"><img id="linkedBibliographyCover" class="linked-bibliography-cover d-none" src="" alt="Cover monograf"><div class="bibliography-related-heading"><div class="small text-white-50 mb-1">Bibliografi</div><div id="linkedManuscriptsCitation" class="bibliographic-citation"></div></div><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
                                 <div class="modal-body bibliography-related-modal-body"><p class="text-muted small mb-3">Manuskrip yang dirujuk atau digunakan sebagai objek penelitian dalam bibliografi ini.</p><div id="linkedManuscriptsList" class="linked-manuscripts-list"></div></div>
                             </div></div>
+                        </div>
+
+                        <div class="modal fade" id="citeModal" tabindex="-1" aria-labelledby="citeModalTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content border-0 shadow-lg">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="citeModalTitle"><i class="fa-solid fa-quote-right me-2"></i>Format kutipan</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="citeModalSource" class="small text-muted mb-3"></div>
+                                        <ul class="nav nav-pills nav-fill small mb-3" role="tablist">
+                                            <li class="nav-item" role="presentation"><button class="nav-link active py-1 px-2" id="cite-apa-tab" data-bs-toggle="pill" data-bs-target="#cite-apa" type="button" role="tab" aria-controls="cite-apa" aria-selected="true">APA</button></li>
+                                            <li class="nav-item" role="presentation"><button class="nav-link py-1 px-2" id="cite-apsa-tab" data-bs-toggle="pill" data-bs-target="#cite-apsa" type="button" role="tab" aria-controls="cite-apsa" aria-selected="false">APSA</button></li>
+                                            <li class="nav-item" role="presentation"><button class="nav-link py-1 px-2" id="cite-chicago-tab" data-bs-toggle="pill" data-bs-target="#cite-chicago" type="button" role="tab" aria-controls="cite-chicago" aria-selected="false">Chicago</button></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade show active" id="cite-apa" role="tabpanel" aria-labelledby="cite-apa-tab"><pre class="cite-text mb-0"></pre></div>
+                                            <div class="tab-pane fade" id="cite-apsa" role="tabpanel" aria-labelledby="cite-apsa-tab"><pre class="cite-text mb-0"></pre></div>
+                                            <div class="tab-pane fade" id="cite-chicago" role="tabpanel" aria-labelledby="cite-chicago-tab"><pre class="cite-text mb-0"></pre></div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+                                        <button type="button" class="btn btn-primary btn-sm" id="copyCiteButton"><i class="fa-solid fa-copy me-1"></i> Salin format aktif</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <?php if ($total_pages > 1): ?>
@@ -259,11 +287,9 @@ if (!empty($kategori)) { $url_params .= "&kat_bib=" . urlencode($kategori); }
 $(document).ready(function(){
     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) { new bootstrap.Tooltip(el); });
     $('.btn-linked-manuscripts').on('click', function(){
-        const title=$(this).data('bib-title')||'Sumber bibliografi';
         const citation=$(this).data('bib-citation')||'';
         const cover=$(this).attr('data-bib-cover')||'';
         let items=[]; try { items=JSON.parse($(this).attr('data-items')||'[]'); } catch(e) { items=[]; }
-        $('#linkedManuscriptsTitle').text(title).toggle(!!title);
         $('#linkedManuscriptsCitation').text(citation);
         const coverEl=$('#linkedBibliographyCover');
         coverEl.off('error.kandagaCover').on('error.kandagaCover', function(){ $(this).addClass('d-none').removeAttr('src'); });
@@ -276,6 +302,36 @@ $(document).ready(function(){
             return '<div class="linked-manuscript-item"><img class="linked-manuscript-image" src="'+safeImage+'" alt="'+safeTitle+'" loading="lazy"><div class="linked-manuscript-info"><div class="manuscript-title">'+safeTitle+'</div><div class="manuscript-code">'+safeCode+'</div><div class="manuscript-location"><i class="fa-solid fa-location-dot me-1"></i>'+safeLocation+'</div></div><a class="btn btn-sm btn-primary linked-manuscript-detail" href="<?= BASE_URL ?>/detail.php?id='+encodeURIComponent(item.id)+'"><i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Detail naskah</a></div>';
         }).join('') : '<div class="text-center text-muted py-4">Belum ada naskah terkait.</div>';
         $('#linkedManuscriptsList').html(html);
+    });
+
+    $('.btn-cite-trigger').on('click', function(){
+        const formats = {
+            apa: $(this).data('apa') || '',
+            apsa: $(this).data('apsa') || '',
+            chicago: $(this).data('chicago') || ''
+        };
+        $('#citeModalSource').text(formats.apsa || formats.apa || 'Sumber bibliografi');
+        $('#cite-apa .cite-text').text(formats.apa);
+        $('#cite-apsa .cite-text').text(formats.apsa);
+        $('#cite-chicago .cite-text').text(formats.chicago);
+        $('#copyCiteButton').off('click.kandagaCite').on('click.kandagaCite', async function(){
+            const active = $('#citeModal .nav-link.active').attr('id') || 'cite-apa-tab';
+            const key = active.replace('cite-', '').replace('-tab', '');
+            const text = formats[key] || formats.apa || '';
+            if (!text) return;
+            try {
+                await navigator.clipboard.writeText(text);
+            } catch (error) {
+                const area = $('<textarea>').val(text).css({position:'fixed', left:'-9999px'}).appendTo('body');
+                area[0].select();
+                try { document.execCommand('copy'); } catch (ignored) {}
+                area.remove();
+            }
+            const button = $(this);
+            const original = button.html();
+            button.html('<i class="fa-solid fa-check me-1"></i> Tersalin');
+            setTimeout(function(){ button.html(original); }, 1200);
+        });
     });
 });
 // ... (Bagian script lainnya tetap sama) ...

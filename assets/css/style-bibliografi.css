@@ -3,6 +3,8 @@
     width: calc(100% - 2rem);
     max-width: 880px;
     margin: 1rem auto;
+    height: auto !important;
+    min-height: 0 !important;
     max-height: calc(100dvh - 2rem);
 }
 
@@ -40,14 +42,25 @@
     flex: 1 1 auto;
 }
 
+.bibliography-page .bibliography-related-heading {
+    color: #f8fafc;
+}
+
 .bibliography-page .bibliography-related-heading .modal-title,
 .bibliography-page .bibliography-related-heading .bibliographic-citation {
+    color: #f8fafc;
     overflow-wrap: anywhere;
     word-break: break-word;
 }
 
 .bibliography-page .bibliography-related-heading .modal-title {
     line-height: 1.35;
+}
+
+.bibliography-page .bibliography-related-heading .bibliographic-citation {
+    font-size: .92rem;
+    font-weight: 600;
+    line-height: 1.5;
 }
 
 .bibliography-page .bibliography-related-modal-header .close {
@@ -174,13 +187,11 @@
         width: calc(100% - 1rem);
         max-width: none;
         margin: .5rem auto;
-        height: calc(100dvh - 1rem);
         max-height: calc(100dvh - 1rem);
     }
 
     .bibliography-page .bibliography-related-modal {
-        height: 100%;
-        max-height: 100%;
+        max-height: calc(100dvh - 1rem);
         border-radius: 14px;
     }
 
@@ -250,6 +261,34 @@
     .bibliography-page .bibliography-related-modal-header {
         padding: .8rem .85rem;
     }
+}
+
+.bibliography-page .cite-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    font-family: inherit;
+    font-size: .9rem;
+    line-height: 1.55;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: .75rem;
+}
+
+.bibliography-page #citeModalSource {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+@media (max-width: 575.98px) {
+    .bibliography-page #citeModal .modal-dialog {
+        margin: .5rem;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: calc(100dvh - 1rem);
+    }
+    .bibliography-page #citeModal .modal-footer { flex-wrap: wrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {

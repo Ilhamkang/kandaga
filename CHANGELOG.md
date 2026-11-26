@@ -9,6 +9,9 @@
 - Menata ulang tipografi hero beranda pada layar kecil: judul `1.85rem`, paragraf dan tombol `0.95rem`, serta angka dan label statistik yang proporsional.
 - Memperbaiki kartu monograf publik di mobile: sitasi tidak lagi terjepit menjadi kolom 56px ketika sampul tidak tersedia, tinggi kartu turun drastis, dan pagination tidak lagi meluap.
 - Menambahkan cache-buster versi pada stylesheet beranda agar perbaikan tipografi langsung diterima browser.
+- Memperbaiki modal “Lihat naskah terkait” pada monograf: warna sitasi header diubah menjadi terang (kontras ~15:1), judul ganda dihapus karena sudah tercantum dalam format APSA, dan tinggi popup kini mengikuti isi (377px untuk 1 naskah, bukan 828px penuh layar).
+- Menambahkan modal “Format kutipan” yang sebelumnya tidak ada: tab APA/APSA/Chicago dan tombol salin dengan fallback untuk browser tanpa akses clipboard.
+- Menyeragamkan tinggi modal agar tidak dipaksa `min-height` penuh layar oleh Bootstrap 5 pada layar kecil.
 
 Rilis ini code-only. Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan skema.
 
