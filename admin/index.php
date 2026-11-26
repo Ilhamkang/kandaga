@@ -212,7 +212,7 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                 <a href="index.php?page=update" class="nav-link <?= ($page == 'update') ? 'active' : ''; ?>">
                     <i class="fa-solid fa-cloud-arrow-down"></i> <span>Pusat Pembaruan</span>
                     <?php if ($update_available): ?>
-                        <span class="badge bg-warning ms-auto" style="font-size: 10px; animation: blink 1s infinite;">baru</span>
+                        <span class="badge bg-warning text-dark ms-auto" style="font-size: 10px; animation: blink 1s infinite;">baru</span>
                     <?php endif; ?>
                 </a>
 

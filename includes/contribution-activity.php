@@ -12,7 +12,7 @@ $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'O
         <form method="get" action="<?= htmlspecialchars($activityFormAction??BASE_URL.'/pages/kontributor.php',ENT_QUOTES,'UTF-8') ?>" class="d-flex align-items-center gap-2 flex-wrap">
             <?php if(isset($activityFormPage)): ?><input type="hidden" name="page" value="<?= htmlspecialchars($activityFormPage,ENT_QUOTES,'UTF-8') ?>"><?php endif; ?>
             <label for="activityYear" class="me-2">Tahun</label>
-            <select id="activityYear" name="activity_year" class="form-select-sm me-2">
+            <select id="activityYear" name="activity_year" class="form-select form-select-sm me-2">
                 <?php foreach ($activityYears as $year): ?><option value="<?= $year ?>" <?= $year === $activityYear ? 'selected' : '' ?>><?= $year ?></option><?php endforeach; ?>
             </select><button type="submit" class="btn btn-sm btn-outline-primary">Tampilkan</button>
         </form>

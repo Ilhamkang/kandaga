@@ -6,6 +6,7 @@
 - Menambahkan `DEPENDENCIES.md` dan menyelaraskan `THIRD_PARTY_NOTICES.md` sebagai inventaris pustaka pihak ketiga.
 - Mengupgrade bundle Bootstrap di `assets/bootstrap/` dari 4.6.2 ke 5.3.9 secara in-place dan mengonversi markup/skrip aplikasi ke API serta kelas Bootstrap 5 (`data-bs-*`, `me/ms/pe/ps`, `fw-*`, `form-select`, `badge bg-*`, `btn-close`, input group tanpa wrapper, dan API Modal/Tab/Tooltip).
 - Menyamakan jQuery ke satu build penuh 3.6.0, menghapus salinan slim dan berkas 0 byte, serta mencabut shim kelas Bootstrap 5 dari `module-fonts.css`.
+- Memulihkan kontras teks badge Bootstrap 5 (`text-dark` pada `bg-light`/`bg-info`/`bg-warning`, termasuk angka sidebar pencarian dan bookmark navbar) serta menambahkan kelas dasar `form-select` pada semua `form-select-sm`.
 - Menghapus `assets/js/dompdf/` beserta 317 berkasnya karena tidak dipakai aplikasi; berkas lama akan dihapus saat pembaruan lewat daftar `delete` manifest.
 - Menonaktifkan perilaku `sticky` pada sidebar halaman Tentang di layar kecil.
 

@@ -65,7 +65,7 @@ if (isset($conn)) kandagaTrackWebsite($conn);
                         </div>
                     </li>
 
-                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/pages/bookmark.php"><i class="fa-regular fa-bookmark"></i> Bookmark <span class="badge bg-light" data-bookmark-count>0</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/pages/bookmark.php"><i class="fa-regular fa-bookmark"></i> Bookmark <span class="badge bg-light text-dark rounded-pill" data-bookmark-count>0</span></a></li>
                     <li class="nav-item">
                         <a class="nav-link search-pill" href="<?= BASE_URL ?>/search"><i class="fa-solid fa-magnifying-glass"></i> <span>Cari</span></a>
                     </li>

@@ -104,7 +104,7 @@ function tampilkanKategoriModern($conn, $sql, $getParam, $label) {
             echo "<li class='list-group-item $activeStyle'>
                     <a href='$link' class='w-100 d-flex justify-content-between align-items-center' style='text-decoration:none;' title='$nilaiTampil'>
                         <span class='text-truncate pe-2'>$nilaiTampil</span>
-                        <span class='badge rounded-pill shadow-sm'>{$row['jumlah']}</span>
+                        <span class='badge text-dark rounded-pill shadow-sm'>{$row['jumlah']}</span>
                     </a>
                   </li>";
         } echo "</ul></div>";
@@ -113,7 +113,7 @@ function tampilkanKategoriModern($conn, $sql, $getParam, $label) {
 
 function tampilkanPilihanFilterMobile($conn, $sql, $param, $label, $selected) {
     $res = mysqli_query($conn, $sql);
-    echo '<div class="mb-3"><label class="small fw-bold text-muted mb-1">' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</label><select name="' . htmlspecialchars($param, ENT_QUOTES, 'UTF-8') . '" class="form-select-sm">';
+    echo '<div class="mb-3"><label class="small fw-bold text-muted mb-1">' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</label><select name="' . htmlspecialchars($param, ENT_QUOTES, 'UTF-8') . '" class="form-select form-select-sm">';
     echo '<option value="">Semua</option>';
     if ($res) while ($option = mysqli_fetch_assoc($res)) {
         $value = (string)$option['id_kirim'];
@@ -259,7 +259,7 @@ function tampilkanPilihanFilterMobile($conn, $sql, $param, $label, $selected) {
                         <input type="hidden" name="page" value="1">
                         <div class="search-select-group">
                             <label for="searchPerPage">Per halaman:</label>
-                            <select id="searchPerPage" name="per_page" class="form-select-sm" onchange="this.form.submit()">
+                            <select id="searchPerPage" name="per_page" class="form-select form-select-sm" onchange="this.form.submit()">
                                 <?php foreach ($perPageOptions as $size): ?>
                                     <option value="<?= $size ?>" <?= $perPage === $size ? 'selected' : '' ?>><?= $size ?></option>
                                 <?php endforeach; ?>
@@ -267,7 +267,7 @@ function tampilkanPilihanFilterMobile($conn, $sql, $param, $label, $selected) {
                         </div>
                         <div class="search-select-group">
                             <label for="searchSort">Urutkan:</label>
-                            <select id="searchSort" name="sort" class="form-select-sm" onchange="this.form.submit()">
+                            <select id="searchSort" name="sort" class="form-select form-select-sm" onchange="this.form.submit()">
                                 <option value="desc" <?= $sortOrder === 'DESC' ? 'selected' : '' ?>>Terbaru</option>
                                 <option value="asc" <?= $sortOrder === 'ASC' ? 'selected' : '' ?>>Terlama</option>
                             </select>

@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
                             while ($l = mysqli_fetch_array($logs_my)): ?>
                                 <tr>
                                     <td><?= date('H:i, d M Y', strtotime($l['waktu'])); ?></td>
-                                    <td><span class="badge bg-warning"><?= htmlspecialchars($l['aksi']) ?></span></td>
+                                    <td><span class="badge bg-warning text-dark"><?= htmlspecialchars($l['aksi']) ?></span></td>
                                     <td><code><?= $l['ip_address'] ?></code></td>
                                 </tr>
                             <?php endwhile; ?>

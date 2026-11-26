@@ -99,7 +99,7 @@ foreach ($users as $row) {
                             <small class="text-muted"><?= htmlspecialchars($row['nama'] ?? ''); ?></small>
                             <?php if ($row['status_akun'] == 'blokir'): ?> <span class="badge bg-danger-subtle text-danger-emphasis ms-2">Diblokir</span> <?php endif; ?>
                         </td>
-                        <td class="align-middle"><span class="badge bg-light border"><?= ucfirst($row['role']); ?></span></td>
+                        <td class="align-middle"><span class="badge bg-light text-dark border"><?= ucfirst($row['role']); ?></span></td>
                         <td class="text-center align-middle">
                             <span class="text-muted small">
                                 <span class="status-dot <?= $is_online ? 'status-online' : 'status-offline'; ?>"></span>

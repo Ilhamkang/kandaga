@@ -249,7 +249,7 @@ if ($stmt = $conn->prepare($query_str)) {
                     </div>
                 </div>
                 <div class="col-md-2 mb-2 mb-md-0">
-                    <select name="f_kategori" class="form-select-sm text-sm">
+                    <select name="f_kategori" class="form-select form-select-sm text-sm">
                         <option value="">-- Semua Kategori --</option>
                         <option value="katalog" <?= $f_kategori == 'katalog' ? 'selected' : '' ?>>Katalog</option>
                         <option value="referensi primer" <?= $f_kategori == 'referensi primer' ? 'selected' : '' ?>>Referensi Primer</option>
@@ -257,7 +257,7 @@ if ($stmt = $conn->prepare($query_str)) {
                     </select>
                 </div>
                 <div class="col-md-2 mb-2 mb-md-0">
-                    <select name="f_tipe" class="form-select-sm text-sm">
+                    <select name="f_tipe" class="form-select form-select-sm text-sm">
                         <option value="">-- Semua Tipe Item --</option>
                         <option value="buku" <?= $f_tipe == 'buku' ? 'selected' : '' ?>>Buku (Monograf/Section)</option>
                         <option value="jurnal" <?= $f_tipe == 'jurnal' ? 'selected' : '' ?>>Jurnal Ilmiah</option>
@@ -352,14 +352,14 @@ if ($stmt = $conn->prepare($query_str)) {
                 <div class="row g-2">
                     <div class="mb-3 col-md-6">
                         <label class="fw-bold text-secondary small mb-1">Tipe Item (Zotero-style)</label>
-                        <select name="tipe_item" id="tipe_item" class="form-select-sm text-sm fw-bold bg-white" onchange="toggleTipeInput()" required>
+                        <select name="tipe_item" id="tipe_item" class="form-select form-select-sm text-sm fw-bold bg-white" onchange="toggleTipeInput()" required>
                             <option value="buku">📖 Buku / Bagian Buku</option>
                             <option value="jurnal">📰 Artikel Jurnal Ilmiah</option>
                         </select>
                     </div>
                     <div class="mb-3 col-md-6">
                         <label class="fw-bold text-secondary small mb-1">Kategori Dokumen</label>
-                        <select name="kategori" id="kategori" class="form-select-sm text-sm" required>
+                        <select name="kategori" id="kategori" class="form-select form-select-sm text-sm" required>
                             <option value="referensi sekunder">Referensi Sekunder</option>
                             <option value="referensi primer">Referensi Primer</option>
                             <option value="katalog">Katalog</option>
@@ -477,7 +477,7 @@ if ($stmt = $conn->prepare($query_str)) {
 
                 <div class="mb-3">
                     <label class="fw-bold text-secondary small mb-1">Tentukan Kategori Hasil Import</label>
-                    <select name="kategori_import" class="form-select-sm text-sm" required>
+                    <select name="kategori_import" class="form-select form-select-sm text-sm" required>
                         <option value="referensi sekunder" selected>Referensi Sekunder (Default)</option>
                         <option value="referensi primer">Referensi Primer</option>
                         <option value="katalog">Katalog</option>

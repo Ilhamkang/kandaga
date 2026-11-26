@@ -46,7 +46,7 @@ if (!file_exists($path_foto)) {
             <div class="col-md-4">
                 <div class="card p-4 text-center">
                     <img src="<?= $path_foto; ?>?v=<?= time(); ?>" class="rounded-circle" style="width:150px; height:150px; object-fit:cover; margin:0 auto 15px;" id="avatarPreview">                    <h5 class="fw-bold"><?= htmlspecialchars($data['nama']); ?></h5>
-                    <span class="badge bg-info mb-3"><?= htmlspecialchars($data['role']); ?></span>
+                    <span class="badge bg-info text-dark mb-3"><?= htmlspecialchars($data['role']); ?></span>
 
                     <a href="../detail-kontributor?id=<?= urlencode($data['id']); ?>" target="_blank" class="btn btn-outline-primary btn-sm mb-3">
                         <i class="fa fa-eye"></i> Lihat Profil Publik

@@ -93,8 +93,8 @@ $result = $conn->query($sql);
                     <td><?= htmlspecialchars($row['nama_tempat'] ?? '-') ?></td>
                     <td><?= htmlspecialchars($row['negara'] ?? '-') ?></td>
                     <td><code><?= htmlspecialchars($row['kode_inventaris']) ?></code></td>
-                    <td><?php foreach(explode('||', $row['daftar_aksara'] ?? '') as $a) if($a) echo "<span class='badge bg-light border me-1'>".htmlspecialchars($a,ENT_QUOTES,'UTF-8')."</span>"; ?></td>
-                    <td><?php foreach(explode('||', $row['daftar_bahasa'] ?? '') as $b) if($b) echo "<span class='badge bg-light border me-1'>".htmlspecialchars($b,ENT_QUOTES,'UTF-8')."</span>"; ?></td>
+                    <td><?php foreach(explode('||', $row['daftar_aksara'] ?? '') as $a) if($a) echo "<span class='badge bg-light text-dark border me-1'>".htmlspecialchars($a,ENT_QUOTES,'UTF-8')."</span>"; ?></td>
+                    <td><?php foreach(explode('||', $row['daftar_bahasa'] ?? '') as $b) if($b) echo "<span class='badge bg-light text-dark border me-1'>".htmlspecialchars($b,ENT_QUOTES,'UTF-8')."</span>"; ?></td>
                     <td>
                         <div class='btn-group btn-action-group'>
                             <a href='<?= $url_detail ?>' target='_blank' class='btn btn-sm' title='Lihat'><i class='fa-solid fa-eye text-primary'></i></a>

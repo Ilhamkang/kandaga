@@ -61,7 +61,7 @@ $catalogCards = [
         <form method="get" action="<?= htmlspecialchars(BASE_URL . '/admin/index.php', ENT_QUOTES, 'UTF-8') ?>" class="d-flex align-items-center gap-2 flex-wrap">
             <input type="hidden" name="page" value="statistik">
             <label for="statisticsPeriod" class="visually-hidden">Periode grafik</label>
-            <select id="statisticsPeriod" name="analytics_period" class="form-select-sm stats-period" onchange="this.form.submit()">
+            <select id="statisticsPeriod" name="analytics_period" class="form-select form-select-sm stats-period" onchange="this.form.submit()">
                 <?php foreach (['7' => '7 hari', '30' => '30 hari', '90' => '90 hari'] as $value => $label): ?><option value="<?= $value ?>" <?= $period === $value ? 'selected' : '' ?>><?= $label ?></option><?php endforeach; ?>
             </select>
         </form>
@@ -79,7 +79,7 @@ $catalogCards = [
 
     <?php if ($traffic !== null): ?>
         <section class="stats-panel" aria-labelledby="dailyStatsTitle">
-            <div class="stats-panel-heading"><div><h4 id="dailyStatsTitle">Akses halaman harian</h4><p class="stats-caption mb-0">Agregat halaman publik; tanpa log request mentah atau identitas pengunjung.</p></div><span class="badge bg-light border"><?= $period ?> hari</span></div>
+            <div class="stats-panel-heading"><div><h4 id="dailyStatsTitle">Akses halaman harian</h4><p class="stats-caption mb-0">Agregat halaman publik; tanpa log request mentah atau identitas pengunjung.</p></div><span class="badge bg-light text-dark border"><?= $period ?> hari</span></div>
             <?php if ($daily): ?><div class="stats-chart" role="img" aria-label="Grafik kunjungan harian">
                 <?php foreach ($daily as $index => $point): $views = (int)($point['views'] ?? 0); $height = max(2, (int)round(($views / $maxDaily) * 100)); $label = date('d M', strtotime((string)$point['day'])); ?>
                     <div class="stats-bar-wrap" title="<?= htmlspecialchars($label . ': ' . number_format($views) . ' kunjungan', ENT_QUOTES, 'UTF-8') ?>"><div class="stats-bar" style="height:<?= $height ?>%"></div><?php if ($index === 0 || $index === count($daily)-1 || $index % 5 === 0): ?><span class="stats-bar-label"><?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?></span><?php endif; ?></div>

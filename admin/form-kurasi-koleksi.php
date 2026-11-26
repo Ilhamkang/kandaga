@@ -155,7 +155,7 @@ $tabel_query  = $conn->query("
                             <tr>
                                 <td class="fw-bold text-dark"><?= htmlspecialchars($row['nama_tempat']) ?></td>
                                 <td><i class="fas fa-user-circle text-muted me-1"></i> <?= htmlspecialchars($row['nama']) ?></td>
-                                <td><span class="badge bg-info py-1 px-2 fw-normal"><?= htmlspecialchars($row['posisi_kurator']) ?></span></td>
+                                <td><span class="badge bg-info text-dark py-1 px-2 fw-normal"><?= htmlspecialchars($row['posisi_kurator']) ?></span></td>
                                 <td class="text-secondary small"><?= date('d-m-Y', strtotime($row['tanggal_mulai'])) ?></td>
                                 <td class="text-center">
                                     <a href="index.php?page=form-kurasi-koleksi&delete=<?= $row['id'] ?>" data-kandaga-delete="1"
