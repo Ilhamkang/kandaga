@@ -23,7 +23,7 @@ require_once __DIR__ . '/../includes/version.php';
 <div class="page-header">
     <div class="container text-center">
         <h2 class="font-weight-bold">Mengenal KANDAGA</h2>
-        <p class="text-muted mx-auto" style="max-width: 600px;">Upaya kolaboratif dalam mendigitalisasi dan memetakan kekayaan intelektual naskah Sunda.</p>
+        <p class="text-muted mx-auto page-subtitle">Upaya kolaboratif dalam mendigitalisasi dan memetakan kekayaan intelektual naskah Sunda.</p>
     </div>
 </div>
 
@@ -77,7 +77,7 @@ require_once __DIR__ . '/../includes/version.php';
         </div>
 
         <div class="col-lg-4">
-            <div class="content-card sticky-top" style="top: 20px;">
+            <div class="content-card sticky-top">
                 <h4>Kontak & Pengembang</h4>
                 <img src="<?= BASE_URL ?>/assets/images/ilham-leiden.png" class="profile-img" alt="Ilham Nurwansah di Leiden" loading="lazy">
                 <div class="contact-info mb-4">

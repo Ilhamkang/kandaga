@@ -41,6 +41,14 @@
 
 /* KANDAGA · halaman Tentang. Semua aturan di bawah sengaja di-scoping
    ke .kandaga-about-page agar tidak mengubah halaman lain. */
+.kandaga-about-page .page-subtitle {
+    max-width: 600px;
+}
+
+.kandaga-about-page .content-card.sticky-top {
+    top: 20px;
+}
+
 .kandaga-about-page .content-card h4 {
     font-size: 1.15rem;
     font-weight: 700;
