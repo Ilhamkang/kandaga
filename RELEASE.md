@@ -1,6 +1,6 @@
 # Kandaga v3.1.68
 
-Perbaikan menu navbar pada layar mobile dan penyederhanaan laporan rilis. Riwayat versi lama tetap tersedia sebagai GitHub Release masing-masing; ringkasan historis disimpan di `CHANGELOG.md`.
+Stabilisasi Bootstrap 5.3.9, perbaikan keterbacaan dan grid kartu di layar kecil, kerapian bibliografi serta ekspor XML, dan penyempurnaan kontributor serta Naskah Pilihan di beranda. Riwayat versi lama tetap tersedia sebagai GitHub Release masing-masing; ringkasan historis disimpan di `CHANGELOG.md`.
 
 - Menambahkan cache-buster `?v=<versi>` pada CSS dan JavaScript Bootstrap di seluruh template agar browser tidak lagi memakai bundle Bootstrap 4.6.2 yang tersimpan pada URL tanpa versi. Menu lipat navbar mobile kini membuka `#navbarNav` dengan normal setelah pembaruan.
 - Menambahkan `aria-controls`, `aria-expanded`, dan `aria-label` pada tombol toggle navbar.

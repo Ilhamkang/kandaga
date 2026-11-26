@@ -1,4 +1,4 @@
 {
     "version": "3.1.68",
-    "description": "Perbaikan menu navbar mobile lewat cache-buster Bootstrap 5.3.9, penyederhanaan laporan rilis ke versi terbaru, dan penyesuaian modul katalog/detail serta admin."
+    "description": "Bootstrap 5.3.9 stabil, navbar mobile dan tipografi beranda diperbaiki, bibliografi serta ekspor XML diamankan, kartu publik dan detail naskah proporsional di mobile, kontributor beranda memakai grid penuh container dengan geser dan indikator titik, serta tinggi gambar Naskah Pilihan dikunci."
 }

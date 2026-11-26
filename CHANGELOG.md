@@ -1,4 +1,4 @@
-# v3.1.68 — Perbaikan navbar mobile dan laporan rilis terbaru
+# v3.1.68 — Bootstrap 5.3.9, perbaikan mobile, kontributor, dan Naskah Pilihan
 
 - Menambahkan cache-buster `?v=<versi>` pada CSS dan JavaScript Bootstrap di seluruh template agar browser tidak lagi memakai bundle Bootstrap 4.6.2 yang tersimpan pada URL tanpa versi. Menu lipat navbar mobile kini membuka `#navbarNav` dengan normal setelah pembaruan.
 - Menambahkan `aria-controls`, `aria-expanded`, dan `aria-label` pada tombol toggle navbar.
