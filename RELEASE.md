@@ -16,6 +16,8 @@ Perbaikan menu navbar pada layar mobile dan penyederhanaan laporan rilis. Riwaya
 - Menyeragamkan tinggi modal agar tidak dipaksa `min-height` penuh layar oleh Bootstrap 5 pada layar kecil.
 - Menambahkan pengecekan duplikat pada form bibliografi admin: indikator langsung saat mengisi serta penolakan simpan apabila judul, penyusun, tahun, dan kategori identik setelah normalisasi spasi dan huruf besar/kecil.
 - Memperbaiki form edit naskah: tombol hapus kini tersedia pada semua baris bibliografi, termasuk satu-satunya entri yang tersedia, sehingga relasi katalog/primer/sekunder benar-benar bisa dilepas.
+- Menyesuaikan tombol hapus baris di form edit menjadi kotak 34×34px yang sejajar dengan tinggi `form-select`, tidak lagi tampak kebesar.
+- Memperbaiki ekspor XML HSP-KOD dan HSP-DESC: atribut `type` tidak lagi memuat backslash literal dan teks relasi seperti “Arab & Pegon” kini dieskap sebagai `&amp;`. Semua format XML (MODS, MARC21, TEI, HSP) ikut diamankan.
 
 Rilis ini code-only. Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan skema.
 

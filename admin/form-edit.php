@@ -126,6 +126,18 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
     margin-bottom:10px;
     align-items:center;
 }
+.btn-remove-row{
+    flex:0 0 auto;
+    width:2.125rem;
+    height:2.125rem;
+    padding:0;
+    font-size:1rem;
+    line-height:1;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:.5rem;
+}
 .sticky-submit {
     position: sticky;
     bottom: 0;

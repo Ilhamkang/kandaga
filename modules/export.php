@@ -53,6 +53,11 @@ $string_aksara = kandagaFormatConjunction($aksara_arr);
 $string_bahasa = kandagaFormatConjunction($bahasa_arr);
 $string_alas   = kandagaFormatConjunction($alas_arr);
 
+// Relasi master dapat memuat "&" atau "<"; siapkan versi aman untuk XML.
+$xml_aksara = htmlspecialchars($string_aksara, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$xml_bahasa = htmlspecialchars($string_bahasa, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$xml_alas   = htmlspecialchars($string_alas, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
 // Sanitisasi data teks dasar untuk XML/Output
 $judul = htmlspecialchars($naskah['judul'] ?? 'Tanpa Judul');
 $kode  = htmlspecialchars($naskah['kode_inventaris'] ?? '-');
@@ -87,8 +92,8 @@ switch ($format) {
         echo "  <titleInfo>\n    <title>{$judul}</title>\n  </titleInfo>\n";
         echo "  <identifier type=\"local\">{$kode}</identifier>\n";
         echo "  <location>\n    <physicalLocation>{$tempat}</physicalLocation>\n  </location>\n";
-        echo "  <physicalDescription>\n    <form authority=\"gmd\">manuscript</form>\n    <note type=\"physical\">{$fisik}</note>\n    <note type=\"material\">{$string_alas}</note>\n  </physicalDescription>\n";
-        echo "  <language>\n    <languageTerm type=\"text\">{$string_bahasa}</languageTerm>\n  </language>\n";
+        echo "  <physicalDescription>\n    <form authority=\"gmd\">manuscript</form>\n    <note type=\"physical\">{$fisik}</note>\n    <note type=\"material\">{$xml_alas}</note>\n  </physicalDescription>\n";
+        echo "  <language>\n    <languageTerm type=\"text\">{$xml_bahasa}</languageTerm>\n  </language>\n";
         echo "  <note type=\"content\">{$isi}</note>\n";
         echo "  <note type=\"ownership\">{$riwayat}</note>\n";
         echo '</mods>';
@@ -121,15 +126,15 @@ switch ($format) {
         echo "  <leader>00000nam a2200000   4500</leader>\n";
         echo "  <controlfield tag=\"001\">{$id}</controlfield>\n";
         // 041 - Language
-        echo "  <datafield tag=\"041\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">{$string_bahasa}</subfield>\n  </datafield>\n";
+        echo "  <datafield tag=\"041\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">{$xml_bahasa}</subfield>\n  </datafield>\n";
         // 099 - Local Call Number (Kode Inventaris)
         echo "  <datafield tag=\"099\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">{$kode}</subfield>\n  </datafield>\n";
         // 245 - Title Info
         echo "  <datafield tag=\"245\" ind1=\"1\" ind2=\"0\">\n    <subfield code=\"a\">{$judul}</subfield>\n  </datafield>\n";
         // 300 - Physical Description
-        echo "  <datafield tag=\"300\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">{$fisik}</subfield>\n    <subfield code=\"b\">{$string_alas}</subfield>\n  </datafield>\n";
+        echo "  <datafield tag=\"300\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">{$fisik}</subfield>\n    <subfield code=\"b\">{$xml_alas}</subfield>\n  </datafield>\n";
         // 500 - General Note (Aksara)
-        echo "  <datafield tag=\"500\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">Script: {$string_aksara}</subfield>\n  </datafield>\n";
+        echo "  <datafield tag=\"500\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">Script: {$xml_aksara}</subfield>\n  </datafield>\n";
         // 520 - Summary Note (Isi)
         echo "  <datafield tag=\"520\" ind1=\" \" ind2=\" \">\n    <subfield code=\"a\">{$isi}</subfield>\n  </datafield>\n";
         // 852 - Location (Tempat Penyimpan)
@@ -156,11 +161,11 @@ switch ($format) {
         echo "          </msIdentifier>\n";
         echo "          <msContents>\n";
         echo "            <summary>{$isi}</summary>\n";
-        echo "            <textLang mainLang=\"...\">Languages: {$string_bahasa} | Scripts: {$string_aksara}</textLang>\n";
+        echo "            <textLang mainLang=\"...\">Languages: {$xml_bahasa} | Scripts: {$xml_aksara}</textLang>\n";
         echo "          </msContents>\n";
         echo "          <physDesc>\n";
         echo "            <objectDesc form=\"manuscript\">\n";
-        echo "              <supportDesc material=\"...\">\n                <support><p>{$string_alas}. {$fisik}</p></support>\n              </supportDesc>\n";
+        echo "              <supportDesc material=\"...\">\n                <support><p>{$xml_alas}. {$fisik}</p></support>\n              </supportDesc>\n";
         echo "            </objectDesc>\n";
         echo "          </physDesc>\n";
         echo "          <history>\n            <provenance><p>{$riwayat}</p></provenance>\n          </history>\n";
@@ -178,14 +183,14 @@ switch ($format) {
         header('Content-Disposition: inline; filename="hsp_kodikologi_'.$id.'.xml"');
         
         echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-        echo '<hsp xmlns="http://handschriftenportal.de/schema/hsp/v1" type=\"kodicology\" id="' . $id . '">'."\n";
+        echo '<hsp xmlns="http://handschriftenportal.de/schema/hsp/v1" type="kodicology" id="' . $id . '">'."\n";
         echo "  <metadata>\n";
         echo "    <settlement>{$tempat}</settlement>\n";
         echo "    <idno>{$kode}</idno>\n";
         echo "    <title>{$judul}</title>\n";
         echo "    <objectDesc>\n";
         echo "      <supportDesc>\n";
-        echo "        <material>{$string_alas}</material>\n";
+        echo "        <material>{$xml_alas}</material>\n";
         echo "        <dimensionsDesc>{$fisik}</dimensionsDesc>\n";
         echo "      </supportDesc>\n";
         echo "    </objectDesc>\n";
@@ -202,13 +207,13 @@ switch ($format) {
         header('Content-Disposition: inline; filename="hsp_description_'.$id.'.xml"');
         
         echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-        echo '<hsp xmlns="http://handschriftenportal.de/schema/hsp/v1" type=\"description\" id="' . $id . '">'."\n";
+        echo '<hsp xmlns="http://handschriftenportal.de/schema/hsp/v1" type="description" id="' . $id . '">'."\n";
         echo "  <metadata>\n";
         echo "    <idno>{$kode}</idno>\n";
         echo "    <msContents>\n";
         echo "      <textLang>\n";
-        echo "        <lang>{$string_bahasa}</lang>\n";
-        echo "        <script>{$string_aksara}</script>\n";
+        echo "        <lang>{$xml_bahasa}</lang>\n";
+        echo "        <script>{$xml_aksara}</script>\n";
         echo "      </textLang>\n";
         echo "      <contentDescription>\n";
         echo "        <summary>{$isi}</summary>\n";
