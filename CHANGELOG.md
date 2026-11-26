@@ -1,3 +1,14 @@
+# v3.1.68 — Perbaikan navbar mobile dan laporan rilis terbaru
+
+- Menambahkan cache-buster `?v=<versi>` pada CSS dan JavaScript Bootstrap di seluruh template agar browser tidak lagi memakai bundle Bootstrap 4.6.2 yang tersimpan pada URL tanpa versi. Menu lipat navbar mobile kini membuka `#navbarNav` dengan normal setelah pembaruan.
+- Menambahkan `aria-controls`, `aria-expanded`, dan `aria-label` pada tombol toggle navbar.
+- Menyederhanakan `RELEASE.md` agar hanya memuat catatan rilis versi terbaru; arsip perubahan tetap berada di `CHANGELOG.md` dan GitHub Release.
+- Menghapus bagian laporan hasil uji dan daftar pemeriksaan deployment dari catatan rilis serta changelog.
+- Memperketat `tools/build-release.php`: `RELEASE.md` wajib memuat tepat satu judul versi, `version.json.version` harus sinkron dengan judul dan tag, serta format laporan rilis divalidasi.
+- Melanjutkan penyesuaian pada modul katalog/detail, admin, dan modul pendukung terkait; rinciannya akan dimasukkan sebelum tag rilis dibuat.
+
+Rilis ini code-only. Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan skema.
+
 # v3.1.67 — Kerapian Tentang & Disclaimer, upgrade Bootstrap 5.3.9, dan pengerasan keamanan rilis
 
 - Merapikan redaksi Ketentuan Penggunaan & Penafian: pernyataan persetujuan aktif disederhanakan, klaim hak cipta sepihak dirumuskan ulang, dan keterbukaan kode dideklarasikan eksplisit (repo GitHub publik AGPL-3.0, data CC BY-NC-SA 4.0, kanal pelaporan kerentanan).
@@ -74,7 +85,7 @@ Tidak ada migrasi SQL atau backup database. API key Zotero pada halaman Referens
 - Menambahkan ikon akses PDF/IIIF pada card search thumbnail dan list dengan validasi URL.
 - Tidak ada migrasi SQL dan backup database.
 
-# v3.1.60 — KRIR: gambar detail, editor naskah, dan artikel mobile
+# v3.1.60 — gambar detail, editor naskah, dan artikel mobile
 
 - Menetapkan batas ukuran gambar utama detail naskah secara terpisah untuk desktop dan mobile.
 - Menambahkan alignment justified untuk isi deskripsi metadata.

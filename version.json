@@ -1,4 +1,4 @@
 {
-    "version": "3.1.67",
-    "description": "Kerapian Tentang dan Disclaimer, pengerasan keamanan rilis, upgrade Bootstrap 5.3.9, penyatuan jQuery, dan penghapusan berkas usang."
+    "version": "3.1.68",
+    "description": "Perbaikan menu navbar mobile lewat cache-buster Bootstrap 5.3.9, penyederhanaan laporan rilis ke versi terbaru, dan penyesuaian modul katalog/detail serta admin."
 }

@@ -64,9 +64,17 @@ if (!preg_match('/^# Kandaga v(\d+\.\d+\.\d+)\s*$/m', $release, $match)) {
     kdFail('Judul RELEASE.md tidak valid. Contoh: # Kandaga v3.1.66');
 }
 $version = $match[1];
+if (preg_match_all('/^# Kandaga v\d+\.\d+\.\d+\s*$/m', $release) !== 1) {
+    kdFail('RELEASE.md harus memuat tepat satu judul versi; arsip rilis lama disimpan di CHANGELOG.md.');
+}
+if (preg_match('/\bKRIR\b/i', $release)) {
+    kdFail('RELEASE.md tidak boleh memuat laporan hasil uji KRIR.');
+}
 
 $meta = json_decode((string)@file_get_contents($root . '/version.json'), true);
 if (!is_array($meta)) kdFail('version.json tidak valid.');
+$metaVersion = (string)($meta['version'] ?? '');
+if ($metaVersion !== $version) kdFail("version.json.version ({$metaVersion}) tidak cocok dengan RELEASE.md v{$version}.");
 $description = (string)($meta['description'] ?? '');
 if ($description === '') kdFail('version.json.description tidak boleh kosong.');
 
