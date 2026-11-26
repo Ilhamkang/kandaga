@@ -10,10 +10,6 @@ $total_lembaga = $conn->query("SELECT COUNT(*) as total FROM tb_lokasi")->fetch_
 $total_negara = $conn->query("SELECT COUNT(DISTINCT negara) as total FROM tb_lokasi WHERE negara != '' AND negara IS NOT NULL")->fetch_assoc()['total'];
 ?>
 
-<link rel="stylesheet" href="assets/css/style-home.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
-<link rel="stylesheet" href="assets/css/style-naskah-baru.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
-
-
 <div class="home-container">
     <div class="hero-section py-5">
         <div class="container text-center">
@@ -62,11 +58,7 @@ $total_negara = $conn->query("SELECT COUNT(DISTINCT negara) as total FROM tb_lok
             <h4 class="fw-bold mb-4" style="color: #0f2042;">
                 <i class="fa-regular fa-bookmark text-danger me-2"></i> Entri Naskah Terbaru
             </h4>
-            <div class="row">
-                <div class="col-md-12">
-                    <?php include 'includes/naskah-baru.php'; ?>
-                </div>
-            </div>
+            <?php include 'includes/naskah-baru.php'; ?>
         </div>
     </div>
 

@@ -64,7 +64,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 <style>body{background:#f8fafc}.feedback-card{background:#fff;border-radius:16px;padding:2rem;box-shadow:0 4px 16px #00000008}.feedback-summary{background:#f1f5f9;border-radius:12px;padding:1rem;overflow-wrap:anywhere}.feedback-card textarea{min-height:180px}@media(max-width:575px){.feedback-card{padding:1.2rem}}</style>
-</head><body class="kandaga-module">
+</head><body class="kandaga-module kandaga-standalone-page kandaga-report-page">
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 <main class="container py-5"><div class="row justify-content-center"><div class="col-lg-8">
 <a class="btn btn-light border mb-3" href="<?= kandagaFeedbackEscape($detailUrl) ?>"><i class="fa-solid fa-arrow-left me-2"></i>Kembali ke detail naskah</a>

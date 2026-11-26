@@ -90,7 +90,7 @@ if (isset($_POST['del_lokasi'])) { $conn->query("DELETE FROM tb_lokasi WHERE id_
 $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'aksara';
 ?>
 
-<div class="container-fluid py-4">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid py-4"><?php endif; ?>
     <h3 class="mb-4">Manajemen Data Master</h3>
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item"><a class="nav-link <?= $active_tab == 'aksara' ? 'active' : '' ?>" data-bs-toggle="tab" href="#aksara">Aksara</a></li>
@@ -176,7 +176,7 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'aksara';
             </table>
         </div>
     </div>
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
 <div class="modal fade" id="modalAksara"><div class="modal-dialog"><form method="POST" class="modal-content"><div class="modal-header"><h5>Aksara</h5></div><div class="modal-body"><input type="hidden" name="id_aksara" id="id_aksara"><div class="mb-3"><label>Nama</label><input type="text" name="nama_aksara" id="nama_aksara" class="form-control" required></div><div class="mb-3"><label>Deskripsi</label><textarea name="deskripsi" id="deskripsi_aksara" class="form-control"></textarea></div><div class="mb-3"><label>Tahun</label><input type="number" name="tahun_ditemukan" id="tahun_ditemukan" class="form-control"></div></div><div class="modal-footer"><button type="submit" name="simpan_aksara" class="btn btn-primary">Simpan</button></div></form></div></div>
 

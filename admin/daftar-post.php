@@ -23,7 +23,7 @@ $q_kat = "SELECT DISTINCT kategori FROM tb_kabar WHERE kategori IS NOT NULL AND 
 $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_error($conn));
 ?>
 
-<div class="container-fluid mt-4">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid mt-4"><?php endif; ?>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="fw-bold">Daftar Postingan</h4>
         <button class="btn btn-primary shadow-sm" onclick="tambahPost()">+ Tambah Tulisan</button>
@@ -101,7 +101,7 @@ $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_
             </table>
         </div>
     </div>
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
 <script>
 // Fungsi Navigasi, Sort, Filter, dan Hapus (Sama seperti sebelumnya)

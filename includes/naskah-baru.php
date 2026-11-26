@@ -9,14 +9,14 @@ $sql = "SELECT id, judul, gambar, url_gambar_eksternal, kode_inventaris
 $result = mysqli_query($conn, $sql);
 ?>
 
-<div class="row row-cols-2 mb-4">
+<div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
 
     <?php if ($result && mysqli_num_rows($result) > 0): ?>
         <?php while ($naskah = mysqli_fetch_assoc($result)): ?>
             <?php
             $img = htmlspecialchars(kandagaImageUrl($naskah), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
             ?>
-            <div class="col-md-3 col-sm-6 mb-4">
+            <div class="col">
                 <div class="card naskah-baru-card shadow-sm h-100" onclick="location.href='detail.php?id=<?= $naskah['id'] ?>'" style="cursor: pointer; border: none; border-radius: 12px; overflow: hidden;">
                     <div style="height: 180px; overflow: hidden;">
                         <img src="<?= $img ?>" class="card-img-top" alt="<?= htmlspecialchars($naskah['judul']) ?>"

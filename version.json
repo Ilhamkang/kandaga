@@ -1,4 +1,4 @@
 {
-    "version": "3.1.68",
-    "description": "Bootstrap 5.3.9 stabil, navbar mobile dan tipografi beranda diperbaiki, bibliografi serta ekspor XML diamankan, kartu publik dan detail naskah proporsional di mobile, kontributor beranda memakai grid penuh container dengan geser dan indikator titik, serta tinggi gambar Naskah Pilihan dikunci."
+    "version": "3.1.69",
+    "description": "Kontrak layout modul dirapikan: stylesheet dipindah ke head, padding dan wrapper ganda dihapus, grid kartu diseragamkan, gutter mobile disatukan, dan modul admin tidak lagi menggandakan dokumen HTML atau container-fluid saat di-include."
 }

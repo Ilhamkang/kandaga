@@ -7,8 +7,7 @@
 @media (max-width: 767.98px) {
     /* Homepage sections own the gutter; embedded partials must not add one. */
     body.kandaga-public .home-container > .home-section > .container,
-    body.kandaga-public .home-container > .hero-section > .container,
-    body.kandaga-public .home-container > .home-section > .bg-light > .container {
+    body.kandaga-public .home-container > .hero-section > .container {
         padding-left: var(--kandaga-mobile-gutter) !important;
         padding-right: var(--kandaga-mobile-gutter) !important;
     }
@@ -16,7 +15,9 @@
     /* Shared shell for standalone pages that previously inherited only the
        generic Bootstrap container padding. */
     body.kandaga-special-page > .page-header > .container,
-    body.kandaga-special-page > .container {
+    body.kandaga-special-page > .container,
+    body.kandaga-standalone-page > .page-header > .container,
+    body.kandaga-standalone-page > .container {
         padding-left: var(--kandaga-mobile-gutter) !important;
         padding-right: var(--kandaga-mobile-gutter) !important;
     }
@@ -100,15 +101,6 @@
     body.kandaga-title-index-page .naskah-count {
         flex: 0 0 auto;
         white-space: nowrap;
-    }
-
-    body.kandaga-public .home-container .embedded-module {
-        width: 100%;
-        max-width: none !important;
-        margin-left: 0;
-        margin-right: 0;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
     }
 
     body.kandaga-public .home-container .home-section {
@@ -334,11 +326,17 @@
    related manuscripts already used two columns and keep their own rules. */
 @media (max-width: 767.98px) {
     body.kandaga-home-page .home-container .row.row-cols-2 > [class*="col-"],
+    body.kandaga-home-page .home-container .row.row-cols-2 > .col,
     body.kandaga-collection-page .row.row-cols-2 > [class*="col-"],
+    body.kandaga-collection-page .row.row-cols-2 > .col,
     body.kandaga-collection-detail-page .row.row-cols-2 > [class*="col-"],
+    body.kandaga-collection-detail-page .row.row-cols-2 > .col,
     body.kandaga-contributors-page .row.row-cols-2 > [class*="col-"],
+    body.kandaga-contributors-page .row.row-cols-2 > .col,
     body.kandaga-location-index-page .row.row-cols-2 > [class*="col-"],
-    body.kandaga-catalog-page .row.row-cols-2 > [class*="col-"] {
+    body.kandaga-location-index-page .row.row-cols-2 > .col,
+    body.kandaga-catalog-page .row.row-cols-2 > [class*="col-"],
+    body.kandaga-catalog-page .row.row-cols-2 > .col {
         min-width: 0;
     }
 

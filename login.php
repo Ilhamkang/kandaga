@@ -40,7 +40,7 @@ if ($pesan === 'gagal') {
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-login.css">
 <?php include __DIR__ . '/includes/module-head.php'; ?>
 </head>
-<body class="kandaga-module">
+<body class="kandaga-module kandaga-standalone-page kandaga-login-page">
 
 <div class="login-card">
     <img src="<?= BASE_URL ?>/assets/images/favicon.png" alt="Logo" class="brand-logo">

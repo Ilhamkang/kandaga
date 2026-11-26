@@ -207,7 +207,7 @@ if ($stmt = $conn->prepare($query_str)) {
 }
 ?>
 
-<div class="container-fluid py-4">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid py-4"><?php endif; ?>
     <div class="row mb-4 align-items-center">
         <div class="col-md-6">
             <h3 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-bookmark text-primary me-2"></i>Daftar Pustaka & Bibliografi</h3>
@@ -337,7 +337,7 @@ if ($stmt = $conn->prepare($query_str)) {
             </table>
         </div>
     </div>
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
 <div class="modal fade" id="modalBib" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">

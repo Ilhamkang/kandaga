@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
     .header-custom { background: #fdfbf7; color: #5d4037; padding: 18px 20px; font-weight: bold; border-bottom: 1px solid #eee; }
 </style>
 
-<div class="container-fluid">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
     <?php if (!empty($pesan_sukses)): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <?= $pesan_sukses ?>
@@ -82,4 +82,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
             </table>
         </div>
     </div>
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>

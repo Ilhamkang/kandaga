@@ -61,7 +61,7 @@ $tabel_query  = $conn->query("
 ");
 ?>
 
-<div class="container-fluid py-4">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid py-4"><?php endif; ?>
     <div class="row mb-4">
         <div class="col">
             <h3 class="page-title fw-bold mb-0">Manajemen Kurasi Koleksi</h3>
@@ -180,4 +180,4 @@ $tabel_query  = $conn->query("
         </div>
 
     </div>
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>

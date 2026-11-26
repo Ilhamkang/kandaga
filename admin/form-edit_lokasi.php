@@ -26,7 +26,7 @@ if (!$data) {
     .preview-img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #e2e8f0; margin-bottom: 10px; }
 </style>
 
-<div class="container-fluid py-4">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid py-4"><?php endif; ?>
     <div class="page-header">
         <h2 class="page-title">Edit Lokasi Koleksi</h2>
         <p class="text-muted small">Perbarui data institusi atau perpustakaan penyimpan naskah.</p>
@@ -99,7 +99,7 @@ if (!$data) {
             <button type="submit" id="btnUpdateLokasi" class="btn btn-primary px-5 shadow">Update Lokasi</button>
         </div>
     </form>
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
 <script>
     $(document).off('submit', '#formEditLokasi').on('submit', '#formEditLokasi', function(e) {

@@ -101,7 +101,7 @@ $items = kandagaZoteroItems($userId, $apiKey, $error);
   </style>
   <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
-<body class="kandaga-module">
+<body class="kandaga-module kandaga-standalone-page kandaga-reference-page">
   <?php if ($error !== ''): ?>
     <div class="alert alert-light border" role="status"><?= kandagaZoteroEscape($error) ?></div>
   <?php elseif ($items === []): ?>

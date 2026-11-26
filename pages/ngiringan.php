@@ -14,7 +14,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
     <script src="<?= BASE_URL ?>/admin/assets/js/sweetalert2.min.js"></script>
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
-<body class="kandaga-module">
+<body class="kandaga-module kandaga-standalone-page kandaga-ngiringan-page">
 
 <div class="login-card">
     <img src="<?= BASE_URL ?>/assets/images/favicon.png" alt="Logo" class="brand-logo">

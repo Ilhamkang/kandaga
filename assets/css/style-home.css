@@ -2,6 +2,12 @@
 
     /* Font & Reset */
     .home-container { font-family: 'Inter', sans-serif; }
+
+    /* Modul beranda adalah fragmen: lebar dan jarak diatur oleh section. */
+    .home-container .embedded-module {
+        width: 100%;
+        max-width: none;
+    }
     h2, h4 { font-family: 'Lora', serif; }
 
     /* Hero Section */

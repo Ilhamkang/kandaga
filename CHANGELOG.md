@@ -1,3 +1,14 @@
+# v3.1.69 — Perapian kontrak layout dan nesting modul
+
+- Memindahkan stylesheet beranda, naskah terbaru, Naskah Pilihan, kontributor, dan `public-mobile.css` ke `<head>`; modul kini berupa fragmen tanpa `<link>`/`<style>` di dalam `<body>`.
+- Menghapus `py-4` pada Naskah Pilihan dan `my-5` pada Kabar Terbaru agar jarak diatur sekali oleh `.home-section`.
+- Menghapus `.row > .col-md-12` yang hanya membungkus entri naskah terbaru di beranda.
+- Menyeragamkan grid kartu ke `.row.row-cols-* > .col` tanpa `col-*` ganda pada naskah terbaru, katalog, dan detail koleksi.
+- Memuat `public-mobile.css` sekali dari `module-head.php` dan menambahkan hook `kandaga-standalone-page` pada halaman publik yang sebelumnya hanya memakai `kandaga-module`; indeks lokasi juga memakai `kandaga-special-page`.
+- Menghapus selector mati dan override gutter mobile ganda pada `mobile-layout.css`, duplikasi tinggi thumbnail kabar, serta membatasi `.card-title` ke kartu naskah terbaru.
+- Membuat dokumen HTML lengkap dan `.container-fluid` pada modul admin bersifat kondisional saat di-include dari shell; akses langsung tetap utuh.
+- Menurunkan rantai gutter beranda dari empat lapis menjadi tiga tanpa mengubah ukuran kartu kontributor atau tinggi Naskah Pilihan.
+
 # v3.1.68 — Bootstrap 5.3.9, perbaikan mobile, kontributor, dan Naskah Pilihan
 
 - Menambahkan cache-buster `?v=<versi>` pada CSS dan JavaScript Bootstrap di seluruh template agar browser tidak lagi memakai bundle Bootstrap 4.6.2 yang tersimpan pada URL tanpa versi. Menu lipat navbar mobile kini membuka `#navbarNav` dengan normal setelah pembaruan.

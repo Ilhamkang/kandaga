@@ -9,6 +9,8 @@ require_once __DIR__ . '/../includes/version.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/request.php';
 if (!defined('KANDAGA_GOAH_PANEL')) define('KANDAGA_GOAH_PANEL', true);
+// Included modules can drop duplicate document/container wrappers while direct requests keep them.
+if (!defined('KANDAGA_ADMIN_SHELL')) define('KANDAGA_ADMIN_SHELL', true);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') kandagaCsrf();
 $page = $_GET['page'] ?? 'dashboard';
 if ($page === 'catalog-importer') { $page = 'metadata-importer'; $_GET['engine'] = 'catalog'; }

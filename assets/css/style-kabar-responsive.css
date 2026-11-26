@@ -108,14 +108,6 @@
         padding: 1rem !important;
     }
 
-    .kandaga-post-list-page .thumb-img {
-        height: 170px;
-    }
-
-    .kandaga-home-page .kandaga-latest-posts {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-    }
 }
 
 /* Two compact article cards per row on phones; desktop keeps three. */

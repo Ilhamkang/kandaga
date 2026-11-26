@@ -3,7 +3,7 @@
 $q_terbaru = mysqli_query($conn, "SELECT * FROM tb_kabar WHERE status = 'published' ORDER BY id_kabar DESC LIMIT 4");
 ?>
 
-<div class="kandaga-latest-posts my-5">
+<div class="kandaga-latest-posts">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="fw-bold" style="color: #0f2042;">Kabar Terbaru</h4>
         <a href="kabar/" class="text-decoration-none" style="color: #c5a880; font-weight: 600;">Lihat Semua &rarr;</a>

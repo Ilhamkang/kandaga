@@ -122,13 +122,13 @@ $src_user = (!empty($data_lokasi['foto_kurator']) && file_exists(__DIR__ . '/../
                     </div>
                 </form>
 
-                <div class="row row-cols-2 g-4">
+                <div class="row row-cols-2 row-cols-xl-3 g-4">
                     <?php if ($naskah_result->num_rows > 0): ?>
                         <?php while ($naskah = $naskah_result->fetch_assoc()): ?>
                             <?php
                                 $src_naskah = kandagaImageUrl($naskah);
                             ?>
-                            <div class="col-xl-4 col-md-6">
+                            <div class="col">
                                 <a href="<?= BASE_URL ?>/detail.php?id=<?= htmlspecialchars((string)$naskah['id']) ?>" class="text-decoration-none text-dark">
                                     <div class="card-manuskrip shadow-sm">
                                         <div class="img-naskah-wrapper">

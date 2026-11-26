@@ -34,7 +34,7 @@ if (!file_exists($path_foto)) {
 }
 ?>
 
-<div class="container-fluid">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
     <h3 class="mb-4">Pengaturan Profil Pengguna</h3>
 
     <div id="notifikasi"></div>
@@ -98,7 +98,7 @@ if (!file_exists($path_foto)) {
             </div>
         </div>
     </form>
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
 <script>
 $(document).ready(function() {

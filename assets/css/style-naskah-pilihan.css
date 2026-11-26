@@ -1,0 +1,50 @@
+/* Naskah Pilihan: rasio card dikunci agar gambar dan teks tetap proporsional. */
+.card-pilihan {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-pilihan:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1) !important;
+}
+
+.card-pilihan .featured-image-box {
+    background: #f1f5f9;
+    height: 300px;
+    overflow: hidden;
+}
+
+.card-pilihan .featured-image-box img {
+    display: block;
+    object-fit: cover;
+}
+
+.card-pilihan h2,
+.card-pilihan .card-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-pilihan h2 { -webkit-line-clamp: 2; }
+.card-pilihan .card-text { -webkit-line-clamp: 4; }
+
+@media (min-width: 992px) {
+    .card-pilihan .featured-image-box { height: 320px; }
+}
+
+@media (max-width: 767.98px) {
+    .card-pilihan .row { flex-direction: column; }
+    .card-pilihan .featured-image-box { height: 220px; }
+    .card-pilihan .card-body { padding: 1.25rem !important; }
+    .card-pilihan h2 {
+        font-size: 1.35rem !important;
+        line-height: 1.25 !important;
+    }
+    .card-pilihan .card-text {
+        font-size: .9rem !important;
+        line-height: 1.6 !important;
+        -webkit-line-clamp: 3;
+    }
+}

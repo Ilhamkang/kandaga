@@ -78,7 +78,7 @@ $resultLokasi = mysqli_query($conn, $sqlLokasi);
     </style>
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
-<body class="kandaga-module kandaga-location-index-page">
+<body class="kandaga-module kandaga-special-page kandaga-location-index-page">
 
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 

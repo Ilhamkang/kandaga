@@ -14,12 +14,13 @@ $data_lokasi = mysqli_query($conn, "SELECT id_lokasi, nama_tempat FROM tb_lokasi
 $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM katalog ORDER BY kode_inventaris, judul");
 ?>
 
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <title>Form Input Naskah</title>
-
+<?php endif; ?>
 
 <style>
 
@@ -74,11 +75,14 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 .dynamic-row select,
 .dynamic
 </style>
+
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
 </head>
 
 <body>
+<?php endif; ?>
 
-<div class="container-fluid">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
 
 <div class="page-title">
 <i class="fa-solid fa-book"></i> Tambah Naskah Baru
@@ -340,7 +344,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 </form>
 
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
 <!-- ================= JS ================= -->
 
@@ -589,5 +593,7 @@ function addIdentifierRow(){const box=document.getElementById('identifier-input'
 
 </script>
 
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
 </body>
 </html>
+<?php endif; ?>

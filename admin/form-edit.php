@@ -76,6 +76,7 @@ $ks_data = ksLoad($conn, $id_naskah);
 $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM katalog WHERE id <> ".(int)$id_naskah." ORDER BY kode_inventaris, judul");
 ?>
 
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -83,6 +84,8 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 <title>Form Edit Naskah</title>
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
+<?php endif; ?>
+
 <style>
 /* ================= PAGE TITLE ================= */
 .page-title{
@@ -150,10 +153,13 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
     z-index: 100;
 }
 </style>
+
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
 </head>
 <body>
+<?php endif; ?>
 
-<div class="container-fluid py-4">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid py-4"><?php endif; ?>
 
 <div class="page-title">
     <i class="fa-solid fa-pen-to-square"></i> Edit Naskah: <?= htmlspecialchars($naskah['judul']) ?>
@@ -449,7 +455,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
     </div>
 </form>
 
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
 
 
@@ -635,5 +641,7 @@ $('#formEditNaskah').on('submit', function(e){
     });
 });
 </script>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
 </body>
 </html>
+<?php endif; ?>

@@ -21,8 +21,6 @@ $kontributor_chunks = array_chunk($kontributor_list, 4);
 $kontributor_pages = count($kontributor_chunks);
 ?>
 
-<link rel="stylesheet" href="assets/css/style-kontributor.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
-
 <div class="embedded-module embedded-kontributor">
     <div class="kontributor-section position-relative">
         <div class="kontributor-header d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">

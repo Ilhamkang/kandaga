@@ -75,7 +75,7 @@ $string_alas_tulis = getNamaRelasi($conn, 'tb_alas_tulis', 'naskah_alas_tulis', 
     </style>
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
-<body class="kandaga-module">
+<body class="kandaga-module kandaga-standalone-page kandaga-export-page">
 
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 

@@ -55,7 +55,7 @@ $catalogCards = [
     @media (max-width:700px) { .statistics-dashboard .stats-header { align-items:flex-start; flex-direction:column; } .statistics-dashboard .stats-grid,.statistics-dashboard .catalog-grid,.statistics-dashboard .stats-link-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 </style>
 
-<div id="statisticsDashboard" class="statistics-dashboard container-fluid p-3" data-detail-endpoint="<?= htmlspecialchars(BASE_URL . '/admin/actions/statistics-detail.php', ENT_QUOTES, 'UTF-8') ?>">
+<div id="statisticsDashboard" class="statistics-dashboard<?= defined('KANDAGA_ADMIN_SHELL') ? '' : ' container-fluid' ?> p-3" data-detail-endpoint="<?= htmlspecialchars(BASE_URL . '/admin/actions/statistics-detail.php', ENT_QUOTES, 'UTF-8') ?>">
     <div class="stats-header">
         <div><h3>Statistik Kandaga</h3><p>Ringkasan katalog dan pemanfaatan halaman yang ringan; rincian dimuat hanya saat diperlukan.</p></div>
         <form method="get" action="<?= htmlspecialchars(BASE_URL . '/admin/index.php', ENT_QUOTES, 'UTF-8') ?>" class="d-flex align-items-center gap-2 flex-wrap">

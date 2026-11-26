@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-search.css?v=3.1.2">
     <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
-<body class="kandaga-module">
+<body class="kandaga-module kandaga-standalone-page kandaga-bookmark-page">
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 <main class="container my-5">
     <h1 class="h3 fw-bold">Bookmark naskah</h1>

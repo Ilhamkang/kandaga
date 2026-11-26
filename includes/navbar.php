@@ -7,8 +7,6 @@ if (isset($conn)) kandagaTrackWebsite($conn);
 ?>
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-navbar.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/public-mobile.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
-
 <div class="kandaga-nav" data-kandaga-base="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>">
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">

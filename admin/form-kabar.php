@@ -7,7 +7,7 @@ $thumbnailMaxBytes = min(5242880, kandagaPostIniBytes(ini_get('upload_max_filesi
 if (session_status() == PHP_SESSION_NONE) { if (session_status() === PHP_SESSION_NONE) session_start(); }
 ?>
 
-<div class="container-fluid">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
     <form id="formInputKabar" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="slug" id="slugInput">
 
@@ -60,7 +60,7 @@ if (session_status() == PHP_SESSION_NONE) { if (session_status() === PHP_SESSION
             </div>
         </div>
     </form>
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
 <script>
     $(document).ready(function() {

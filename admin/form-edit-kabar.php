@@ -50,6 +50,7 @@ if (!$data) {
 }
 ?>
 
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,8 +58,9 @@ if (!$data) {
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
 <body class="kandaga-module">
+<?php endif; ?>
 
-<div class="container-fluid">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="mb-0">Edit Berita / Kabar</h3>
     </div>
@@ -132,7 +134,7 @@ if (!$data) {
             </div>
         </div>
     </form>
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
 <script>
     // Memastikan TinyMCE di-load kembali saat file ini di-load via AJAX
@@ -180,5 +182,7 @@ if (!$data) {
         });
     });
 </script>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
 </body>
 </html>
+<?php endif; ?>

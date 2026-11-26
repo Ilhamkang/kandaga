@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
     .header-custom { background: #fdfbf7; color: #5d4037; padding: 18px 20px; font-weight: bold; border-bottom: 1px solid #eee; }
 </style>
 
-<div class="container-fluid">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
     <div class="card shadow-sm border-0 card-custom">
         <div class="header-custom d-flex justify-content-between align-items-center">
             <span><i class="fa-solid fa-clock-rotate-left me-2"></i>Riwayat Aktivitas</span>
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
             </div>
         </div>
     </div>
-</div>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
 <script>
     $(document).ready(function(){

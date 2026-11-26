@@ -19,18 +19,18 @@
     transform: scale(1.05);
 }
 
-/* 3. Tipografi Judul (Tetap mempertahankan logika truncate Anda) */
-.card-title {
-    font-size: 0.9rem !important;
-    font-weight: 700 !important;
-    color: #1e293b !important;
-    line-height: 1.4 !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important;
-    -webkit-box-orient: vertical !important;
-    overflow: hidden !important;
-    height: 2.8em !important;
-    margin-bottom: 0 !important;
+/* 3. Tipografi Judul (di-scope agar tidak menimpa kartu halaman lain) */
+.naskah-baru-card .naskah-baru-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.8em;
+    margin-bottom: 0;
 }
 
 /* 4. Styling khusus untuk kode inventaris (Opsional jika ingin tampilan lebih unik) */
