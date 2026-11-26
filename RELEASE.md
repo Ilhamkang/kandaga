@@ -1,3 +1,32 @@
+# Kandaga v3.1.66
+
+## v3.1.66 — Kanal rilis GitHub untuk Update Center
+
+- Menambahkan workflow GitHub Actions yang mem-build paket rilis saat tag `v*` di-push, lalu mempublikasikan `version.json` dan ZIP ke branch `gh-pages`.
+- Menambahkan `tools/build-release.php` untuk menghasilkan `update-manifest.json`, SHA-256 per berkas, SHA-256 ZIP, dan channel `version.json` dari berkas yang ter-track di Git.
+- Mengarahkan Update Center ke `https://raw.githubusercontent.com/Ilhamkang/kandaga/gh-pages/` sebagai sumber pemeriksaan dan unduhan rilis.
+- Menyesuaikan indikator pembaruan pada halaman admin agar memakai kanal GitHub yang sama.
+- Menambahkan `.gitignore` agar konfigurasi lokal, kredensial, cache, maintenance lock, konten upload, dan artefak build tidak masuk repositori atau paket rilis.
+- Menghapus kredensial database plaintext dari `config/database.php`; konfigurasi produksi kini mengandalkan variabel `KANDAGA_DB_*` atau berkas lokal di luat repositori.
+
+### KRIR — ruang lingkup dan dampak
+
+- **File berubah:** `.gitignore`, `.github/workflows/release.yml`, `tools/build-release.php`, `admin/includes/update-engine.php`, `includes/update-engine.php`, `admin/index.php`, `admin/update.php`, `config/database.php`, `version.json`, `CHANGELOG.md`, `RELEASE.md`, dan `update-manifest.json`.
+- **SQL/database:** tidak ada migrasi, perubahan tabel, query skema, atau backup database. Paket tetap code-only dengan backup kode saja.
+- **Fitur dipertahankan:** katalog, detail naskah, pencarian, bookmark, bibliografi, importer, SMTP/korespondensi, statistik, SEO, Zotero, dan seluruh alur Update Center termasuk rollback.
+- **Dampak yang mungkin terlihat:** tombol “Periksa Versi” kini membaca kanal GitHub. Sebelum tag rilis pertama dibuat, kanal `gh-pages` belum ada dan pemeriksaan akan gagal; setelah rilis pertama dipublish, versi akan tampil normal.
+- **Kompatibilitas:** PHP >= 8.1, MySQL >= 8.0, MariaDB >= 10.11, dan ekstensi rilis sebelumnya. Tidak ada dependency frontend baru.
+- **Rollback:** pulihkan file kode ke v3.1.65. Tidak ada migrasi atau data database yang perlu dibatalkan. Repositori dan kanal rilis dapat tetap dipakai karena paket lama masih tersimpan sebagai GitHub Release.
+
+### Pemeriksaan KRIR sebelum deployment
+
+1. Pastikan repo GitHub sudah public agar `raw.githubusercontent.com` dapat diakses updater tanpa token.
+2. Push commit ke `main`, lalu buat tag `v3.1.66` dan verifikasi workflow GitHub Actions berhasil.
+3. Cek `https://raw.githubusercontent.com/Ilhamkang/kandaga/gh-pages/version.json` mengembalikan `version`, `zip_filename`, dan `sha256`.
+4. Di Update Center, lakukan “Periksa Versi” lalu “Unduh & Periksa”; tinjau preview perubahan.
+5. Pastikan `config/database.local.php`, `config/update.local.php`, `.git`, dan konten `assets/images` tidak masuk paket.
+6. Uji backup kode, install, verifikasi checksum, dan rollback pada lingkungan uji sebelum dipakai produksi.
+
 # Kandaga v3.1.65
 
 ## v3.1.65 — Tahap 3 hardening dan stabilisasi operasional

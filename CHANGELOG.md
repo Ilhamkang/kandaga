@@ -1,3 +1,13 @@
+# v3.1.66 — Kanal rilis GitHub untuk Update Center
+
+- Menambahkan GitHub Actions untuk mem-build paket saat tag `v*` di-push dan mempublikasikan channel `version.json` serta ZIP ke branch `gh-pages`.
+- Menambahkan `tools/build-release.php` untuk membuat manifest, checksum per berkas, checksum ZIP, dan metadata rilis dari berkas yang ter-track di Git.
+- Mengarahkan Update Center dan indikator versi admin ke `https://raw.githubusercontent.com/Ilhamkang/kandaga/gh-pages/`.
+- Menambahkan `.gitignore` untuk konfigurasi lokal, kredensial, cache, maintenance lock, upload, dan artefak build.
+- Menghapus kredensial database plaintext dari `config/database.php`; gunakan `KANDAGA_DB_*` atau berkas lokal.
+
+Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan fitur katalog. Paket ini code-only.
+
 # v3.1.65 — Tahap 3 hardening dan stabilisasi operasional
 
 - Menambahkan pemeriksaan same-origin sebagai lapisan tambahan pada request POST yang sudah dilindungi CSRF.

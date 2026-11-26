@@ -1,4 +1,4 @@
 {
-  "version": "3.1.65",
-  "description": "Tahap 3 hardening: audit session/CSRF, upload non-eksekutabel, dan heartbeat Update Center tanpa migrasi SQL."
+    "version": "3.1.66",
+    "description": "Kanal rilis GitHub untuk Update Center: build otomatis, publish ke gh-pages, checksum ZIP, dan tanpa migrasi SQL."
 }
