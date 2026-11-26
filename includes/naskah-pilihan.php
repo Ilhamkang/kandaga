@@ -53,7 +53,7 @@ if ($resultPilihan) {
             <div class="card border-0 shadow-sm overflow-hidden card-pilihan" style="border-radius: 16px; transition: 0.3s;">
                 <div class="row no-gutters align-items-stretch">
                     <div class="col-md-4">
-                        <div class="h-100 w-100" style="background: #f1f5f9; min-height: 250px;">
+                        <div class="featured-image-box w-100">
                             <img src="<?= htmlspecialchars($displayImg, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" alt="<?= htmlspecialchars($naskah['judul']) ?>"
                                  class="w-100 h-100" style="object-fit: cover;"
                                  onerror="this.onerror=null;var card=this.closest('a');if(card){card.remove();}">
@@ -95,9 +95,43 @@ if ($resultPilihan) {
         transform: translateY(-5px);
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
     }
-    /* Responsif: di mobile tetap menumpuk */
-    @media (max-width: 768px) {
+
+    /* Tinggi gambar dan panjang teks dikunci agar card tidak mengikuti
+       rasio asli naskah yang berbeda-beda. */
+    .card-pilihan .featured-image-box {
+        background: #f1f5f9;
+        height: 300px;
+        overflow: hidden;
+    }
+    .card-pilihan .featured-image-box img {
+        display: block;
+        object-fit: cover;
+    }
+    .card-pilihan h2,
+    .card-pilihan .card-text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .card-pilihan h2 { -webkit-line-clamp: 2; }
+    .card-pilihan .card-text { -webkit-line-clamp: 4; }
+
+    @media (min-width: 992px) {
+        .card-pilihan .featured-image-box { height: 320px; }
+    }
+
+    @media (max-width: 767.98px) {
         .card-pilihan .row { flex-direction: column; }
-        .card-pilihan .col-md-4 { min-height: 200px; }
+        .card-pilihan .featured-image-box { height: 220px; }
+        .card-pilihan .card-body { padding: 1.25rem !important; }
+        .card-pilihan h2 {
+            font-size: 1.35rem !important;
+            line-height: 1.25 !important;
+        }
+        .card-pilihan .card-text {
+            font-size: .9rem !important;
+            line-height: 1.6 !important;
+            -webkit-line-clamp: 3;
+        }
     }
 </style>
