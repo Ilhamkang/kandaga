@@ -1,0 +1,10 @@
+.activity-scroll { overflow-x: auto; padding-bottom: 8px; }
+.activity-months { display: flex; justify-content: space-between; width: 850px; font-size: .8rem; color: #64748b; margin-bottom: 5px; }
+.activity-calendar { display: grid; grid-template-rows: repeat(7, 13px); grid-auto-flow: column; grid-auto-columns: 13px; gap: 3px; width: max-content; }
+.activity-day { border-radius: 3px; border: 1px solid rgba(27,31,35,.09); display: block; }
+.activity-day:focus { outline: 2px solid #2563eb; outline-offset: 1px; }
+.activity-level-0 { background: #ebedf0; }.activity-level-1 { background: #9be9a8; }.activity-level-2 { background: #40c463; }.activity-level-3 { background: #30a14e; }.activity-level-4 { background: #216e39; }
+.activity-key { display: inline-block; width: 13px; height: 13px; border-radius: 3px; margin: 0 2px; vertical-align: middle; }
+.activity-tooltip { position: fixed; max-width: min(340px, calc(100vw - 16px)); padding: 10px 12px; background: #1e293b; color: #fff; border-radius: 8px; font-size: .85rem; white-space: pre-line; z-index: 1100; pointer-events: none; box-shadow: 0 4px 12px #0003; }
+
+.activity-year-grid{width:850px}.activity-public .activity-year-grid{width:100%;min-width:850px;margin-inline:auto}.activity-public .activity-months{width:100%}.activity-public .activity-calendar{width:100%;grid-template-rows:repeat(7,auto);grid-auto-columns:minmax(0,1fr)}.activity-public .activity-day{aspect-ratio:1;min-height:13px}.activity-public .activity-scroll{width:100%}

@@ -1,0 +1,522 @@
+body{
+    background:#f5f7fb;
+    font-family:inherit;
+}
+
+/* ======================================
+WRAPPER
+====================================== */
+
+.inbox-wrapper{
+
+    height:78vh;
+
+    background:#fff;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    display:flex;
+    flex-direction:column;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,.04);
+}
+
+/* ======================================
+TOPBAR
+====================================== */
+
+.inbox-topbar{
+
+    height:60px;
+
+    border-bottom:1px solid #edf0f5;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 16px;
+
+    background:#fff;
+}
+
+.topbar-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.search-input{
+
+    width:240px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#f3f5f9;
+
+    padding:0 14px;
+
+    font-size:13px;
+
+    outline:none;
+}
+
+.search-input:focus{
+    background:#ebf2ff;
+}
+
+/* ======================================
+BODY
+====================================== */
+
+.inbox-body{
+
+    flex:1;
+
+    display:flex;
+
+    overflow:hidden;
+}
+
+/* ======================================
+SIDEBAR
+====================================== */
+
+.inbox-sidebar{
+
+    width:34%;
+
+    border-right:1px solid #edf0f5;
+
+    overflow-y:auto;
+
+    background:#fff;
+}
+
+/* ======================================
+CONTENT
+====================================== */
+
+.inbox-content{
+
+    width:66%;
+
+    overflow-y:auto;
+
+    background:#fafbfd;
+
+    padding:28px;
+}
+
+/* ======================================
+ITEM
+====================================== */
+
+.email-item{
+
+    width:100%;
+
+    border:0;
+
+    text-align:left;
+
+    font:inherit;
+
+    background:#fff;
+
+    padding:14px 16px;
+
+    border-bottom:1px solid #f1f3f6;
+
+    cursor:pointer;
+
+    transition:.15s ease;
+
+    position:relative;
+}
+
+.email-item:focus-visible{
+    outline:3px solid rgba(45,108,223,.28);
+    outline-offset:-3px;
+}
+
+.email-item:hover{
+    background:#f8fbff;
+}
+
+.email-item.active{
+    background:#eef4ff;
+}
+
+.email-item.active::before{
+
+    content:'';
+
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:3px;
+    height:100%;
+
+    background:#2d6cdf;
+}
+
+/* ======================================
+ROW
+====================================== */
+
+.email-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:10px;
+}
+
+.email-left{
+
+    display:flex;
+
+    gap:10px;
+
+    min-width:0;
+}
+
+/* ======================================
+ICON
+====================================== */
+
+.mail-icon{
+
+    width:18px;
+
+    text-align:center;
+
+    padding-top:2px;
+
+    font-size:14px;
+}
+
+/* ======================================
+TEXT
+====================================== */
+
+.email-main{
+    min-width:0;
+}
+
+.email-name{
+
+    font-size:13px;
+
+    color:#111827;
+
+    margin-bottom:3px;
+}
+
+.email-name.bold{
+    font-weight:700;
+}
+
+.email-subject{
+
+    font-size:13px;
+
+    color:#374151;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    max-width:260px;
+}
+
+.email-preview{
+
+    font-size:12px;
+
+    color:#9ca3af;
+
+    margin-top:2px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    max-width:260px;
+}
+
+.email-date{
+
+    font-size:11px;
+
+    color:#9ca3af;
+
+    white-space:nowrap;
+}
+
+/* ======================================
+DETAIL
+====================================== */
+
+.mail-subject{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#111827;
+}
+
+.mail-meta{
+
+    margin-top:16px;
+
+    padding-bottom:20px;
+
+    border-bottom:1px solid #e5e7eb;
+
+    color:#6b7280;
+}
+
+.mail-message{
+
+    margin-top:24px;
+
+    background:#fff;
+
+    padding:24px;
+
+    border-radius:14px;
+
+    line-height:1.8;
+
+    white-space:pre-line;
+
+    box-shadow:
+        0 1px 3px rgba(0,0,0,.03);
+
+    min-height:140px;
+
+    display:flex;
+
+    align-items:flex-start;
+
+}
+
+/* ======================================
+BUTTONS
+====================================== */
+
+.action-buttons{
+
+    margin-top:22px;
+
+    display:flex;
+
+    gap:10px;
+}
+
+.btn-modern{
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:10px 16px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    transition:.15s ease;
+}
+
+.btn-modern:hover{
+    transform:translateY(-1px);
+}
+
+.btn-read{
+    background:#edf3ff;
+    color:#2d5bd1;
+}
+
+.btn-delete{
+    background:#fff1f1;
+    color:#dc2626;
+}
+
+/* ======================================
+EMPTY
+====================================== */
+
+.empty-state{
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#9ca3af;
+}
+
+.empty-state i{
+
+    font-size:70px;
+
+    margin-bottom:18px;
+
+    opacity:.35;
+}
+
+/* ======================================
+SCROLLBAR
+====================================== */
+
+.inbox-sidebar::-webkit-scrollbar,
+.inbox-content::-webkit-scrollbar{
+    width:7px;
+}
+
+.inbox-sidebar::-webkit-scrollbar-thumb,
+.inbox-content::-webkit-scrollbar-thumb{
+    background:#d6dce6;
+    border-radius:20px;
+}
+
+/* Shared correspondence refinements. Feedback Naskah and Inbox use the same
+ * visual language while retaining their separate data and endpoints. */
+.inbox-wrapper{
+    font-family:var(--kandaga-font-ui, inherit);
+    border:1px solid var(--kandaga-border, #e2e8f0);
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+}
+
+.inbox-topbar{
+    min-height:64px;
+    height:auto;
+    gap:12px;
+    padding:12px 16px;
+    flex-wrap:wrap;
+}
+
+.inbox-topbar > .topbar-left,
+.inbox-topbar > form.topbar-left{
+    flex:1 1 520px;
+    min-width:0;
+}
+
+.inbox-topbar > #badge-area,
+.inbox-topbar > #feedbackUnread{
+    flex:0 0 auto;
+}
+
+.topbar-left{ flex-wrap:wrap; }
+
+.search-input{
+    width:clamp(180px, 30vw, 300px);
+    height:38px;
+    border:1px solid #dbe3ef;
+    background:#f8fafc;
+    color:#1e293b;
+    font-size:var(--kandaga-text-sm, .875rem);
+}
+
+.search-input:focus{
+    border-color:#93c5fd;
+    background:#fff;
+    box-shadow:0 0 0 .2rem rgba(37,99,235,.12);
+}
+
+.inbox-filter .form-control{
+    width:auto;
+    min-width:150px;
+    height:38px;
+}
+
+.email-item{ padding:15px 16px; }
+.email-name,
+.email-subject{ font-size:var(--kandaga-text-sm, .875rem); }
+.email-preview,
+.email-date{ font-size:var(--kandaga-text-xs, .75rem); }
+
+.inbox-content{ padding:30px; }
+.mail-subject{ font-size:clamp(1.35rem, 2vw, 1.75rem); line-height:1.2; }
+.mail-meta{ font-size:var(--kandaga-text-sm, .875rem); line-height:1.55; }
+.mail-message{ line-height:1.7; }
+
+.action-buttons{ flex-wrap:wrap; }
+.btn-modern{
+    border:1px solid transparent;
+    font-family:inherit;
+    min-height:38px;
+}
+.btn-modern:focus-visible,
+.inbox-reply-form button:focus-visible,
+.feedback-reply-form button:focus-visible{
+    outline:3px solid rgba(37,99,235,.25);
+    outline-offset:2px;
+}
+
+.inbox-correspondence-reply,
+.feedback-reply{
+    border-color:#dbe3ef;
+    border-radius:12px;
+    line-height:1.6;
+}
+
+.inbox-reply-form,
+.feedback-reply-form{
+    border-top:1px solid var(--kandaga-border, #e2e8f0);
+    padding-top:1.25rem;
+}
+
+.inbox-reply-form h3,
+.feedback-reply-form h3,
+.inbox-correspondence-replies h3,
+.feedback-replies h3{
+    color:#172554;
+    font-weight:700;
+}
+
+.empty-state h5,
+.empty-state h2{ color:#334155; font-weight:600; }
+.empty-state p{ color:#64748b; }
+
+@media(max-width:767.98px){
+    .inbox-wrapper{ height:auto; min-height:70vh; border-radius:12px; }
+    .inbox-topbar{ align-items:stretch; padding:12px; }
+    .inbox-topbar > .topbar-left,
+    .inbox-topbar > form.topbar-left{ flex-basis:100%; }
+    .inbox-topbar > #badge-area,
+    .inbox-topbar > #feedbackUnread{ margin-left:auto; }
+    .topbar-left .search-input{ flex:1 1 180px; width:auto; }
+    .inbox-filter .form-control{ flex:1 1 150px; }
+    .inbox-content{ padding:20px; }
+    .mail-subject{ font-size:1.3rem; }
+    .mail-message{ padding:18px; }
+    .action-buttons .btn-modern{ flex:1 1 auto; }
+}

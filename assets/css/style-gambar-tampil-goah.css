@@ -1,0 +1,12 @@
+/* CSS untuk memastikan gambar memiliki lebar tetap */
+.placeholder-img {
+    width: 300px !important;
+    height: auto;
+    display: block;
+    margin: 10px auto;
+    object-fit: contain; /* Memastikan gambar tidak terdistorsi */
+    border: 1px solid #ddd; /* Tambahkan border tipis opsional */
+    padding: 5px; /* Ruang tambahan di sekitar gambar */
+    background-color: #f9f9f9; /* Latar belakang opsional */
+}
+

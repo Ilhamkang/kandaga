@@ -1,0 +1,40 @@
+/* Shared public content primitives used by Tentang, Disclaimer, and
+   Bibliografi. Kept intentionally conservative so page-specific rules win. */
+.content-card,
+.bibliography-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, .05);
+}
+
+.content-card {
+    padding: 2.5rem;
+}
+
+.bibliography-card {
+    padding: 2rem;
+}
+
+.kandaga-prose p,
+.kandaga-prose li {
+    line-height: 1.75;
+}
+
+.kandaga-prose p {
+    text-align: justify;
+}
+
+@media (max-width: 767.98px) {
+    .content-card,
+    .bibliography-card {
+        border-radius: 14px;
+    }
+
+    .content-card {
+        padding: 1rem;
+    }
+
+    .bibliography-card {
+        padding: 1rem;
+    }
+}

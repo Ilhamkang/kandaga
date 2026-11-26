@@ -1,0 +1,10 @@
+.image-viewer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 80vh; /* Sesuaikan tinggi */
+    overflow: hidden;
+    background-color: #f5f5f5; /* Opsional, untuk tampilan lebih rapi */
+}
+

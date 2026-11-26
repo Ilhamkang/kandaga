@@ -1,0 +1,48 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mysqli, zip, mbstring, curl, tokenizer
+          coverage: none
+
+      - name: Verify PHP sources
+        run: find . -path ./dist -prune -o -path ./.git -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Build release package
+        run: php tools/build-release.php
+
+      - name: Publish channel to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          force_orphan: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/kandaga-*.zip
+          body_path: RELEASE.md
+          generate_release_notes: false

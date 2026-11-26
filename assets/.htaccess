@@ -1,0 +1,19 @@
+Options -Indexes
+
+# Asset folders contain images, fonts, stylesheets, and client-side scripts.
+# They must never execute uploaded server-side scripts, even when a shared
+# host applies a PHP handler recursively to the document root.
+<FilesMatch "\.(?:php[0-9]?|phtml|pht|phar|cgi|pl|py|sh|asp|aspx)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<IfModule mod_mime.c>
+    RemoveHandler .php .php3 .php4 .php5 .php7 .php8 .phtml .pht .phar
+    RemoveType .php .php3 .php4 .php5 .php7 .php8 .phtml .pht .phar
+</IfModule>

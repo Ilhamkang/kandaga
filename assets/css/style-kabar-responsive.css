@@ -1,0 +1,119 @@
+/*
+ * Kabar/article responsive layer.
+ * Desktop keeps the existing presentation; these rules only compact the
+ * public article surfaces on narrow screens. The homepage selector is scoped
+ * to the latest-post module and never reaches Naskah Pilihan.
+ */
+
+.kandaga-home-page .kandaga-latest-posts {
+    width: 100%;
+}
+
+@media (max-width: 767.98px) {
+    .kandaga-post-page .article-page-shell {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+
+    .kandaga-post-page .article-main-column,
+    .kandaga-post-page .article-sidebar-column {
+        padding-left: .5rem;
+        padding-right: .5rem;
+    }
+
+    /* Avoid a thick card-inside-card appearance on phones. */
+    .kandaga-post-page .article-surface {
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+
+    .kandaga-post-page .article-title {
+        font-size: clamp(1.45rem, 6vw, 2rem);
+        line-height: 1.2;
+    }
+
+    .kandaga-post-page .article-meta {
+        gap: .5rem .75rem;
+        margin-bottom: 1rem;
+        font-size: .82rem;
+    }
+
+    .kandaga-post-page .article-featured-image {
+        display: block;
+        width: 100%;
+        max-height: 320px !important;
+        object-fit: cover;
+        border-radius: 6px !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .kandaga-post-page .article-body {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        line-height: 1.7;
+    }
+
+    .kandaga-post-page .article-body img,
+    .kandaga-post-page .article-body video,
+    .kandaga-post-page .article-body iframe {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .kandaga-post-page .article-body table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    .kandaga-post-page .article-sidebar-column {
+        margin-top: 1rem;
+    }
+
+    .kandaga-post-page .article-sidebar-card {
+        margin-bottom: .75rem;
+        padding: .75rem !important;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: none !important;
+    }
+
+    .kandaga-post-list-page .article-list-shell {
+        padding-left: .75rem;
+        padding-right: .75rem;
+    }
+
+    .kandaga-post-list-page .page-header {
+        padding: 1.75rem 0 1.25rem;
+    }
+
+    .kandaga-post-list-page .section-kabar {
+        margin-top: 1.75rem;
+    }
+
+    .kandaga-post-list-page .section-heading {
+        margin-bottom: 1rem;
+    }
+
+    .kandaga-post-list-page .card-post {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, .06);
+    }
+
+    .kandaga-post-list-page .card-post .card-body {
+        padding: 1rem !important;
+    }
+
+    .kandaga-post-list-page .thumb-img {
+        height: 170px;
+    }
+
+    .kandaga-home-page .kandaga-latest-posts {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+}

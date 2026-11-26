@@ -1,0 +1,12 @@
+        body { background-color: #edf2f7; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: 'Segoe UI', sans-serif; }
+        .login-card { width: 100%; max-width: 400px; padding: 30px; background: #fff; border-radius: 15px; box-shadow: 0 10px 25px rgba(15, 32, 66, 0.1); border-top: 5px solid #0f2042; }
+        .brand-logo { display: block; margin: 0 auto 20px; height: 70px; }
+        
+        .btn-login { background-color: #0f2042; color: #fff; border-radius: 10px; padding: 12px; width: 100%; border: none; font-weight: bold; transition: 0.3s; }
+        .btn-login:hover { background-color: #1a3a78; color: #fff; }
+        
+        .input-group-text { background-color: #f8f9fa; border-right: none; color: #0f2042; }
+        .form-control { border-left: none; }
+        .form-control:focus { border-color: #0f2042; box-shadow: none; }
+        
+        #togglePassword { cursor: pointer; color: #6c757d; }

@@ -1,0 +1,65 @@
+/* 1. Definisi Variabel Warna (Mudah diubah kapan saja) */
+:root {
+    --primary-color: #4f46e5;      /* Warna utama (Indigo) */
+    --hover-color: #4338ca;        /* Warna saat hover */
+    --text-muted: #6c757d;
+    --card-bg: #ffffff;
+    --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* 2. Styling Card Utama */
+.card-koleksi {
+    border: none;
+    border-radius: 1rem; /* Sudut lebih melengkung */
+    background: var(--card-bg);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); /* Efek transisi halus */
+    overflow: hidden;
+}
+
+/* 3. Efek Hover Dinamis */
+.card-koleksi:hover {
+    transform: translateY(-10px); /* Kartu naik sedikit */
+    box-shadow: var(--shadow-hover);
+}
+
+/* 4. Pengaturan Gambar agar proporsional */
+.card-img-top {
+    height: 220px;
+    object-fit: cover; /* Gambar tidak akan gepeng */
+    transition: transform 0.5s ease;
+}
+
+.card-koleksi:hover .card-img-top {
+    transform: scale(1.05); /* Gambar sedikit membesar saat hover */
+}
+
+/* 5. Styling Teks */
+.card-title {
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+/* 6. Styling Badge Kurator */
+.kurator-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: #eef2ff;
+    color: var(--primary-color);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid #e0e7ff;
+}
+
+/* 7. Responsif untuk HP */
+@media (max-width: 768px) {
+    .card-koleksi {
+        margin-bottom: 1rem;
+    }
+    .card-img-top {
+        height: 180px;
+    }
+}

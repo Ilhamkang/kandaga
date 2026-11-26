@@ -1,0 +1,115 @@
+/* Goah admin visual consistency layer. Loaded after the legacy module CSS. */
+body.kandaga-module #kontenUtama {
+    font-family: var(--kandaga-font-ui) !important;
+    color: var(--kandaga-text);
+}
+
+body.kandaga-module #kontenUtama input,
+body.kandaga-module #kontenUtama select,
+body.kandaga-module #kontenUtama textarea,
+body.kandaga-module #kontenUtama button,
+body.kandaga-module #kontenUtama .form-control,
+body.kandaga-module #kontenUtama .custom-select {
+    font-family: var(--kandaga-font-ui);
+}
+
+body.kandaga-module #kontenUtama h1,
+body.kandaga-module #kontenUtama h2,
+body.kandaga-module #kontenUtama h3,
+body.kandaga-module #kontenUtama h4,
+body.kandaga-module #kontenUtama h5,
+body.kandaga-module #kontenUtama h6 {
+    color: #172554;
+    font-weight: var(--kandaga-weight-bold);
+    letter-spacing: -.01em;
+}
+
+body.kandaga-module #kontenUtama > .breadcrumb {
+    font-size: var(--kandaga-text-sm);
+    color: var(--kandaga-muted);
+}
+
+body.kandaga-module #kontenUtama label,
+body.kandaga-module #kontenUtama .form-label {
+    font-size: var(--kandaga-text-sm);
+    font-weight: var(--kandaga-weight-semibold);
+    color: #334155;
+}
+
+body.kandaga-module #kontenUtama .form-control,
+body.kandaga-module #kontenUtama .custom-select,
+body.kandaga-module #kontenUtama .custom-file-label {
+    font-size: var(--kandaga-text-md);
+    line-height: 1.4;
+}
+
+body.kandaga-module #kontenUtama .btn {
+    font-weight: var(--kandaga-weight-semibold);
+    letter-spacing: .005em;
+}
+
+body.kandaga-module #kontenUtama .table {
+    font-size: var(--kandaga-text-sm);
+}
+
+body.kandaga-module #kontenUtama .table thead th {
+    font-size: var(--kandaga-text-xs);
+    font-weight: var(--kandaga-weight-bold);
+    letter-spacing: .035em;
+    text-transform: none;
+}
+
+body.kandaga-module #kontenUtama .small,
+body.kandaga-module #kontenUtama small {
+    font-size: var(--kandaga-text-xs);
+}
+
+body.kandaga-module #kontenUtama .card,
+body.kandaga-module #kontenUtama .section-card,
+body.kandaga-module #kontenUtama .form-section {
+    border-color: var(--kandaga-border);
+    border-radius: 12px;
+}
+
+body.kandaga-module #kontenUtama code,
+body.kandaga-module #kontenUtama pre,
+body.kandaga-module #kontenUtama .metadata-code {
+    font-family: var(--kandaga-font-mono);
+}
+
+body.kandaga-module #sidebar .nav-link,
+body.kandaga-module #sidebar .sidebar-heading,
+body.kandaga-module .navbar,
+body.kandaga-module .navbar-brand {
+    font-family: var(--kandaga-font-ui) !important;
+}
+
+body.kandaga-module #sidebar .nav-link { font-size: var(--kandaga-text-sm); }
+body.kandaga-module #sidebar .sidebar-heading {
+    font-size: var(--kandaga-text-xs);
+    font-weight: var(--kandaga-weight-bold);
+    letter-spacing: .06em;
+}
+
+body.kandaga-module #realtime-clock {
+    font-family: var(--kandaga-font-ui) !important;
+    font-variant-numeric: tabular-nums;
+}
+
+body.kandaga-module .kandaga-dashboard-context {
+    font-family: var(--kandaga-font-ui) !important;
+}
+
+body.kandaga-module .timestamp-stamp,
+body.kandaga-module .audit-timestamp {
+    font-family: var(--kandaga-font-mono) !important;
+}
+
+@media (max-width: 575.98px) {
+    body.kandaga-module #kontenUtama h1 { font-size: 1.5rem !important; }
+    body.kandaga-module #kontenUtama h2 { font-size: 1.3rem !important; }
+    body.kandaga-module #kontenUtama h3 { font-size: 1.15rem !important; }
+    body.kandaga-module #kontenUtama h4 { font-size: 1rem !important; }
+    body.kandaga-module #kontenUtama .table { font-size: .82rem; }
+    body.kandaga-module #kontenUtama .table thead th { font-size: .7rem; }
+}

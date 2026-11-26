@@ -1,0 +1,22 @@
+body {
+    font-size: 10pt;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table, th, td {
+    border: none;
+    padding: 5px;
+}
+.text-center {
+    text-align: center;
+}
+/* Tambahkan aturan ini untuk meratakan teks */
+td:nth-child(2) {
+    text-align: justify;
+}
+
+img {
+    margin-bottom: 10px; /* Menambahkan margin di bawah gambar */
+}

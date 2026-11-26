@@ -1,0 +1,249 @@
+/* Bibliografi publik — modal relasi dan daftar naskah yang responsif. */
+.bibliography-page .bibliography-related-modal-dialog {
+    width: calc(100% - 2rem);
+    max-width: 880px;
+    margin: 1rem auto;
+    max-height: calc(100dvh - 2rem);
+}
+
+.bibliography-page .bibliography-related-modal {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: calc(100dvh - 2rem);
+    border-radius: 18px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.bibliography-page .bibliography-related-modal-header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: .8rem;
+    padding: .95rem 1rem;
+    background: #1e293b;
+    border-bottom: 1px solid #334155;
+}
+
+.bibliography-page .linked-bibliography-cover {
+    width: 44px;
+    height: 58px;
+    flex: 0 0 44px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: rgba(255,255,255,.16);
+}
+
+.bibliography-page .bibliography-related-heading {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.bibliography-page .bibliography-related-heading .modal-title,
+.bibliography-page .bibliography-related-heading .bibliographic-citation {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.bibliography-page .bibliography-related-heading .modal-title {
+    line-height: 1.35;
+}
+
+.bibliography-page .bibliography-related-modal-header .close {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    margin: -.2rem -.3rem 0 0;
+    padding: 0;
+    border-radius: 8px;
+    opacity: 1;
+}
+
+.bibliography-page .bibliography-related-modal-header .close:hover,
+.bibliography-page .bibliography-related-modal-header .close:focus {
+    background: rgba(255,255,255,.16);
+}
+
+.bibliography-page .bibliography-related-modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: 1rem;
+}
+
+.bibliography-page .linked-manuscripts-list {
+    display: grid;
+    gap: .7rem;
+}
+
+.bibliography-page .linked-manuscript-item {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: .75rem;
+    padding: .75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.bibliography-page .linked-manuscript-image {
+    width: 58px;
+    height: 76px;
+    object-fit: cover;
+    border-radius: 7px;
+    background: #f1f5f9;
+}
+
+.bibliography-page .linked-manuscript-info {
+    min-width: 0;
+}
+
+.bibliography-page .linked-manuscript-info > div {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.bibliography-page .manuscript-title {
+    color: #1e293b;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.bibliography-page .manuscript-code,
+.bibliography-page .manuscript-location {
+    margin-top: .22rem;
+    color: #64748b;
+    font-size: .82rem;
+    line-height: 1.4;
+}
+
+.bibliography-page .linked-manuscript-detail {
+    white-space: nowrap;
+    background: #245b73;
+    border-color: #245b73;
+}
+
+.bibliography-page .linked-manuscript-detail:hover,
+.bibliography-page .linked-manuscript-detail:focus {
+    background: #1d4658;
+    border-color: #1d4658;
+}
+
+/* Main monograph records use the same wrapping rules as the related modal. */
+.bibliography-page .bib-item {
+    min-width: 0;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.bibliography-page .bib-item > .d-flex:first-child {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 1rem;
+}
+
+.bibliography-page .bib-citation {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.6;
+}
+
+.bibliography-page .bib-item .mt-2.small,
+.bibliography-page .bib-item .mt-2.small a {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+}
+
+.bibliography-page .bib-item .mt-2.small a {
+    max-width: none !important;
+}
+
+.bibliography-page .bib-manuscript-link .btn {
+    white-space: normal;
+}
+
+@media (max-width: 767.98px) {
+    .bibliography-page .bibliography-related-modal-dialog {
+        width: calc(100% - 1rem);
+        max-width: none;
+        margin: .5rem auto;
+        height: calc(100dvh - 1rem);
+        max-height: calc(100dvh - 1rem);
+    }
+
+    .bibliography-page .bibliography-related-modal {
+        height: 100%;
+        max-height: 100%;
+        border-radius: 14px;
+    }
+
+    .bibliography-page .bibliography-related-modal-header {
+        padding: .8rem .85rem;
+        gap: .65rem;
+    }
+
+    .bibliography-page .linked-bibliography-cover {
+        width: 40px;
+        height: 54px;
+        flex-basis: 40px;
+    }
+
+    .bibliography-page .bibliography-related-modal-body {
+        padding: .8rem;
+    }
+
+    .bibliography-page .linked-manuscript-item {
+        grid-template-columns: 50px minmax(0, 1fr);
+        gap: .65rem;
+        padding: .65rem;
+    }
+
+    .bibliography-page .linked-manuscript-image {
+        width: 50px;
+        height: 66px;
+    }
+
+    .bibliography-page .linked-manuscript-detail {
+        grid-column: 2;
+        width: 100%;
+        white-space: normal;
+    }
+
+    .bibliography-page .bib-item > .d-flex:first-child {
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: .75rem;
+    }
+
+    .bibliography-page .bib-item > .d-flex:first-child > img {
+        width: 56px !important;
+        height: 76px !important;
+        margin-right: 0 !important;
+    }
+
+    .bibliography-page .bib-item > .d-flex:first-child > div:last-child {
+        grid-column: 2;
+        justify-content: flex-start;
+    }
+
+    .bibliography-page .bib-citation {
+        padding-right: 0 !important;
+    }
+
+    .bibliography-page .bibliography-related-modal-header {
+        padding: .8rem .85rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bibliography-page .modal.fade,
+    .bibliography-page .modal.fade .modal-dialog {
+        transition: none;
+    }
+}

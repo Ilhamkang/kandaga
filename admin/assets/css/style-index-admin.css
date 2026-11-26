@@ -1,0 +1,168 @@
+/* ==========================================
+   Variables & Base Styles
+   ========================================== */
+:root {
+    --navy: #0f2042;
+    --navy-light: #1e3a68;
+    --sidebar-width: 250px;
+    --sidebar-mini: 70px;
+}
+
+body {
+    background-color: #f8f9fc;
+    font-family: var(--kandaga-font-ui, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
+    color: #333;
+    margin: 0;
+}
+
+/* ==========================================
+   Navbar
+   ========================================== */
+.navbar {
+    background-color: #ffffff !important;
+    height: 60px;
+}
+.navbar-brand {
+    font-weight: 800;
+    color: var(--navy) !important;
+}
+
+/* ==========================================
+   Sidebar Styling (Navy Theme)
+   ========================================== */
+#sidebar {
+    min-height: 0;
+    height: calc(100vh - 60px);
+    max-height: calc(100vh - 60px);
+    background: var(--navy);
+    border-right: 1px solid #e3e6f0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    width: var(--sidebar-width);
+    transition: width 0.3s ease;
+}
+#sidebar > *:last-child { padding-bottom: 2rem; }
+
+/* Sidebar Links */
+#sidebar .nav-link {
+    color: #b7b9cc;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+#sidebar .nav-link i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+#sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+#sidebar .nav-link.active {
+    color: #ffffff;
+    background-color: var(--navy-light);
+    border-left: 4px solid #ffffff;
+    font-weight: 600;
+}
+
+/* Sidebar Headings */
+.sidebar-heading {
+    padding: 1rem 1.5rem 0.5rem 1.5rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #5a5c69; /* Abu gelap agar terbaca di background navy */
+    font-weight: 800;
+    letter-spacing: 0.05rem;
+}
+
+.sidebar-divider {
+    margin: 0.5rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================
+   Main Content Wrapper
+   ========================================== */
+#main-wrapper {
+    margin-left: var(--sidebar-width);
+    transition: margin-left 0.3s ease;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ==========================================
+   Sidebar Toggle Logic (Mini & Responsive)
+   ========================================== */
+/* Kondisi Mini */
+body.sidebar-mini #sidebar { width: var(--sidebar-mini); }
+body.sidebar-mini #main-wrapper { margin-left: var(--sidebar-mini); }
+
+/* Sembunyikan elemen saat Mini */
+body.sidebar-mini #sidebar .nav-link span,
+body.sidebar-mini #sidebar .sidebar-heading,
+body.sidebar-mini #sidebar .badge { display: none !important; }
+body.sidebar-mini #sidebar .sidebar-divider { display: none; }
+body.sidebar-mini #sidebar .nav-link {
+    justify-content: center;
+    padding: .75rem .5rem;
+    position: relative;
+}
+body.sidebar-mini #sidebar .nav-link i {
+    margin-right: 0;
+    width: 1.25rem;
+    flex: 0 0 1.25rem;
+    font-size: 1rem;
+    line-height: 1;
+    text-align: center;
+}
+
+.kandaga-sidebar-tooltip {
+    position: fixed;
+    z-index: 2000;
+    max-width: 240px;
+    padding: .4rem .65rem;
+    border-radius: .4rem;
+    background: #0f172a;
+    color: #fff;
+    font-size: .78rem;
+    line-height: 1.25;
+    box-shadow: 0 8px 20px rgba(15,23,42,.2);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* Responsive Mobile (Overlay) */
+@media (max-width: 768px) {
+    #sidebar { margin-left: -250px; }
+    body.sidebar-open #sidebar { margin-left: 0; width: var(--sidebar-width); }
+    #main-wrapper { margin-left: 0 !important; }
+}
+
+/* ==========================================
+   Custom Utility & Mobile Override
+   ========================================== */
+.card { border-radius: 10px; }
+.badge { padding: 0.3em 0.6em; border-radius: 0.5rem; }
+
+@media (max-width: 576px) {
+    #main-wrapper { padding: 0.75rem !important; }
+    .navbar-brand { font-size: 0.9rem; }
+    .navbar-brand img { height: 25px !important; }
+    .breadcrumb { font-size: 0.8rem; margin-bottom: 0.75rem !important; }
+    /* Card padding is controlled by each module's Bootstrap utility class. */
+    .btn { padding: 0.4rem 0.6rem; font-size: 0.85rem; }
+    h1, h2, h3, h4 { font-size: 1.25rem !important; }
+}

@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap');
+
+html, body {
+  height: 100%;
+  margin: 0;
+  box-sizing: border-box; /* Menghindari masalah overflow */
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 15px;
+  /* Hapus overflow: hidden untuk memastikan scrollbar global bekerja */
+}
+
+/* Mengatur tinggi container utama */
+#dashboard-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100%;
+}
+
+#sidebar {
+  width: 170px;
+  background: #f8f9fa;
+  padding: 12px;
+  overflow-y: auto; /* Sidebar hanya scroll jika butuh */
+  height: 100vh;
+}
+
+/* Konten utama */
+#content { /* Perbaiki selector menjadi #content */
+  flex-grow: 1;
+  width: 100%;
+  padding: 5px; /* Kurangi padding untuk memastikan scrollbar muncul */
+  background-color: #fff;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+}
+
+#content-container {
+  display: flex;
+  flex-direction: column; /* Pastikan elemen diatur dalam satu kolom */
+  align-items: flex-start; /* Konten rata kiri */
+  width: 100%;
+}
+
+#navbar {
+  background-color: #f8f9fa;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#navbar-title {
+  margin: 0;
+}
+
+#logout {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#logout img {
+  height: 20px;
+  margin-left: 10px;
+}
+
+#logout:hover {
+  transform: scale(1.2);
+}
+
+#user-info {
+  display: flex;
+  align-items: center;
+}
+
+#user-info img {
+  height: 20px;
+  margin-right: 5px;
+}
+
+#username {
+  margin-right: 10px;
+}
+
+#sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+#sidebar li {
+  margin-bottom: 10px;
+}
+
+#sidebar a {
+  display: block;
+  padding: 10px;
+  font-size: 12px;
+  text-decoration: none;
+  color: #333;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+#sidebar a:hover {
+  background-color: #ddd;
+}
+
+footer {
+  background-color: black;
+  color: white;
+  height: 80px;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+  margin-top: auto;
+}
+
+.placeholder-img,
+.naskah-img {
+    width: 300px !important;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+    object-fit: contain;
+    border: 1px solid #ddd;
+    padding: 5px;
+    background-color: #f9f9f9;
+}
+
+.table td:first-child {
+    white-space: nowrap;
+    width: 1px;
+    padding-right: 15px;
+}
+
+.table {
+    border: none;
+}
+
+.table td, 
+.table th {
+    padding: 3px;
+    line-height: 1.3;
+    vertical-align: top;
+    border: none;
+}
+
+.form-input {
+  width: 100%; /* Pastikan semua input termasuk textarea punya lebar penuh */
+  max-width: 585px; /* Atur max-width jika perlu */
+  box-sizing: border-box; /* Agar padding tidak menambah ukuran total */
+}
+
+
+textarea.form-input {
+  resize: vertical; /* Biar pengguna bisa resize ke bawah, tapi lebarnya tetap */
+  height: 120px; /* Atur tinggi default */
+  width: 100%; /* Pastikan semua input termasuk textarea punya lebar penuh */
+  max-width: 600px; /* Atur max-width jika perlu */
+}
+
+

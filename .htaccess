@@ -1,0 +1,56 @@
+Options -Indexes -MultiViews
+RewriteEngine On
+
+# Batas upload untuk development lokal: kode menerima gambar hingga 5 MB.
+# Hanya berlaku pada mod_php; aman jika host memakai PHP-FPM.
+<IfModule php_module>
+    php_value upload_max_filesize 16M
+    php_value post_max_size 20M
+</IfModule>
+
+RewriteRule ^sitemap\.xml$ sitemap.php [L,QSA]
+
+# Keep POST endpoints and internal resources away from canonical redirects.
+# These directories contain PHP helpers and deployment-only code; they must
+# never be addressable as web resources. Server-side require/include remains
+# unaffected by these rewrite rules.
+RewriteRule ^(?:config|includes|admin/(?:includes|engines))(?:/|$) - [F,L,NC]
+RewriteRule ^(?:maintenance\.lock|update_cache\.json)$ - [F,L,NC]
+RewriteRule ^(?:admin|actions|modules|assets|pages)(?:/|$) - [L,NC]
+# Deployment metadata, diagnostics, examples, and migrations are not public
+# resources. The application reads them server-side when needed.
+RewriteRule ^(?:tools|migrations|import-examples)(?:/|$) - [F,L,NC]
+RewriteRule ^(?:cek-localhost\.php|version\.json|update-manifest\.json|CHANGELOG\.md|RELEASE\.md|VALIDASI\.md)$ - [F,L,NC]
+# Protect root-level deployment/configuration files if they exist on a host
+# that maps PHP source files directly.
+RewriteRule ^(?:config|database|analytics|update)\.php$ - [F,L,NC]
+RewriteRule ^kandaga_backup(?:/|$) - [F,L,NC]
+RewriteRule \.(?:sql|zip|bak|log)$ - [F,L,NC]
+# Do not expose repository metadata, local environment files, or package data.
+RewriteRule ^(?:\.git|\.env|composer\.(?:json|lock)|package(?:-lock)?\.json)(?:/|$) - [F,L,NC]
+
+# Never serve deployment secrets or local override files.
+<FilesMatch "^(?:\.env|.*\.local\.php|.*\.ini|.*\.log|.*\.bak)$">
+    Require all denied
+</FilesMatch>
+
+RewriteCond %{THE_REQUEST} \s/+pages/bibliografi\.php[\s?] [NC]
+RewriteRule ^pages/bibliografi\.php$ /monograf [R=301,L,NE]
+RewriteCond %{THE_REQUEST} \s/+pages/katalog\.php[\s?] [NC]
+RewriteRule ^pages/katalog\.php$ /katalog [R=301,L,NE]
+RewriteCond %{THE_REQUEST} \s/+(.+)\.php[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+RewriteRule ^koleksi/([a-zA-Z0-9_-]+)/?$ pages/detail-koleksi.php?slug=$1 [L,QSA]
+RewriteRule ^monograf/?$ pages/bibliografi.php [L,QSA]
+RewriteRule ^katalog/?$ pages/katalog.php [L,QSA]
+RewriteRule ^lokasi/([a-zA-Z0-9_-]+)/?$ pages/detail-koleksi.php?slug=$1 [L,QSA]
+RewriteRule ^kabar/?$ pages/daftar-post.php [L,QSA]
+RewriteRule ^kabar/([a-zA-Z0-9-]+)/?$ pages/post.php?slug=$1 [L,QSA]
+RewriteRule ^export/?$ modules/export.php [L,QSA]
+RewriteRule ^iiif-viewer/?$ pages/iiif-viewer.php [L,QSA]
+RewriteRule ^(lapor-naskah|bookmark|statistik|disclaimer|ngiringan|bibliografi|indeks-judul|referensi|tentang|koleksi|detail-kontributor|kontak|kontributor|indeks-lokasi)/?$ pages/$1.php [L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^/.]+)/?$ $1.php [L,QSA]

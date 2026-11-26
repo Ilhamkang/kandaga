@@ -1,0 +1,335 @@
+/* Kandaga mobile layout foundation. Keep desktop rules unchanged. */
+:root {
+    --kandaga-mobile-gutter: .75rem;
+    --kandaga-mobile-section-gap: 1.5rem;
+}
+
+@media (max-width: 767.98px) {
+    /* Homepage sections own the gutter; embedded partials must not add one. */
+    body.kandaga-public .home-container > .home-section > .container,
+    body.kandaga-public .home-container > .hero-section > .container,
+    body.kandaga-public .home-container > .home-section > .bg-light > .container {
+        padding-left: var(--kandaga-mobile-gutter) !important;
+        padding-right: var(--kandaga-mobile-gutter) !important;
+    }
+
+    /* Shared shell for standalone pages that previously inherited only the
+       generic Bootstrap container padding. */
+    body.kandaga-special-page > .page-header > .container,
+    body.kandaga-special-page > .container {
+        padding-left: var(--kandaga-mobile-gutter) !important;
+        padding-right: var(--kandaga-mobile-gutter) !important;
+    }
+
+    body.kandaga-special-page .page-header {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+        margin-bottom: 1.25rem !important;
+    }
+
+    body.kandaga-special-page .content-card,
+    body.kandaga-special-page .wrapper-disclaimer,
+    body.kandaga-special-page .profile-card,
+    body.kandaga-special-page .bibliography-card {
+        padding: 1rem !important;
+        border-radius: 14px;
+    }
+
+    body.kandaga-special-page > .container > .row {
+        margin-left: -.35rem;
+        margin-right: -.35rem;
+    }
+
+    body.kandaga-special-page > .container > .row > [class*="col-"] {
+        padding-left: .35rem;
+        padding-right: .35rem;
+    }
+
+    body.kandaga-statistics-page .chart-container {
+        height: 220px;
+        padding: .75rem;
+    }
+
+    body.kandaga-statistics-page .traffic-stat-row .public-top-searches,
+    body.kandaga-statistics-page .traffic-stat-row .popular-manuscripts {
+        min-height: 0;
+    }
+
+    body.kandaga-statistics-page .research-status-head {
+        flex-wrap: wrap;
+    }
+
+    body.kandaga-contributors-page .card-kontributor-premium {
+        border-radius: 12px;
+    }
+
+    body.kandaga-contributor-profile-page .profile-card .d-flex.gap-3 {
+        flex-wrap: wrap;
+        gap: .5rem !important;
+    }
+
+    body.kandaga-contributor-profile-page .stat-card {
+        flex: 1 1 9rem;
+    }
+
+    body.kandaga-disclaimer-page h4 {
+        align-items: flex-start;
+        font-size: 1.05rem;
+        line-height: 1.45;
+    }
+
+    body.kandaga-disclaimer-page .alert-notice {
+        padding: .9rem;
+    }
+
+    body.kandaga-title-index-page .index-card {
+        overflow: hidden;
+    }
+
+    body.kandaga-title-index-page .list-group-item {
+        align-items: flex-start !important;
+        gap: .6rem;
+    }
+
+    body.kandaga-title-index-page .judul-link {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    body.kandaga-title-index-page .naskah-count {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    body.kandaga-public .home-container .embedded-module {
+        width: 100%;
+        max-width: none !important;
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.kandaga-public .home-container .embedded-kontributor {
+        max-width: 960px !important;
+    }
+
+    body.kandaga-public .home-container .home-section {
+        padding-top: var(--kandaga-mobile-section-gap) !important;
+        padding-bottom: var(--kandaga-mobile-section-gap) !important;
+    }
+
+    /* Standalone public pages retain their own container, but use one compact gutter. */
+    body.manuscript-detail-page > .container,
+    body.kandaga-search > .container,
+    body.kandaga-post-page > .article-page-shell,
+    body.kandaga-post-list-page > .article-list-shell {
+        padding-left: var(--kandaga-mobile-gutter) !important;
+        padding-right: var(--kandaga-mobile-gutter) !important;
+    }
+
+    /* Goah: main-wrapper, kontenUtama, and module shells must not stack gutters. */
+    body.kandaga-admin-shell #main-wrapper {
+        padding: .5rem !important;
+    }
+
+    body.kandaga-admin-shell #kontenUtama {
+        padding-left: .5rem !important;
+        padding-right: .5rem !important;
+    }
+
+    body.kandaga-admin-shell #kontenUtama > .container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.kandaga-admin-shell #kontenUtama > .breadcrumb {
+        margin-left: .25rem;
+        margin-right: .25rem;
+    }
+
+    /* Avoid accidental horizontal overflow from long metadata and controls. */
+    body.kandaga-public .row,
+    body.kandaga-admin-shell .row {
+        min-width: 0;
+    }
+
+    body.kandaga-public img,
+    body.kandaga-public iframe,
+    body.kandaga-public video,
+    body.kandaga-admin-shell img,
+    body.kandaga-admin-shell iframe,
+    body.kandaga-admin-shell video {
+        max-width: 100%;
+    }
+
+    .kandaga-digital-access {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        min-height: 1.75rem;
+    }
+
+    .kandaga-digital-access-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: .45rem;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        text-decoration: none !important;
+    }
+}
+
+.kandaga-digital-access {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+}
+
+.kandaga-digital-access-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: .45rem;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    text-decoration: none !important;
+    transition: background-color .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.kandaga-digital-access-link:hover,
+.kandaga-digital-access-link:focus-visible {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    transform: translateY(-1px);
+}
+
+.kandaga-digital-access-pdf { color: #dc2626 !important; }
+.kandaga-digital-access-iiif { color: #2563eb !important; }
+
+/* Search cards use non-interactive availability markers. Detail pages keep
+   their full PDF/IIIF links and the button treatment defined elsewhere. */
+.kandaga-digital-indicators {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    margin-left: .45rem;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.kandaga-digital-indicator {
+    font-size: .82rem;
+    line-height: 1;
+}
+
+.kandaga-digital-indicator-pdf { color: #b42318; }
+.kandaga-digital-indicator-iiif { color: #245b73; }
+
+.search-material-meta {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    white-space: normal;
+}
+
+.search-card-metadata {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: .5rem;
+}
+
+.search-card-code {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.card-naskah .card-body,
+.search-list-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.search-list-metadata {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: .65rem;
+}
+
+.search-list-metadata > span:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+@media (max-width: 575.98px) {
+    .search-card-metadata,
+    .search-list-metadata {
+        grid-template-columns: 1fr;
+        gap: .25rem;
+    }
+
+    .search-material-meta {
+        justify-self: start;
+    }
+
+    body.kandaga-bibliography-page .bibliography-header {
+        margin-bottom: 1rem !important;
+    }
+
+    body.kandaga-bibliography-page .search-box-wrapper {
+        padding: .75rem !important;
+    }
+
+    body.kandaga-bibliography-page .bib-item {
+        padding: 1rem 0 !important;
+    }
+
+    body.kandaga-bibliography-page .bib-item > .d-flex:first-child {
+        display: grid !important;
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: .75rem;
+    }
+
+    body.kandaga-bibliography-page .bib-item > .d-flex:first-child > img {
+        width: 56px !important;
+        height: 76px !important;
+        margin-right: 0 !important;
+    }
+
+    body.kandaga-bibliography-page .bib-item .bib-citation {
+        min-width: 0;
+        padding-right: 0 !important;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    body.kandaga-bibliography-page .bib-item > .d-flex:first-child > div:last-child {
+        grid-column: 2;
+        justify-content: flex-start;
+    }
+
+    body.kandaga-bibliography-page .bib-manuscript-link,
+    body.kandaga-bibliography-page .bib-item .mt-2.small {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    body.kandaga-bibliography-page .bib-item .mt-2.small a {
+        display: inline !important;
+        max-width: none !important;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+}

@@ -1,0 +1,3 @@
+@import url('./module-fonts.css');
+body, body * { font-family: var(--kandaga-module-font) !important; }
+body { font-size: 16px; line-height: 1.65; }

@@ -1,0 +1,103 @@
+/* Kandaga typography foundation
+ * Shared by public pages, contributor pages, and the Goah panel.
+ * Keep script-specific fonts scoped to manuscript content only.
+ */
+:root {
+    --kandaga-font-ui: "Source Sans Pro", "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --kandaga-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    --kandaga-font-sunda: "Noto Sans Sundanese", "kairaga", var(--kandaga-font-ui);
+    --kandaga-font-sunda-kuno: "Bujangga", var(--kandaga-font-sunda);
+    --kandaga-text-xs: .75rem;
+    --kandaga-text-sm: .875rem;
+    --kandaga-text-md: 1rem;
+    --kandaga-text-lg: 1.125rem;
+    --kandaga-text-xl: 1.5rem;
+    --kandaga-leading-body: 1.55;
+    --kandaga-leading-tight: 1.25;
+    --kandaga-weight-regular: 400;
+    --kandaga-weight-medium: 500;
+    --kandaga-weight-semibold: 600;
+    --kandaga-weight-bold: 700;
+    --kandaga-weight-extrabold: 800;
+    --kandaga-text: #334155;
+    --kandaga-muted: #64748b;
+    --kandaga-border: #e2e8f0;
+    --kandaga-primary: #2563eb;
+}
+
+html,
+body {
+    font-family: var(--kandaga-font-ui);
+    color: var(--kandaga-text);
+    line-height: var(--kandaga-leading-body);
+}
+
+body.kandaga-module,
+body.kandaga-public {
+    font-family: var(--kandaga-font-ui) !important;
+    color: var(--kandaga-text);
+}
+
+body.kandaga-module h1,
+body.kandaga-module h2,
+body.kandaga-module h3,
+body.kandaga-module h4,
+body.kandaga-module h5,
+body.kandaga-module h6,
+body.kandaga-public h1,
+body.kandaga-public h2,
+body.kandaga-public h3,
+body.kandaga-public h4,
+body.kandaga-public h5,
+body.kandaga-public h6 {
+    font-family: var(--kandaga-font-ui);
+    line-height: var(--kandaga-leading-tight);
+}
+
+body.kandaga-module input,
+body.kandaga-module select,
+body.kandaga-module textarea,
+body.kandaga-module button,
+body.kandaga-public input,
+body.kandaga-public select,
+body.kandaga-public textarea,
+body.kandaga-public button {
+    font-family: inherit;
+}
+
+.kandaga-mono,
+code,
+pre,
+.viewer-code,
+.metadata-code,
+.badge-code {
+    font-family: var(--kandaga-font-mono);
+}
+
+.kandaga-script-sunda {
+    font-family: var(--kandaga-font-sunda);
+}
+
+.kandaga-script-sunda-kuno {
+    font-family: var(--kandaga-font-sunda-kuno);
+}
+
+/* Bootstrap 4 is the application baseline. These aliases keep older
+ * contributor templates readable while they are migrated gradually. */
+.fw-bold { font-weight: var(--kandaga-weight-bold) !important; }
+.fw-semibold { font-weight: var(--kandaga-weight-semibold) !important; }
+.ms-1 { margin-left: .25rem !important; }
+.ms-2 { margin-left: .5rem !important; }
+.ms-3 { margin-left: 1rem !important; }
+.me-1 { margin-right: .25rem !important; }
+.me-2 { margin-right: .5rem !important; }
+.me-3 { margin-right: 1rem !important; }
+
+@media (max-width: 575.98px) {
+    body.kandaga-module h1,
+    body.kandaga-public h1 { font-size: 1.5rem; }
+    body.kandaga-module h2,
+    body.kandaga-public h2 { font-size: 1.3rem; }
+    body.kandaga-module h3,
+    body.kandaga-public h3 { font-size: 1.15rem; }
+}

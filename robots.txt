@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /config/
+Disallow: /includes/
+Disallow: /actions/
+Disallow: /modules/
+Disallow: /tools/
+Disallow: /migrations/
+Disallow: /import-examples/
+Disallow: /cek-localhost.php
+Disallow: /version.json
+Disallow: /update-manifest.json
+Sitemap: https://katalog.kairaga.com/sitemap.xml
+
+# Halaman detail naskah, artikel, katalog, dan bibliografi tetap dapat dirayapi.

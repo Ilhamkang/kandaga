@@ -1,0 +1,21 @@
+.footer-visits { border-top: 1px solid #ffffff24; padding-top: 16px; margin-top: 20px; }
+.footer-visits-title { font-size: .85rem; font-weight: 600; color: #cbd5e1; }
+.footer-visits-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+.footer-visits-grid span { display: block; font-size: .75rem; color: #94a3b8; }
+.footer-visits-grid strong { font-size: 1.2rem; color: #f8fafc; }
+@media(max-width:767.98px) {
+    .kandaga-nav .navbar-brand img { height: 28px; }
+    .kandaga-nav .navbar-brand .brand-main { font-size: 1.05rem; }
+    .kandaga-nav .nav-link i { font-size: .9rem; }
+    .kandaga-nav .nav-link { padding: 8px 10px; }
+    .article-title { font-size: 1.7rem; line-height: 1.35; overflow-wrap: anywhere; }
+    .article-meta { gap: 8px 14px !important; font-size: .85rem; }
+    .article-body img, .article-body iframe { max-width: 100%; }
+    .article-body table { display: block; overflow-x: auto; max-width: 100%; }
+    .catalog-type-badges .badge { font-size: .8rem; padding: 8px 10px !important; }
+    .home-container .stat-card i { font-size: 1.3rem !important; }
+    .home-container .stat-number { font-size: 1.4rem; }
+    .home-container .stat-label { font-size: .8rem; }
+}
+
+@media(max-width:767.98px){.search-box-wrapper{display:flex!important;flex-direction:column;background:transparent!important;box-shadow:none!important;padding:0!important;border-radius:0!important;gap:10px}.search-input-modern{width:100%!important;min-width:0;background:white!important;border-radius:12px!important;padding:15px!important}.search-btn-modern{width:100%;margin:0!important;border-radius:12px!important}.search-btn-modern:hover{transform:none!important}.search-display-form{gap:8px}.search-list-card{padding:10px!important}.search-list-card img{width:65px!important}.sticky-top#searchCategoryPanel{position:static}}

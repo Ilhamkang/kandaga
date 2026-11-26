@@ -1,0 +1,63 @@
+/* Indeks judul publik — daftar ringan dan responsif. */
+.title-index-page .index-card,
+.kandaga-title-index-page .index-card {
+    border: 0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.title-index-page .list-group-item,
+.kandaga-title-index-page .list-group-item {
+    gap: 1rem;
+    padding: .9rem 1.1rem;
+}
+
+.title-index-page .judul-link,
+.kandaga-title-index-page .judul-link {
+    min-width: 0;
+    color: #1e293b;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.title-index-page .judul-link:hover,
+.title-index-page .judul-link:focus,
+.kandaga-title-index-page .judul-link:hover,
+.kandaga-title-index-page .judul-link:focus {
+    color: #245b73;
+    text-decoration: none;
+}
+
+.title-index-page .naskah-count,
+.kandaga-title-index-page .naskah-count {
+    flex: 0 0 auto;
+    color: #64748b;
+    font-size: .82rem;
+    white-space: nowrap;
+}
+
+.title-index-page .btn-letter,
+.kandaga-title-index-page .btn-letter {
+    min-width: 2.25rem;
+    margin: .15rem;
+}
+
+@media (max-width: 575.98px) {
+    .title-index-page .list-group-item,
+    .kandaga-title-index-page .list-group-item {
+        align-items: flex-start !important;
+        gap: .5rem;
+        padding: .8rem .75rem;
+    }
+
+    .title-index-page .naskah-count,
+    .kandaga-title-index-page .naskah-count {
+        font-size: .75rem;
+    }
+
+    .title-index-page .pagination-label,
+    .kandaga-title-index-page .pagination-label {
+        display: none;
+    }
+}

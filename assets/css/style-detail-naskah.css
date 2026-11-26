@@ -1,0 +1,146 @@
+/* Manuscript detail presentation. Keep image and interaction rules scoped to
+   the single manuscript page so public cards and the home page are untouched. */
+.manuscript-detail-page .image-viewer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+}
+
+.manuscript-detail-page .image-viewer-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-height: min(68vh, 760px);
+    overflow: hidden;
+}
+
+.manuscript-detail-page .naskah-img-fit {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: min(68vh, 760px);
+    object-fit: contain;
+    margin: 0 auto;
+    cursor: zoom-in;
+}
+
+/* Keep long-form metadata aligned with the rest of the detail table. */
+.manuscript-detail-page .detail-metadata .value-col.prose-value,
+.manuscript-detail-page .detail-metadata .value-col.prose-value p,
+.manuscript-detail-page .detail-metadata .value-col.prose-value div,
+.manuscript-detail-page .detail-metadata .value-col.prose-value li,
+.manuscript-detail-page .detail-metadata .value-col.prose-value blockquote {
+    text-align: justify !important;
+}
+
+.manuscript-detail-page .related-card {
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.manuscript-detail-page .related-card:hover,
+.manuscript-detail-page .related-card:focus-within {
+    transform: translateY(-4px);
+    border-color: #93c5fd !important;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, .14) !important;
+}
+
+.manuscript-detail-page .related-card img {
+    transition: transform .3s ease;
+}
+
+.manuscript-detail-page .related-card:hover img,
+.manuscript-detail-page .related-card:focus-within img {
+    transform: scale(1.04);
+}
+
+/* Keep labels above values on narrow screens without changing desktop layout. */
+.detail-metadata {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.detail-metadata .label-col {
+    width: 210px;
+    color: #64748b;
+    font-weight: 700;
+    vertical-align: top;
+    white-space: normal;
+}
+
+.detail-metadata .value-col {
+    color: #1e293b;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+}
+
+.detail-metadata tr {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.detail-metadata tr:last-child {
+    border-bottom: 0;
+}
+
+@media (max-width: 767.98px) {
+    .manuscript-detail-page .image-viewer-container {
+        padding: .5rem 0;
+        border-radius: 10px;
+    }
+
+    .manuscript-detail-page .image-viewer-box {
+        max-height: min(55vh, 520px);
+    }
+
+    .manuscript-detail-page .naskah-img-fit {
+        max-width: 100%;
+        max-height: min(55vh, 520px);
+    }
+
+    .detail-metadata,
+    .detail-metadata tbody,
+    .detail-metadata tr,
+    .detail-metadata td {
+        display: block;
+        width: 100%;
+    }
+
+    .detail-metadata tr {
+        padding: .7rem 0 .85rem;
+    }
+
+    .detail-metadata .label-col,
+    .detail-metadata .value-col {
+        width: 100%;
+        border: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .detail-metadata .label-col {
+        padding-top: 0;
+        padding-bottom: .25rem;
+        font-size: .78rem;
+        letter-spacing: .01em;
+        text-transform: none;
+    }
+
+    .detail-metadata .value-col {
+        padding-top: 0;
+        padding-bottom: 0;
+        line-height: 1.65;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .manuscript-detail-page .related-card,
+    .manuscript-detail-page .related-card img {
+        transition: none;
+    }
+}

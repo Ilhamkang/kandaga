@@ -1,0 +1,102 @@
+/* --- Root Variables untuk kemudahan maintenance --- */
+:root {
+    --primary-color: #2c3e50;
+    --accent-color: #3498db;
+    --bg-light: #f8f9fa;
+    --transition-speed: 0.3s;
+}
+
+body {
+    background-color: var(--bg-light);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* --- Penyesuaian Card Naskah --- */
+.card {
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Efek dinamis saat mouse diarahkan ke kartu */
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    transition: transform var(--transition-speed) ease;
+}
+
+/* Efek zoom pada gambar saat kartu di-hover */
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* --- Sidebar Sticky yang elegan --- */
+.sidebar-sticky {
+    position: sticky;
+    top: 100px; /* Jarak dari atas layar */
+    border-radius: 15px;
+    background: #ffffff;
+}
+
+/* --- Tipografi & Elemen UI --- */
+h2 {
+    font-weight: 700;
+    color: var(--primary-color);
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* Garis bawah dekoratif di bawah judul */
+h2::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 4px;
+    background: var(--accent-color);
+    margin-top: 10px;
+    border-radius: 2px;
+}
+
+.card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.btn-outline-secondary {
+    border-radius: 20px;
+    padding: 8px 20px;
+    transition: all 0.2s;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* --- Responsif untuk Mobile --- */
+@media (max-width: 991px) {
+    .sidebar-sticky {
+        position: static; /* Hilangkan sticky di HP agar tidak menutupi konten */
+        margin-top: 2rem;
+    }
+    
+    .card-img-top {
+        height: 250px; /* Sedikit lebih tinggi di mobile agar nyaman dilihat */
+    }
+}
+
+/* --- Animasi Fade In untuk Konten --- */
+.container {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

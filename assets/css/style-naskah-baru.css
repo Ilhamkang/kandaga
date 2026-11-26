@@ -1,0 +1,40 @@
+/* 1. Efek Hover untuk kartu */
+.naskah-baru-card {
+    transition: all 0.3s ease !important;
+    border: 1px solid #edf2f7 !important; /* Menjaga border tetap halus */
+}
+
+.naskah-baru-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    border-color: #2563eb !important;
+}
+
+/* 2. Opsional: Efek zoom halus pada gambar saat card di-hover */
+.naskah-baru-card img {
+    transition: transform 0.3s ease;
+}
+
+.naskah-baru-card:hover img {
+    transform: scale(1.05);
+}
+
+/* 3. Tipografi Judul (Tetap mempertahankan logika truncate Anda) */
+.card-title {
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    line-height: 1.4 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    height: 2.8em !important;
+    margin-bottom: 0 !important;
+}
+
+/* 4. Styling khusus untuk kode inventaris (Opsional jika ingin tampilan lebih unik) */
+.text-muted .fa-barcode {
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
