@@ -79,27 +79,27 @@ foreach ($users as $row) {
 
 <div class="card shadow-sm border-0 user-card">
     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 font-weight-bold" style="color: #0f2042;"><i class="fa-solid fa-user-gear mr-2"></i>Monitor Pengguna</h5>
+        <h5 class="mb-0 fw-bold" style="color: #0f2042;"><i class="fa-solid fa-user-gear me-2"></i>Monitor Pengguna</h5>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover mb-0">
                 <thead class="bg-light">
-                    <tr><th class="pl-4">User</th><th>Peran</th><th class="text-center">Status Aktivitas</th><th class="text-center">Aksi</th></tr>
+                    <tr><th class="ps-4">User</th><th>Peran</th><th class="text-center">Status Aktivitas</th><th class="text-center">Aksi</th></tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($users as $row) : 
+                    <?php foreach ($users as $row) :
                         $is_me = (isset($_SESSION['admin_id']) && $row['id'] == $_SESSION['admin_id']);
                         $is_online = ($row['status_akun'] === 'aktif' && $row['last_aksi'] !== null && strpos(strtolower($row['last_aksi']), 'logout') === false && ($waktu_sekarang - strtotime($row['last_waktu'])) < 300);
                         if ($is_me) $is_online = true;
                     ?>
                     <tr>
-                        <td class="pl-4 align-middle">
-                            <div class="font-weight-bold text-dark"><?= htmlspecialchars($row['username']); ?></div>
+                        <td class="ps-4 align-middle">
+                            <div class="fw-bold text-dark"><?= htmlspecialchars($row['username']); ?></div>
                             <small class="text-muted"><?= htmlspecialchars($row['nama'] ?? ''); ?></small>
-                            <?php if ($row['status_akun'] == 'blokir'): ?> <span class="badge badge-soft-danger text-danger ml-2" style="background:#fff1f1;">Diblokir</span> <?php endif; ?>
+                            <?php if ($row['status_akun'] == 'blokir'): ?> <span class="badge bg-danger-subtle text-danger-emphasis ms-2">Diblokir</span> <?php endif; ?>
                         </td>
-                        <td class="align-middle"><span class="badge badge-light border"><?= ucfirst($row['role']); ?></span></td>
+                        <td class="align-middle"><span class="badge bg-light border"><?= ucfirst($row['role']); ?></span></td>
                         <td class="text-center align-middle">
                             <span class="text-muted small">
                                 <span class="status-dot <?= $is_online ? 'status-online' : 'status-offline'; ?>"></span>
@@ -117,7 +117,7 @@ foreach ($users as $row) {
                                     <button class="btn btn-sm btn-light text-danger btn-hapus" data-id="<?= $row['id']; ?>" data-user="<?= $row['username']; ?>"><i class="fa-solid fa-trash-can"></i></button>
                                 </div>
                             <?php else : ?>
-                                <span class="badge badge-secondary">Admin Aktif</span>
+                                <span class="badge bg-secondary">Admin Aktif</span>
                             <?php endif; ?>
                         </td>
                     </tr>

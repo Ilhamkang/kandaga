@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/../config/bootstrap.php'; 
+require_once __DIR__ . '/../config/bootstrap.php';
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
-require_once __DIR__ . '/../config/database.php'; 
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/version.php';
 ?>
 <!DOCTYPE html>
@@ -19,16 +19,16 @@ require_once __DIR__ . '/../includes/version.php';
         body { background-color: #f8fafc; color: #334155; font-family: 'Inter', sans-serif; line-height: 1.6; }
         .page-header { background: white; padding: 50px 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 40px; }
         .wrapper-disclaimer { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); padding: 45px; }
-        
+
         h4 { color: #0f172a; font-weight: 700; margin-top: 35px; margin-bottom: 15px; display: flex; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
         h4 i { color: #0284c7; margin-right: 12px; font-size: 1.3rem; }
-        
+
         h5 { color: #1e293b; font-weight: 600; margin-top: 20px; margin-bottom: 10px; }
         p, li { color: #475569; font-size: 0.95rem; text-align: justify; }
         ul, ol { padding-left: 22px; }
         li { margin-bottom: 10px; }
         .wrapper-disclaimer hr { border-color: #e2e8f0; }
-        
+
         .alert-notice { background-color: #f0f9ff; border-left: 4px solid #0284c7; border-radius: 8px; padding: 20px; margin-bottom: 30px; }
         .table-matrix { font-size: 0.9rem; margin-top: 15px; margin-bottom: 20px; }
         .table-matrix th { background-color: #f8fafc; color: #1e293b; font-weight: 600; }
@@ -42,15 +42,15 @@ require_once __DIR__ . '/../includes/version.php';
 
 <div class="page-header text-center">
     <div class="container">
-        <h2 class="font-weight-bold">Ketentuan Penggunaan &amp; Penafian</h2>
+        <h2 class="fw-bold">Ketentuan Penggunaan &amp; Penafian</h2>
     </div>
 </div>
 
 <div class="container pb-5">
     <div class="wrapper-disclaimer kandaga-prose">
-    
+
     <div class="alert-notice">
-        <h5 class="font-weight-bold text-dark mb-2"><i class="fas fa-gavel text-primary me-2"></i> Ketentuan Umum Penggunaan Platform</h5>
+        <h5 class="fw-bold text-dark mb-2"><i class="fas fa-gavel text-primary me-2"></i> Ketentuan Umum Penggunaan Platform</h5>
         <p class="mb-2"><strong>KANDAGA</strong> adalah katalog bersama digital lintas institusi dan perorangan yang berfokus pada pendokumentasian naskah Sunda. Dokumen ini menjelaskan ketentuan penggunaan, batas tanggung jawab, serta pengelolaan hak atas data dan kode aplikasi.</p>
         <p class="mb-0 small text-muted"><i class="fas fa-exclamation-circle text-warning me-1"></i> <strong>Cara membaca ketentuan ini:</strong> Dengan mengakses atau menggunakan layanan KANDAGA, Anda dianggap telah membaca ketentuan di bawah ini. Jika tidak menyetujuinya, mohon tidak menggunakan data atau layanan yang disediakan.</p>
     </div>
@@ -74,7 +74,7 @@ require_once __DIR__ . '/../includes/version.php';
 
     <h4><i class="fas fa-user-shield"></i> 3. Batasan Wewenang dan Akuntabilitas Pengguna</h4>
     <p>Untuk menjaga akuntabilitas data, tata kelola akses KANDAGA diatur berdasarkan peran berikut:</p>
-    
+
     <h5>A. Admin / Webmaster</h5>
     <p>Admin memiliki wewenang atas pemeliharaan server, keamanan sistem, optimasi performa, validasi akun kontributor, serta penanganan keluhan terkait data. Tanggung jawab Admin mencakup keamanan siber dan kepatuhan regulasi digital platform, tanpa bertindak sebagai penjamin keaslian fisik manuskrip atau keabsahan kepemilikan naskah di lapangan.</p>
 
@@ -113,23 +113,23 @@ require_once __DIR__ . '/../includes/version.php';
     <h4><i class="fas fa-chart-line"></i> Analitik Kunjungan</h4>
     <p>Untuk pengembangan layanan, KANDAGA mencatat halaman yang dibuka, waktu kunjungan, kata kunci pencarian, IP, perangkat, dan browser. Rincian hanya tersedia bagi administrator. Pemetaan negara dan kota menggunakan ipwho.is apabila geolokasi diaktifkan; hasilnya bersifat perkiraan. IP lokal tidak dikirim ke layanan tersebut.</p>
     <hr class="my-4">
-    
+
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center bg-light p-3 rounded border">
-        <div class="text-left mb-2 mb-md-0">
+        <div class="text-start mb-2 mb-md-0">
             <p class="mb-0 small text-muted"><strong>Lisensi data KANDAGA:</strong></p>
             <p class="mb-0 small text-muted">Deskripsi dan metadata yang disusun KANDAGA dilisensikan di bawah <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.id" target="_blank" rel="noopener noreferrer" class="fw-bold">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)</a>. Hak atas gambar naskah tetap berada pada pemilik atau institusi asal.</p>
         </div>
-        <div class="text-md-right text-center flex-shrink-0">
+        <div class="text-md-end text-center flex-shrink-0">
             <span class="badge bg-secondary p-2 license-badge"><i class="fab fa-creative-commons me-1"></i> BY-NC-SA 4.0</span>
         </div>
     </div>
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center bg-light p-3 rounded border mt-2">
-        <div class="text-left mb-2 mb-md-0">
+        <div class="text-start mb-2 mb-md-0">
             <p class="mb-0 small text-muted"><strong>Lisensi kode aplikasi:</strong></p>
             <p class="mb-0 small text-muted">Kode KANDAGA dirilis di bawah <a href="https://github.com/Ilhamkang/kandaga/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="fw-bold">GNU AGPL-3.0</a>. Rincian komponen pihak ketiga tersedia di repositori proyek.</p>
         </div>
-        <div class="text-md-right text-center flex-shrink-0">
+        <div class="text-md-end text-center flex-shrink-0">
             <span class="badge bg-primary p-2 license-badge"><i class="fas fa-code me-1"></i> AGPL-3.0</span>
         </div>
     </div>
@@ -146,7 +146,7 @@ require_once __DIR__ . '/../includes/version.php';
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
 
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>

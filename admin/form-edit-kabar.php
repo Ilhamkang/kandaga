@@ -45,7 +45,7 @@ if (!$query) {
 
 $data = mysqli_fetch_assoc($query);
 
-if (!$data) { 
+if (!$data) {
     die("ERROR: Data dengan ID $id tidak ditemukan di database.");
 }
 ?>
@@ -66,22 +66,22 @@ if (!$data) {
     <form id="formEditKabar" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_kabar" value="<?= $data['id_kabar']; ?>">
         <input type="hidden" name="thumbnail_lama" value="<?= htmlspecialchars($data['thumbnail']); ?>">
-        
+
         <div class="row">
             <div class="col-md-8">
                 <div class="card shadow-sm mb-3">
                     <div class="card-body">
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label>Judul Berita</label>
-                            <input type="text" name="judul" class="form-control form-control-lg" 
+                            <input type="text" name="judul" class="form-control form-control-lg"
                                    value="<?= htmlspecialchars($data['judul']); ?>" required>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label>Slug (URL Friendly)</label>
-                            <input type="text" name="slug" class="form-control" 
+                            <input type="text" name="slug" class="form-control"
                                    value="<?= htmlspecialchars($data['slug']); ?>" required>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label>Konten</label>
                             <textarea name="konten" id="editorKabar" class="form-control"><?= htmlspecialchars($data['konten']); ?></textarea>
                         </div>
@@ -107,17 +107,17 @@ if (!$data) {
                 <div class="card shadow-sm mb-3">
                     <div class="card-header bg-light"><strong>Status & Kategori</strong></div>
                     <div class="card-body">
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label>Kategori</label>
-                            <select name="kategori" class="form-control">
+                            <select name="kategori" class="form-select">
                                 <?php foreach(['berita', 'kegiatan', 'pengumuman', 'artikel'] as $kat): ?>
                                     <option value="<?= $kat ?>" <?= $data['kategori'] == $kat ? 'selected' : '' ?>><?= ucfirst($kat) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label>Status</label>
-                            <select name="status" class="form-control">
+                            <select name="status" class="form-select">
                                 <option value="published" <?= $data['status'] == 'published' ? 'selected' : '' ?>>Diterbitkan</option>
                                 <option value="draft" <?= $data['status'] == 'draft' ? 'selected' : '' ?>>Draf</option>
                             </select>
@@ -126,7 +126,7 @@ if (!$data) {
                 </div>
 
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary btn-lg"><i class="fa-solid fa-floppy-disk mr-1"></i>Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="fa-solid fa-floppy-disk me-1"></i>Simpan Perubahan</button>
                     <button type="button" class="btn btn-secondary" onclick="$('#kontenUtama').load('daftar-post.php')">Batal</button>
                 </div>
             </div>
@@ -157,9 +157,9 @@ if (!$data) {
     $('#formEditKabar').off('submit').on('submit', function(e) {
         e.preventDefault();
         if (typeof tinymce !== 'undefined') tinymce.triggerSave();
-        
+
         var formData = new FormData(this);
-        
+
         $.ajax({
             url: 'actions/proses-edit-kabar.php',
             type: 'POST',
@@ -181,4 +181,4 @@ if (!$data) {
     });
 </script>
 </body>
-</html>     
+</html>

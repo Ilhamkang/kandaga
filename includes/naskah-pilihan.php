@@ -42,12 +42,12 @@ if ($resultPilihan) {
 <div class="embedded-module embedded-naskah-pilihan py-4">
     <div class="row mb-4 align-items-end">
         <div class="col-12 border-left border-primary" style="border-width: 4px !important;">
-            <h3 class="ml-3 font-weight-bold" style="color: #1e293b; margin-bottom: 2px;">Naskah Pilihan</h3>
-            <p class="ml-3 text-muted mb-0">Rekomendasi kurasi naskah untuk Anda jelajahi hari ini.</p>
+            <h3 class="ms-3 fw-bold" style="color: #1e293b; margin-bottom: 2px;">Naskah Pilihan</h3>
+            <p class="ms-3 text-muted mb-0">Rekomendasi kurasi naskah untuk Anda jelajahi hari ini.</p>
         </div>
     </div>
 
-    <?php 
+    <?php
     if ($naskah !== null && $displayImg !== null): ?>
         <a href="detail.php?id=<?= $naskah['id'] ?>" class="text-decoration-none">
             <div class="card border-0 shadow-sm overflow-hidden card-pilihan" style="border-radius: 16px; transition: 0.3s;">
@@ -61,18 +61,18 @@ if ($resultPilihan) {
                     </div>
                     <div class="col-md-8">
                         <div class="card-body p-4 p-md-5">
-                            <h2 class="font-weight-bold mb-3" style="color: #1e293b; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.2; font-family: 'Inter', sans-serif;">
+                            <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.2; font-family: 'Inter', sans-serif;">
     <?= htmlspecialchars($naskah['judul']) ?>
 </h2>
                             <p class="card-text text-muted mb-4" style="line-height: 1.7; text-align: justify; font-size: 0.95rem;">
-                                <?php 
+                                <?php
                                     $clean_text = strip_tags(html_entity_decode($naskah['deskripsi_isi']));
                                     // Disesuaikan agar deskripsi tidak terlalu memanjang jika sangat panjang
-                                    echo (mb_strlen($clean_text) > 450) ? mb_substr($clean_text, 0, 450) . "..." : $clean_text; 
+                                    echo (mb_strlen($clean_text) > 450) ? mb_substr($clean_text, 0, 450) . "..." : $clean_text;
                                 ?>
                             </p>
-                            <span class="font-weight-bold" style="color: #2563eb;">
-                                Baca Selengkapnya <i class="fas fa-arrow-right ml-1"></i>
+                            <span class="fw-bold" style="color: #2563eb;">
+                                Baca Selengkapnya <i class="fas fa-arrow-right ms-1"></i>
                             </span>
                         </div>
                     </div>

@@ -44,15 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
     <?php if (!empty($pesan_sukses)): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <?= $pesan_sukses ?>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
 
     <div class="card shadow-sm border-0 card-custom">
         <div class="header-custom">
-            <i class="fa-solid fa-clock-rotate-left mr-2"></i>Riwayat Aktivitas Pengguna
+            <i class="fa-solid fa-clock-rotate-left me-2"></i>Riwayat Aktivitas Pengguna
         </div>
         <div class="table-responsive">
             <table class="table table-hover m-0">
@@ -69,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
                     $logs = mysqli_query($conn, "SELECT * FROM user_logs ORDER BY id_log DESC LIMIT 50");
                     if ($logs && mysqli_num_rows($logs) > 0):
                         while ($l = mysqli_fetch_array($logs)):
-                            $badge = (stripos($l['aksi'], 'Menyunting') !== false) ? 'badge-warning' : 'badge-secondary';
+                            $badge = (stripos($l['aksi'], 'Menyunting') !== false) ? 'bg-warning text-dark' : 'bg-secondary';
                     ?>
                     <tr>
                         <td><?= date('H:i, d M Y', strtotime($l['waktu'])); ?></td>

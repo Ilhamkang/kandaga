@@ -21,45 +21,45 @@ if (session_status() === PHP_SESSION_NONE) session_start();
     <h5 class="text-center mb-4" style="color:#0f2042; font-weight:800;">Daftar Kontributor</h5>
 
     <form id="registerForm">
-        <div class="form-group">
+        <div class="mb-3">
             <label>Username</label>
             <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user"></i></span></div>
+                <span class="input-group-text"><i class="fa fa-user"></i></span>
                 <input type="text" name="username" class="form-control" required autocomplete="off">
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             <label>Email</label>
             <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-envelope"></i></span></div>
+                <span class="input-group-text"><i class="fa fa-envelope"></i></span>
                 <input type="email" name="email" class="form-control" required autocomplete="off">
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             <label>Kata Sandi</label>
             <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-lock"></i></span></div>
+                <span class="input-group-text"><i class="fa fa-lock"></i></span>
                 <input type="password" name="password" id="passwordField" class="form-control" required autocomplete="off">
-                <div class="input-group-append">
+
                     <span class="input-group-text"><i class="fa fa-eye" id="togglePassword" style="cursor:pointer;"></i></span>
-                </div>
+
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             <label>Konfirmasi Kata Sandi</label>
             <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-lock"></i></span></div>
+                <span class="input-group-text"><i class="fa fa-lock"></i></span>
                 <input type="password" name="password_confirm" id="passwordConfirm" class="form-control" required autocomplete="off">
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             <label>Verifikasi Keamanan</label>
             <div class="input-group mb-2">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-shield"></i></span></div>
+                <span class="input-group-text"><i class="fa fa-shield"></i></span>
                 <input type="text" name="captcha" id="captchaInput" class="form-control" placeholder="Masukkan kode" required autocomplete="off">
             </div>
             <div class="text-center">
@@ -67,10 +67,10 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                 <p class="text-muted" style="font-size: 10px; margin-top:5px;">Klik gambar untuk ganti kode</p>
             </div>
         </div>
-        
+
         <button type="submit" class="btn btn-login" id="btnSubmit">DAFTAR SEKARANG</button>
     </form>
-    
+
     <div class="text-center mt-3">
         <a href="<?= BASE_URL ?>/login.php" class="text-decoration-none" style="color:#0f2042; font-size:0.8rem;">
             <i class="fa-solid fa-arrow-left"></i> Kembali ke Login
@@ -79,7 +79,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 </div>
 
 <script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
-<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <script>
     // 1. Toggle Password
@@ -99,14 +99,14 @@ if (session_status() === PHP_SESSION_NONE) session_start();
     // 3. AJAX Register
     $('#registerForm').on('submit', function(e) {
         e.preventDefault();
-        
+
         if ($('#passwordField').val() !== $('#passwordConfirm').val()) {
             Swal.fire('Oops!', 'Konfirmasi kata sandi tidak cocok!', 'warning');
             return;
         }
 
         var btn = $('#btnSubmit');
-        
+
         $.ajax({
             url: '<?= BASE_URL ?>/actions/proses-registrasi.php', // Sesuaikan path ini
             type: 'POST',
@@ -117,7 +117,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
             success: function(res) {
                 // Parsing jika res berbentuk string JSON
                 var data = (typeof res === 'string') ? JSON.parse(res) : res;
-                
+
                 if (data.success) {
                     Swal.fire('Berhasil!', data.message, 'success').then(() => {
                         window.location.href = '<?= BASE_URL ?>/login.php';
@@ -126,7 +126,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                     Swal.fire('Gagal!', data.message, 'error');
                     btn.prop('disabled', false).html('DAFTAR SEKARANG');
                     // Refresh captcha otomatis jika salah
-                    $('#captchaImage').click(); 
+                    $('#captchaImage').click();
                 }
             },
             error: function() {

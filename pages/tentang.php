@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../config/bootstrap.php'; 
+require_once __DIR__ . '/../config/bootstrap.php';
 // 1. Load Master Loader (config.php)
-require_once __DIR__ . '/../config.php'; 
+require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/version.php';
 ?>
 <!DOCTYPE html>
@@ -10,7 +10,7 @@ require_once __DIR__ . '/../includes/version.php';
     <title>Tentang KANDAGA - Katalog Naskah Sunda</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-tentang.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
@@ -22,7 +22,7 @@ require_once __DIR__ . '/../includes/version.php';
 
 <div class="page-header">
     <div class="container text-center">
-        <h2 class="font-weight-bold">Mengenal KANDAGA</h2>
+        <h2 class="fw-bold">Mengenal KANDAGA</h2>
         <p class="text-muted mx-auto page-subtitle">Upaya kolaboratif dalam mendigitalisasi dan memetakan kekayaan intelektual naskah Sunda.</p>
     </div>
 </div>
@@ -81,11 +81,11 @@ require_once __DIR__ . '/../includes/version.php';
                 <h4>Kontak & Pengembang</h4>
                 <img src="<?= BASE_URL ?>/assets/images/ilham-leiden.png" class="profile-img" alt="Ilham Nurwansah di Leiden" loading="lazy">
                 <div class="contact-info mb-4">
-                    <p class="mb-2"><strong><i class="fa-solid fa-id-badge mr-2 text-primary"></i> Ilham Nurwansah</strong></p>
-                    <p class="mb-0 text-muted small"><i class="fa-solid fa-envelope mr-2"></i> info@kairaga.com</p>
+                    <p class="mb-2"><strong><i class="fa-solid fa-id-badge me-2 text-primary"></i> Ilham Nurwansah</strong></p>
+                    <p class="mb-0 text-muted small"><i class="fa-solid fa-envelope me-2"></i> info@kairaga.com</p>
                 </div>
 
-                <a href="<?= BASE_URL ?>/kontak.php" class="btn btn-primary btn-block">
+                <a href="<?= BASE_URL ?>/kontak.php" class="btn btn-primary w-100">
                     <i class="fa-solid fa-envelope"></i> Hubungi Kami
                 </a>
                 <br>
@@ -95,16 +95,16 @@ require_once __DIR__ . '/../includes/version.php';
                 <p class="small text-muted mb-4">Iterasi berkelanjutan sejak Mei 2023 untuk aksesibilitas data budaya yang lebih baik.</p>
 
                 <hr>
-                <h4><i class="fa-solid fa-file-code mr-2 text-primary"></i>Lisensi</h4>
+                <h4><i class="fa-solid fa-file-code me-2 text-primary"></i>Lisensi</h4>
                 <p class="small text-muted mb-4">
                     Kode aplikasi KANDAGA dirilis di bawah lisensi
                     <a href="https://github.com/Ilhamkang/kandaga/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>.
                     Data naskah, metadata koleksi, dan pustaka pihak ketiga tidak termasuk dalam lisensi kode ini.
                 </p>
-                
+
                 <div class="support-note">
                     <p class="small support-note-text mb-3">
-                        <i class="fa-solid fa-mug-hot mr-1"></i>
+                        <i class="fa-solid fa-mug-hot me-1"></i>
                         Proyek ini dirawat dengan semangat pelestarian dan (tentu saja) ribuan cangkir kafein.
                         <br><br>
                         Jika <strong>KANDAGA</strong> bermanfaat bagi Anda, dukung kami agar tetap "melek" untuk terus mengembangkan fitur-fitur selanjutnya.
@@ -123,12 +123,12 @@ require_once __DIR__ . '/../includes/version.php';
                 </div>
             </div>
         </div>
-    </div> 
-</div> 
+    </div>
+</div>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
 
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>

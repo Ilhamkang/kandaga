@@ -1,4 +1,4 @@
 {
     "version": "3.1.67",
-    "description": "Kerapian halaman Tentang, kebijakan keamanan, inventaris dependensi, dan penghapusan dompdf yang tidak dipakai."
+    "description": "Kerapian Tentang dan Disclaimer, pengerasan keamanan rilis, upgrade Bootstrap 5.3.9, penyatuan jQuery, dan penghapusan berkas usang."
 }

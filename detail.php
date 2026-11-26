@@ -28,8 +28,8 @@ $current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 
 // Query Utama
 $query = "SELECT k.*, l.nama_tempat, l.foto_lokasi, l.negara, l.alamat
-          FROM katalog k 
-          LEFT JOIN tb_lokasi l ON k.id_lokasi = l.id_lokasi 
+          FROM katalog k
+          LEFT JOIN tb_lokasi l ON k.id_lokasi = l.id_lokasi
           WHERE k.id = ?";
 
 $stmt = $conn->prepare($query);
@@ -69,7 +69,7 @@ $stmt_views->close();
 
 // 2. Mengambil Data Relasi Banyak-ke-Banyak (Aksara, Bahasa, Alas Tulis)
 function getNamaRelasi($conn, $tableMaster, $tableJunction, $colId, $colNama, $id_naskah) {
-    $sql = "SELECT DISTINCT m.{$colNama} 
+    $sql = "SELECT DISTINCT m.{$colNama}
             FROM {$tableMaster} m
             JOIN {$tableJunction} j ON m.{$colId} = j.{$colId}
             WHERE j.id_naskah = ?
@@ -203,7 +203,7 @@ $seoImage = $display_image_url;
 <div class="container mt-5 mb-5">
     <div class="mb-4">
         <a href="search.php" class="btn btn-light rounded-pill px-4 text-muted border shadow-sm">
-            <i class="fas fa-arrow-left mr-2 text-primary"></i>Kembali ke Katalog
+            <i class="fas fa-arrow-left me-2 text-primary"></i>Kembali ke Katalog
         </a>
     </div>
 
@@ -222,20 +222,20 @@ $seoImage = $display_image_url;
             <div class="bg-white p-4 rounded-lg shadow-sm border-0">
                 <div class="mb-3 d-flex flex-wrap align-items-center" style="gap: .5rem">
                     <?= kandagaBookmarkButton($id, $row['judul'] ?? '') ?>
-                    <a class="btn btn-sm btn-outline-warning bookmark-style-action" href="<?= BASE_URL ?>/pages/lapor-naskah.php?id=<?= (int)$id ?>"><i class="fa-solid fa-comment-dots mr-1"></i>Lapor / Beri Masukan</a>
+                    <a class="btn btn-sm btn-outline-warning bookmark-style-action" href="<?= BASE_URL ?>/pages/lapor-naskah.php?id=<?= (int)$id ?>"><i class="fa-solid fa-comment-dots me-1"></i>Lapor / Beri Masukan</a>
                 </div>
                 <h2 class="detail-title mb-4"><?= htmlspecialchars($row['judul'] ?? '-') ?></h2>
                 <div class="table-responsive">
                     <table class="table table-detail detail-metadata">
                         <tr><td class="label-col">Tempat Penyimpan</td><td class="value-col"><?= htmlspecialchars($row['nama_tempat'] ?? '-') ?></td></tr>
                         <tr><td class="label-col">Kode Inventaris</td><td class="value-col"><?= htmlspecialchars($row['kode_inventaris'] ?? '-') ?></td></tr>
-                        <tr><td class="label-col">Riwayat Naskah</td><td class="value-col prose-value"><?= !empty($row['riwayat_naskah']) ? htmlspecialchars_decode($row['riwayat_naskah']) : "<span class='text-muted font-italic'>Informasi belum tersedia</span>" ?></td></tr>
+                        <tr><td class="label-col">Riwayat Naskah</td><td class="value-col prose-value"><?= !empty($row['riwayat_naskah']) ? htmlspecialchars_decode($row['riwayat_naskah']) : "<span class='text-muted fst-italic'>Informasi belum tersedia</span>" ?></td></tr>
                         <tr><td class="label-col">Aksara</td><td class="value-col"><?= htmlspecialchars($string_aksara) ?></td></tr>
                         <tr><td class="label-col">Bahasa</td><td class="value-col"><?= htmlspecialchars($string_bahasa) ?></td></tr>
                         <tr><td class="label-col">Alas Tulis</td><td class="value-col"><?= htmlspecialchars($string_alas_tulis) ?></td></tr>
                         <tr><td class="label-col">Deskripsi Fisik</td><td class="value-col prose-value"><?= !empty($row['deskripsi_fisik']) ? htmlspecialchars_decode($row['deskripsi_fisik']) : '-' ?></td></tr>
-                        <tr><td class="label-col">Deskripsi Isi</td><td class="value-col prose-value"><?= !empty($row['deskripsi_isi']) ? htmlspecialchars_decode($row['deskripsi_isi']) : "<span class='text-muted font-italic'>Informasi belum tersedia</span>" ?></td></tr>
-                        
+                        <tr><td class="label-col">Deskripsi Isi</td><td class="value-col prose-value"><?= !empty($row['deskripsi_isi']) ? htmlspecialchars_decode($row['deskripsi_isi']) : "<span class='text-muted fst-italic'>Informasi belum tersedia</span>" ?></td></tr>
+
                         <tr>
                             <td class="label-col">Referensi Katalog</td>
                             <td class="value-col">
@@ -244,14 +244,14 @@ $seoImage = $display_image_url;
                                         <div class="biblio-box shadow-sm mb-2">
                                             <div class="d-flex justify-content-between align-items-start mb-1">
                                                 <button type="button" class="btn btn-xs btn-light border py-0 px-2" onclick="copySitasiText('kat-<?= $index ?>', this)">
-                                                    <i class="far fa-copy mr-1"></i> Salin
+                                                    <i class="far fa-copy me-1"></i> Salin
                                                 </button>
                                             </div>
-                                            <div class="d-flex align-items-start"><?php if ($cover = kandagaBibliographyCover($ref)): ?><img src="<?= htmlspecialchars($cover) ?>" alt="Cover bibliografi" style="width:48px;height:64px;object-fit:cover" class="rounded mr-2"><?php endif; ?><div id="kat-<?= $index ?>"><?= formatSitasiApsa($ref) ?></div></div>
+                                            <div class="d-flex align-items-start"><?php if ($cover = kandagaBibliographyCover($ref)): ?><img src="<?= htmlspecialchars($cover) ?>" alt="Cover bibliografi" style="width:48px;height:64px;object-fit:cover" class="rounded me-2"><?php endif; ?><div id="kat-<?= $index ?>"><?= formatSitasiApsa($ref) ?></div></div>
                                         </div>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <span class="text-muted font-italic">Data katalog belum tersedia.</span>
+                                    <span class="text-muted fst-italic">Data katalog belum tersedia.</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -264,14 +264,14 @@ $seoImage = $display_image_url;
                                         <div class="biblio-box shadow-sm mb-2">
                                             <div class="d-flex justify-content-between align-items-start mb-1">
                                                 <button type="button" class="btn btn-xs btn-light border py-0 px-2" onclick="copySitasiText('prim-<?= $index ?>', this)">
-                                                    <i class="far fa-copy mr-1"></i> Salin
+                                                    <i class="far fa-copy me-1"></i> Salin
                                                 </button>
                                             </div>
-                                            <div class="d-flex align-items-start"><?php if ($cover = kandagaBibliographyCover($ref)): ?><img src="<?= htmlspecialchars($cover) ?>" alt="Cover bibliografi" style="width:48px;height:64px;object-fit:cover" class="rounded mr-2"><?php endif; ?><div id="prim-<?= $index ?>"><?= formatSitasiApsa($ref) ?></div></div>
+                                            <div class="d-flex align-items-start"><?php if ($cover = kandagaBibliographyCover($ref)): ?><img src="<?= htmlspecialchars($cover) ?>" alt="Cover bibliografi" style="width:48px;height:64px;object-fit:cover" class="rounded me-2"><?php endif; ?><div id="prim-<?= $index ?>"><?= formatSitasiApsa($ref) ?></div></div>
                                         </div>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <span class="text-muted font-italic">Data referensi primer belum tersedia.</span>
+                                    <span class="text-muted fst-italic">Data referensi primer belum tersedia.</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -284,45 +284,45 @@ $seoImage = $display_image_url;
                                         <div class="biblio-box shadow-sm mb-2">
                                             <div class="d-flex justify-content-between align-items-start mb-1">
                                                 <button type="button" class="btn btn-xs btn-light border py-0 px-2" onclick="copySitasiText('sek-<?= $index ?>', this)">
-                                                    <i class="far fa-copy mr-1"></i> Salin
+                                                    <i class="far fa-copy me-1"></i> Salin
                                                 </button>
                                             </div>
-                                            <div class="d-flex align-items-start"><?php if ($cover = kandagaBibliographyCover($ref)): ?><img src="<?= htmlspecialchars($cover) ?>" alt="Cover bibliografi" style="width:48px;height:64px;object-fit:cover" class="rounded mr-2"><?php endif; ?><div id="sek-<?= $index ?>"><?= formatSitasiApsa($ref) ?></div></div>
+                                            <div class="d-flex align-items-start"><?php if ($cover = kandagaBibliographyCover($ref)): ?><img src="<?= htmlspecialchars($cover) ?>" alt="Cover bibliografi" style="width:48px;height:64px;object-fit:cover" class="rounded me-2"><?php endif; ?><div id="sek-<?= $index ?>"><?= formatSitasiApsa($ref) ?></div></div>
                                         </div>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <span class="text-muted font-italic">Data referensi sekunder belum tersedia.</span>
+                                    <span class="text-muted fst-italic">Data referensi sekunder belum tersedia.</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
                          <tr>
                             <td class="label-col">
-                                <span class="text-muted font-weight-bold">
-                                    Ekspor Obyek <i class="fa-solid fa-file-export mr-1"></i>
+                                <span class="text-muted fw-bold">
+                                    Ekspor Obyek <i class="fa-solid fa-file-export me-1"></i>
                                 </span>
                             </td>
                             <td class="value-col">
                                 <div class="d-flex flex-wrap align-items-center" style="gap: 20px;">
                                     <a class="btn-export-link" href="<?= BASE_URL ?>/export.php?id=<?= $row['id']; ?>&format=csv">
-                                        <i class="fa-solid fa-file-csv text-success mr-1"></i> CSV
+                                        <i class="fa-solid fa-file-csv text-success me-1"></i> CSV
                                     </a>
                                     <a class="btn-export-link" target="_blank" href="<?= BASE_URL ?>/export.php?id=<?= $row['id']; ?>&format=mods">
-                                        <i class="fa-solid fa-file-lines text-warning mr-1"></i> MODS
+                                        <i class="fa-solid fa-file-lines text-warning me-1"></i> MODS
                                     </a>
                                     <a class="btn-export-link" target="_blank" href="<?= BASE_URL ?>/export.php?id=<?= $row['id']; ?>&format=pica+">
-                                        <i class="fa-solid fa-quote-right text-muted mr-1"></i> PICA+
+                                        <i class="fa-solid fa-quote-right text-muted me-1"></i> PICA+
                                     </a>
                                     <a class="btn-export-link" target="_blank" href="<?= BASE_URL ?>/export.php?id=<?= $row['id']; ?>&format=marc21">
-                                        <i class="fa-solid fa-code text-primary mr-1"></i> MARC21
+                                        <i class="fa-solid fa-code text-primary me-1"></i> MARC21
                                     </a>
                                     <a class="btn-export-link" target="_blank" href="<?= BASE_URL ?>/export.php?id=<?= $row['id']; ?>&format=tei">
-                                        <i class="fa-solid fa-file-code text-info mr-1"></i> TEI
+                                        <i class="fa-solid fa-file-code text-info me-1"></i> TEI
                                     </a>
                                     <a class="btn-export-link" target="_blank" href="<?= BASE_URL ?>/export.php?id=<?= $row['id']; ?>&format=hsp-kod">
-                                        <i class="fa-solid fa-book-open text-danger mr-1"></i> HSP-KOD
+                                        <i class="fa-solid fa-book-open text-danger me-1"></i> HSP-KOD
                                     </a>
                                     <a class="btn-export-link" target="_blank" href="<?= BASE_URL ?>/export.php?id=<?= $row['id']; ?>&format=hsp-desc">
-                                        <i class="fa-solid fa-align-left text-secondary mr-1"></i> HSP-DESC
+                                        <i class="fa-solid fa-align-left text-secondary me-1"></i> HSP-DESC
                                     </a>
                                 </div>
                             </td>
@@ -344,17 +344,17 @@ $seoImage = $display_image_url;
                         <tr>
                             <td class="label-col">Penyedia</td>
                             <td class="value-col">
-                                <?= !empty($row['penyedia_akses']) ? htmlspecialchars($row['penyedia_akses']) : "<span class='text-muted font-italic'>Tidak tersedia</span>" ?>
+                                <?= !empty($row['penyedia_akses']) ? htmlspecialchars($row['penyedia_akses']) : "<span class='text-muted fst-italic'>Tidak tersedia</span>" ?>
                             </td>
                         </tr>
-                        
+
                         <tr>
                             <td class="label-col">URL repositori</td>
                             <td class="value-col">
-                                <?= !empty($row['url_repositori']) ? "<a href='".htmlspecialchars($row['url_repositori'])."' target='_blank'>".htmlspecialchars($row['url_repositori'])."</a>" : "<span class='text-muted font-italic'>Tidak tersedia</span>" ?>
+                                <?= !empty($row['url_repositori']) ? "<a href='".htmlspecialchars($row['url_repositori'])."' target='_blank'>".htmlspecialchars($row['url_repositori'])."</a>" : "<span class='text-muted fst-italic'>Tidak tersedia</span>" ?>
                             </td>
                         </tr>
-                        
+
                         <tr>
                             <td class="label-col">Advance viewer</td>
                             <td class="value-col">
@@ -363,18 +363,18 @@ $seoImage = $display_image_url;
                                         <?php if (!empty($row['url_pdf'])): ?>
                                             <a href="<?= htmlspecialchars($row['url_pdf']) ?>" target="_blank" class="text-danger text-decoration-none text-center">
                                                 <i class="fas fa-file-pdf fa-3x"></i>
-                                                <div class="small mt-1 font-weight-bold">PDF</div>
+                                                <div class="small mt-1 fw-bold">PDF</div>
                                             </a>
                                         <?php endif; ?>
                                         <?php if (!empty($row['iiif_manifest'])): ?>
                                         <a href="iiif-viewer.php?id=<?= $row['id'] ?>&manifest=<?= urlencode($row['iiif_manifest']) ?>" ...>
                                                     <img src="assets/images/iiif-icon.png" style="width: 45px;">
-                                                <div class="small mt-1 font-weight-bold text-dark">IIIF</div>
+                                                <div class="small mt-1 fw-bold text-dark">IIIF</div>
                                             </a>
                                         <?php endif; ?>
                                     </div>
                                 <?php else: ?>
-                                    <span class="text-muted font-italic">Tidak tersedia</span>
+                                    <span class="text-muted fst-italic">Tidak tersedia</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -394,7 +394,7 @@ $seoImage = $display_image_url;
                         <tr>
                             <td class="label-col" style="width: 200px; vertical-align: top;">
                                 <?php $foto_lokasi = !empty($row['foto_lokasi']) ? "assets/images/" . $row['foto_lokasi'] : "assets/images/msc-placeholder.png"; ?>
-                                <span class="sr-only">Foto lokasi koleksi</span>
+                                <span class="visually-hidden">Foto lokasi koleksi</span>
                                 <img src="<?= htmlspecialchars($foto_lokasi) ?>" alt="Foto <?= htmlspecialchars($row['nama_tempat'] ?? 'Lokasi') ?>" class="img-fluid rounded shadow-sm" style="width: 200px; height: 100px; object-fit: cover;">
                             </td>
                             <td class="value-col">
@@ -411,12 +411,12 @@ $seoImage = $display_image_url;
     <div class="row mt-4">
         <div class="col-lg-12">
             <div class="bg-white p-4 rounded-lg shadow-sm border-0">
-                <h6 class="font-weight-bold mb-3"><i class="fas fa-share-alt mr-2"></i>Bagikan Naskah Ini</h6>
+                <h6 class="fw-bold mb-3"><i class="fas fa-share-alt me-2"></i>Bagikan Naskah Ini</h6>
                 <div class="d-flex flex-wrap" style="gap: 10px;">
-                    <a href="https://wa.me/?text=Lihat%20naskah%20ini di Katalog Naskah Sunda:%20<?= urlencode($current_url) ?>" target="_blank" class="btn btn-success"><i class="fab fa-whatsapp mr-1"></i> WhatsApp</a>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?= urlencode($current_url) ?>" target="_blank" class="btn btn-primary"><i class="fab fa-facebook mr-1"></i> Facebook</a>
-                    <a href="https://twitter.com/intent/tweet?url=<?= urlencode($current_url) ?>&text=Cek%20naskah%20ini:%20<?= urlencode($row['judul'] ?? '') ?>" target="_blank" class="btn btn-dark"><i class="fab fa-x-twitter mr-1"></i> X</a>
-                    <button type="button" onclick="copyLink()" id="btnCopy" class="btn btn-outline-secondary"><i class="fas fa-link mr-1"></i> Salin Link</button>
+                    <a href="https://wa.me/?text=Lihat%20naskah%20ini di Katalog Naskah Sunda:%20<?= urlencode($current_url) ?>" target="_blank" class="btn btn-success"><i class="fab fa-whatsapp me-1"></i> WhatsApp</a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?= urlencode($current_url) ?>" target="_blank" class="btn btn-primary"><i class="fab fa-facebook me-1"></i> Facebook</a>
+                    <a href="https://twitter.com/intent/tweet?url=<?= urlencode($current_url) ?>&text=Cek%20naskah%20ini:%20<?= urlencode($row['judul'] ?? '') ?>" target="_blank" class="btn btn-dark"><i class="fab fa-x-twitter me-1"></i> X</a>
+                    <button type="button" onclick="copyLink()" id="btnCopy" class="btn btn-outline-secondary"><i class="fas fa-link me-1"></i> Salin Link</button>
                 </div>
             </div>
         </div>
@@ -428,7 +428,7 @@ $seoImage = $display_image_url;
 
 
     <div class="mt-5 pt-4">
-        <h5 class="font-weight-bold mb-4" style="color: #1e293b;">Naskah Terkait Lainnya</h5>
+        <h5 class="fw-bold mb-4" style="color: #1e293b;">Naskah Terkait Lainnya</h5>
         <div class="row">
             <?php foreach ($ranked as $rel):
                 $rel_img = kandagaImageUrl($rel);
@@ -440,9 +440,9 @@ $seoImage = $display_image_url;
                             <img src="<?= htmlspecialchars($rel_img, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" style="width: 100%; height: 100%; object-fit: cover;"<?= kandagaImageFallbackAttribute() ?>>
                         </div>
                         <div class="p-3 bg-white">
-                            <p class="small font-weight-bold mb-1" style="height: 38px; overflow: hidden; line-height: 1.2; color: #334155;"><?= htmlspecialchars($rel['judul']) ?></p>
-                            <small class="text-muted d-block text-truncate"><i class="fas fa-barcode mr-1" style="font-size: 10px;"></i> <?= htmlspecialchars($rel['kode_inventaris'] ?? '-') ?></small>
-                            <small class="text-muted d-block text-truncate"><i class="fas fa-university mr-1" style="font-size: 10px;"></i> <?= htmlspecialchars($rel['nama_tempat'] ?? '-') ?></small>
+                            <p class="small fw-bold mb-1" style="height: 38px; overflow: hidden; line-height: 1.2; color: #334155;"><?= htmlspecialchars($rel['judul']) ?></p>
+                            <small class="text-muted d-block text-truncate"><i class="fas fa-barcode me-1" style="font-size: 10px;"></i> <?= htmlspecialchars($rel['kode_inventaris'] ?? '-') ?></small>
+                            <small class="text-muted d-block text-truncate"><i class="fas fa-university me-1" style="font-size: 10px;"></i> <?= htmlspecialchars($rel['nama_tempat'] ?? '-') ?></small>
                         </div>
                     </div>
                 </a>
@@ -454,7 +454,7 @@ $seoImage = $display_image_url;
 
 <?php include 'includes/footer.php'; ?>
 
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/viewer.min.js"></script>
 <script>
@@ -469,7 +469,7 @@ $seoImage = $display_image_url;
         navigator.clipboard.writeText(url).then(() => {
             const btn = document.getElementById('btnCopy');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check mr-1"></i> Tersalin!';
+            btn.innerHTML = '<i class="fas fa-check me-1"></i> Tersalin!';
             btn.classList.replace('btn-outline-secondary', 'btn-success');
             setTimeout(() => {
                 btn.innerHTML = originalText;

@@ -22,7 +22,7 @@
             button.setAttribute('aria-pressed',saved?'true':'false');
             button.classList.toggle('btn-primary',saved);button.classList.toggle('btn-outline-primary',!saved);
             var icon=button.querySelector('i'),text=button.querySelector('span');
-            if(icon)icon.className=(saved?'fa-solid':'fa-regular')+' fa-bookmark mr-1';
+            if(icon)icon.className=(saved?'fa-solid':'fa-regular')+' fa-bookmark me-1';
             if(text)text.textContent=saved?'Tersimpan':'Bookmark';
             button.setAttribute('aria-label',(saved?'Hapus bookmark: ':'Bookmark: ')+(button.dataset.bookmarkTitle||'Naskah '+button.dataset.kandagaBookmark));
         });
@@ -43,7 +43,7 @@
         if(item){body.appendChild(element('p','small text-muted mb-1',item.location));body.appendChild(element('p','small text-primary mb-0',item.inventory));}
         layout.appendChild(body);
         var button=element('button','btn btn-sm btn-primary kandaga-bookmark-button');button.type='button';button.dataset.kandagaBookmark=id;button.dataset.bookmarkTitle=name;button.setAttribute('aria-pressed','true');
-        var icon=element('i','fa-solid fa-bookmark mr-1');icon.setAttribute('aria-hidden','true');button.appendChild(icon);button.appendChild(element('span','','Tersimpan'));layout.appendChild(button);article.appendChild(layout);return article;
+        var icon=element('i','fa-solid fa-bookmark me-1');icon.setAttribute('aria-hidden','true');button.appendChild(icon);button.appendChild(element('span','','Tersimpan'));layout.appendChild(button);article.appendChild(layout);return article;
     }
     async function render() {
         if(!list)return;

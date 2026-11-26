@@ -14,28 +14,28 @@
                 <?php endif; ?>
             </div>
 
-            <div class="col-md-3 mb-4 ml-auto">
+            <div class="col-md-3 mb-4 ms-auto">
                 <h5 class="footer-title">Pintasan</h5>
                 <ul class="footer-links">
-                    <li><a href="<?= BASE_URL ?>/pages/indeks-judul.php"><i class="fa-solid fa-chevron-right mr-2" style="font-size: 0.7rem;"></i> Indeks Judul</a></li>
-                    <li><a href="<?= BASE_URL ?>/monograf"><i class="fa-solid fa-chevron-right mr-2" style="font-size: 0.7rem;"></i> Monograf</a></li>
-                    <li><a href="<?= BASE_URL ?>/katalog"><i class="fa-solid fa-chevron-right mr-2" style="font-size: 0.7rem;"></i> Katalog</a></li>
-                    <li><a href="<?= BASE_URL ?>/pages/statistik.php"><i class="fa-solid fa-chevron-right mr-2" style="font-size: 0.7rem;"></i> Statistik Data</a></li>
-                    <li><a href="<?= BASE_URL ?>/pages/tentang.php"><i class="fa-solid fa-chevron-right mr-2" style="font-size: 0.7rem;"></i> Tentang Proyek</a></li>
-                    <li><a href="<?= BASE_URL ?>/pages/disclaimer.php"><i class="fa-solid fa-chevron-right mr-2" style="font-size: 0.7rem;"></i> Disclaimer</a></li>
-                    <li><a href="<?= BASE_URL ?>/pages/kontak.php"><i class="fa-solid fa-chevron-right mr-2" style="font-size: 0.7rem;"></i> Kontak</a></li>
-                    <!--<li><a href="<?= BASE_URL ?>/pages/login.php"><i class="fa-solid fa-chevron-right mr-2" style="font-size: 0.7rem;"></i> Login</a></li>-->
+                    <li><a href="<?= BASE_URL ?>/pages/indeks-judul.php"><i class="fa-solid fa-chevron-right me-2" style="font-size: 0.7rem;"></i> Indeks Judul</a></li>
+                    <li><a href="<?= BASE_URL ?>/monograf"><i class="fa-solid fa-chevron-right me-2" style="font-size: 0.7rem;"></i> Monograf</a></li>
+                    <li><a href="<?= BASE_URL ?>/katalog"><i class="fa-solid fa-chevron-right me-2" style="font-size: 0.7rem;"></i> Katalog</a></li>
+                    <li><a href="<?= BASE_URL ?>/pages/statistik.php"><i class="fa-solid fa-chevron-right me-2" style="font-size: 0.7rem;"></i> Statistik Data</a></li>
+                    <li><a href="<?= BASE_URL ?>/pages/tentang.php"><i class="fa-solid fa-chevron-right me-2" style="font-size: 0.7rem;"></i> Tentang Proyek</a></li>
+                    <li><a href="<?= BASE_URL ?>/pages/disclaimer.php"><i class="fa-solid fa-chevron-right me-2" style="font-size: 0.7rem;"></i> Disclaimer</a></li>
+                    <li><a href="<?= BASE_URL ?>/pages/kontak.php"><i class="fa-solid fa-chevron-right me-2" style="font-size: 0.7rem;"></i> Kontak</a></li>
+                    <!--<li><a href="<?= BASE_URL ?>/pages/login.php"><i class="fa-solid fa-chevron-right me-2" style="font-size: 0.7rem;"></i> Login</a></li>-->
                 </ul>
             </div>
 
             <div class="col-md-3 mb-4 footer-contact">
                 <h5 class="footer-title">Kontak Kami</h5>
                 <p class="d-flex align-items-start">
-                    <i class="fa-solid fa-envelope mt-1"></i> 
+                    <i class="fa-solid fa-envelope mt-1"></i>
                     <span>info@kairaga.com</span>
                 </p>
                 <p class="d-flex align-items-start">
-                    <i class="fa-solid fa-location-dot mt-1"></i> 
+                    <i class="fa-solid fa-location-dot mt-1"></i>
                     <span>Bandung, Jawa Barat,<br>Indonesia</span>
                 </p>
                 <div class="social-icons mt-3" aria-label="Media sosial Kairaga">
@@ -51,7 +51,7 @@
     <div class="footer-bottom">
         <div class="container text-center">
             <p class="mb-0 small" style="opacity: 0.8;">
-                &copy; <?= date('Y'); ?> <span class="brand-footer">KAIRAGA.COM</span>. 
+                &copy; <?= date('Y'); ?> <span class="brand-footer">KAIRAGA.COM</span>.
                 Seluruh data dikelola secara mandiri oleh <b>Kairaga Project</b>.
             </p>
         </div>

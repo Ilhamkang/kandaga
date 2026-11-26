@@ -15,12 +15,12 @@ $slug = isset($_GET['slug']) && is_string($_GET['slug']) ? trim($_GET['slug']) :
 $stmt = $conn->prepare("SELECT k.*, u.nama FROM tb_kabar k LEFT JOIN users u ON k.penulis_id = u.id WHERE k.slug = ? AND k.status = 'published' LIMIT 1");
 $stmt->bind_param('s', $slug); $stmt->execute(); $data = $stmt->get_result()->fetch_assoc(); $stmt->close();
 
-if (!$data) { 
+if (!$data) {
     http_response_code(404);
     die("<div class='container py-5 text-center'>
             <h3>Artikel tidak ditemukan.</h3>
             <a href='" . BASE_URL . "/kabar' class='btn btn-primary'>Kembali ke Daftar Kabar</a>
-         </div>"); 
+         </div>");
 }
 
 // Query sidebar
@@ -41,14 +41,14 @@ function get_summary($konten, $limit = 20) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= htmlspecialchars($data['judul']); ?> - KANDAGA</title>
-    
+
     <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/fontawesome/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/css/style-post-kabar.css">
         <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/css/style-footer.css">
 
-    
+
     <style>
         .article-meta { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; margin-bottom: 25px; color: #64748b; }
         .badge-category { font-weight: 700; text-transform: uppercase; font-size: 0.75rem; padding: 5px 10px; border-radius: 6px; }
@@ -71,9 +71,9 @@ function get_summary($konten, $limit = 20) {
             <main class="col-lg-9 article-main-column">
                 <div class="main-content kandaga-prose article-surface">
                     <h1 class="article-title" style="font-weight: 800; color: #0f172a;"><?= htmlspecialchars($data['judul']); ?></h1>
-                    
+
                     <div class="article-meta">
-                        <?php 
+                        <?php
                         $kategori = isset($data['kategori']) ? strtolower($data['kategori']) : 'lainnya';
                         $cls_badge = 'badge-default';
                         if($kategori == 'berita') $cls_badge = 'badge-berita';
@@ -84,18 +84,18 @@ function get_summary($konten, $limit = 20) {
                             <i class="fas fa-tag me-1"></i> <?= htmlspecialchars($data['kategori'] ?? 'Kabar'); ?>
                         </span>
 
-                        <span><i class="fa-solid fa-calendar-days"></i> <?= date('d M Y • H:i', strtotime($data['waktu_buat'])); ?></span>                      
+                        <span><i class="fa-solid fa-calendar-days"></i> <?= date('d M Y • H:i', strtotime($data['waktu_buat'])); ?></span>
                         <span><i class="fa-solid fa-user-pen"></i> <?= htmlspecialchars($data['nama'] ?? 'Admin'); ?></span>
                         <?php $articleViews=kandagaArticleViews($conn,(int)$data['id_kabar']); if($articleViews!==null): ?><span class="article-views"><i class="fa-solid fa-eye" aria-hidden="true"></i> <?= number_format($articleViews) ?> kunjungan</span><?php endif; ?>
 
                     </div>
 
                     <img src="<?= BASE_URL; ?>/assets/images/post/<?= $data['thumbnail']; ?>" class="img-fluid w-100 mb-4 article-featured-image" style="border-radius: 8px; max-height: 480px; object-fit: cover;" alt="<?= htmlspecialchars($data['judul']); ?>">
-                    
+
                     <div class="article-body">
                         <?= $data['konten']; ?>
                     </div>
-                    
+
                 </div>
             </main>
 
@@ -131,7 +131,7 @@ function get_summary($konten, $limit = 20) {
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
 
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>

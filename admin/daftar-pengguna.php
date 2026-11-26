@@ -22,25 +22,25 @@ $result = $conn->query($query);
 <div class="card shadow-sm border-0">
     <div class="card-header bg-white py-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0 font-weight-bold" style="color: #0f2042;">
-                <i class="fa-solid fa-users mr-2"></i>Manajemen Pengguna
+            <h5 class="mb-0 fw-bold" style="color: #0f2042;">
+                <i class="fa-solid fa-users me-2"></i>Manajemen Pengguna
             </h5>
             <a href="index.php?page=pendaftaran-user" class="btn btn-sm btn-primary" style="background-color: #0f2042; border:none;">
-                <i class="fa-solid fa-plus mr-1"></i>Tambah User
+                <i class="fa-solid fa-plus me-1"></i>Tambah User
             </a>
         </div>
 
         <ul class="nav nav-tabs card-header-tabs" id="userTab">
-            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#semua">Semua</a></li>
-            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pending">Pending</a></li>
-            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#verified">Verified</a></li>
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#semua">Semua</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#pending">Pending</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#verified">Verified</a></li>
         </ul>
     </div>
-    
+
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0" id="tabelUser">
-                <thead class="thead-light">
+                <thead class="table-light">
                     <tr>
                         <th width="50" class="text-center">No</th>
                         <th>User</th>
@@ -50,34 +50,34 @@ $result = $conn->query($query);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
+                    <?php
                     $no = 1;
-                    while ($row = $result->fetch_assoc()) : 
+                    while ($row = $result->fetch_assoc()) :
                         $status = $row['status_verifikasi'] ?? 'pending';
                     ?>
                     <tr class="user-row" data-status="<?php echo htmlspecialchars($status); ?>">
                         <td class="text-center"><?php echo $no++; ?></td>
                         <td>
-                            <div class="font-weight-bold"><?php echo htmlspecialchars($row['username']); ?></div>
+                            <div class="fw-bold"><?php echo htmlspecialchars($row['username']); ?></div>
                             <small class="text-muted"><?php echo htmlspecialchars($row['email'] ?? '-'); ?></small>
                         </td>
                         <td class="text-center">
-                            <?php 
-                            $badge = ($status == 'verified') ? 'badge-success' : (($status == 'pending') ? 'badge-warning' : 'badge-danger');
+                            <?php
+                            $badge = ($status == 'verified') ? 'bg-success' : (($status == 'pending') ? 'bg-warning text-dark' : 'bg-danger');
                             echo '<span class="badge '.$badge.' text-capitalize">'.$status.'</span>';
                             ?>
                         </td>
                         <td class="text-center text-capitalize"><?php echo htmlspecialchars($row['role']); ?></td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info btn-detail" 
-                                    data-id="<?php echo $row['id']; ?>" 
+                            <button class="btn btn-sm btn-outline-info btn-detail"
+                                    data-id="<?php echo $row['id']; ?>"
                                     data-username="<?php echo htmlspecialchars($row['username']); ?>"
                                     data-role="<?php echo htmlspecialchars($row['role']); ?>"
                                     data-status="<?php echo htmlspecialchars($status); ?>">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
-                            <button class="btn btn-sm btn-outline-danger btn-hapus" 
-                                    data-id="<?php echo $row['id']; ?>" 
+                            <button class="btn btn-sm btn-outline-danger btn-hapus"
+                                    data-id="<?php echo $row['id']; ?>"
                                     data-user="<?php echo htmlspecialchars($row['username']); ?>">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
@@ -95,24 +95,24 @@ $result = $conn->query($query);
         <form id="formVerifikasi" class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Kelola Pengguna</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="user_id" id="modal_user_id">
-                <div class="form-group">
+                <div class="mb-3">
                     <label>Username</label>
                     <input type="text" class="form-control" id="modal_username" readonly>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label>Tentukan Peran</label>
-                    <select name="role" class="form-control" id="modal_role">
+                    <select name="role" class="form-select" id="modal_role">
                         <option value="kontributor">Kontributor</option>
                         <option value="admin">Admin</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label>Status Verifikasi</label>
-                    <select name="status" class="form-control" id="modal_status">
+                    <select name="status" class="form-select" id="modal_status">
                         <option value="pending">Pending</option>
                         <option value="verified">Verified</option>
                         <option value="rejected">Rejected</option>
@@ -120,7 +120,7 @@ $result = $conn->query($query);
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
             </div>
         </form>
@@ -133,7 +133,7 @@ $result = $conn->query($query);
             <div class="modal-body text-center p-4">
                 <h5>Konfirmasi Hapus</h5>
                 <p>Yakin menghapus user <b id="namaUser"></b>?</p>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" id="confirmHapus" class="btn btn-danger">Ya, Hapus!</button>
             </div>
         </div>
@@ -145,7 +145,7 @@ $(document).ready(function() {
     // 1. TAB FILTERING
     $('#userTab a').on('click', function (e) {
         e.preventDefault();
-        $(this).tab('show');
+        bootstrap.Tab.getOrCreateInstance(this).show();
         let filter = $(this).attr('href').replace('#', '');
         $('.user-row').show();
         if (filter !== 'semua') {
@@ -159,7 +159,7 @@ $(document).ready(function() {
         $('#modal_username').val($(this).data('username'));
         $('#modal_role').val($(this).data('role'));
         $('#modal_status').val($(this).data('status'));
-        $('#modalDetailUser').modal('show');
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('modalDetailUser')).show();
     });
 
     // 3. SUBMIT VERIFIKASI
@@ -176,13 +176,13 @@ $(document).ready(function() {
     $(".btn-hapus").on('click', function() {
         userId = $(this).data('id');
         $("#namaUser").text($(this).data('user'));
-        $("#modalHapusUser").modal('show');
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('modalHapusUser')).show();
     });
 
     $("#confirmHapus").on('click', function() {
     // Tambahkan '?v=' + Date.now() untuk memaksa browser tidak memakai cache
     $.ajax({
-        url: 'actions/proses-hapus-user.php?v=' + Date.now(), 
+        url: 'actions/proses-hapus-user.php?v=' + Date.now(),
         type: 'POST',
         data: { id: userId },
         success: function(res) {

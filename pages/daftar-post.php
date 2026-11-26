@@ -67,7 +67,7 @@ function get_excerpt($konten, $char_limit = 120) {
 
 <div class="page-header text-center">
     <div class="container">
-        <h2 class="font-weight-bold" style="color: #0f2042;">Kabar KANDAGA</h2>
+        <h2 class="fw-bold" style="color: #0f2042;">Kabar KANDAGA</h2>
         <p class="text-muted mb-3">Informasi terbaru, kegiatan, dan pembaruan seputar katalog naskah Sunda.</p>
         <div class="search-container">
             <form action="<?= BASE_URL ?>/kabar" method="GET">
@@ -83,8 +83,8 @@ function get_excerpt($konten, $char_limit = 120) {
 </div>
 
 <div class="container pb-5 article-list-shell">
-    <?php 
-    $total_rows = mysqli_num_rows($result_berita) + mysqli_num_rows($result_kegiatan) + mysqli_num_rows($result_artikel) + mysqli_num_rows($result_pengumuman); 
+    <?php
+    $total_rows = mysqli_num_rows($result_berita) + mysqli_num_rows($result_kegiatan) + mysqli_num_rows($result_artikel) + mysqli_num_rows($result_pengumuman);
     if($total_rows > 0):
         $categories = [
             ['res' => $result_berita, 'title' => 'Berita Terbaru', 'icon' => 'fa-newspaper', 'class' => 'bg-berita'],
@@ -131,7 +131,7 @@ function get_excerpt($konten, $char_limit = 120) {
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
 
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -8,11 +8,11 @@ $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'O
 ?>
 <section class="card border-0 shadow-sm p-4 mb-4 <?= !empty($activityPublicOnly)?'activity-public':'' ?>" aria-labelledby="activityTitle">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-        <div><h3 class="h5 font-weight-bold" id="activityTitle">Aktivitas kontribusi katalog</h3><p class="small text-muted mb-2"><span id="activityTotal"><?= number_format($activity['total']) ?></span> aktivitas input / pembaruan pada <?= $activityYear ?>.</p></div>
-        <form method="get" action="<?= htmlspecialchars($activityFormAction??BASE_URL.'/pages/kontributor.php',ENT_QUOTES,'UTF-8') ?>" class="form-inline">
+        <div><h3 class="h5 fw-bold" id="activityTitle">Aktivitas kontribusi katalog</h3><p class="small text-muted mb-2"><span id="activityTotal"><?= number_format($activity['total']) ?></span> aktivitas input / pembaruan pada <?= $activityYear ?>.</p></div>
+        <form method="get" action="<?= htmlspecialchars($activityFormAction??BASE_URL.'/pages/kontributor.php',ENT_QUOTES,'UTF-8') ?>" class="d-flex align-items-center gap-2 flex-wrap">
             <?php if(isset($activityFormPage)): ?><input type="hidden" name="page" value="<?= htmlspecialchars($activityFormPage,ENT_QUOTES,'UTF-8') ?>"><?php endif; ?>
-            <label for="activityYear" class="mr-2">Tahun</label>
-            <select id="activityYear" name="activity_year" class="form-control form-control-sm mr-2">
+            <label for="activityYear" class="me-2">Tahun</label>
+            <select id="activityYear" name="activity_year" class="form-select-sm me-2">
                 <?php foreach ($activityYears as $year): ?><option value="<?= $year ?>" <?= $year === $activityYear ? 'selected' : '' ?>><?= $year ?></option><?php endforeach; ?>
             </select><button type="submit" class="btn btn-sm btn-outline-primary">Tampilkan</button>
         </form>
@@ -34,7 +34,7 @@ $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'O
     </div></div>
     <p class="small text-muted mt-2 mb-3">Sedikit <span class="activity-key activity-level-0"></span><span class="activity-key activity-level-1"></span><span class="activity-key activity-level-2"></span><span class="activity-key activity-level-3"></span><span class="activity-key activity-level-4"></span> Banyak — arahkan kursor atau fokus pada kotak untuk melihat kontributor.</p>
     <?php if(empty($activityPublicOnly)): ?>
-    <h4 class="h6 font-weight-bold">Aktivitas bulanan per kontributor</h4>
+    <h4 class="h6 fw-bold">Aktivitas bulanan per kontributor</h4>
     <div style="position:relative;height:300px"><canvas id="contributorMonthlyChart" aria-label="Grafik aktivitas bulanan per kontributor" role="img"></canvas></div>
     <details class="mt-3"><summary>Lihat rincian bulanan</summary><div class="table-responsive"><table class="table table-sm mt-2"><thead><tr><th>Kontributor</th><th>Bulan</th><th>Input</th><th>Pembaruan</th></tr></thead><tbody id="activityMonthlyRows">
     <?php foreach ($activity['contributors'] as $person): foreach ($monthNames as $i => $monthName): if ($person['input'][$i] + $person['edit'][$i] === 0) continue; ?>

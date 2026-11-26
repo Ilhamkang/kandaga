@@ -3,9 +3,9 @@
 
 // Perbaikan SQL: Tambahkan 'id' ke dalam SELECT
 $q_kontributor = mysqli_query($conn, "
-    SELECT id, username, nama, foto, deskripsi 
-    FROM users 
-    WHERE role IN ('kontributor', 'admin') 
+    SELECT id, username, nama, foto, deskripsi
+    FROM users
+    WHERE role IN ('kontributor', 'admin')
     ORDER BY id ASC
 ");
 
@@ -14,7 +14,7 @@ while ($row = mysqli_fetch_assoc($q_kontributor)) {
     // Pastikan path foto benar
     $path_foto = "assets/images/user/" . (!empty($row['foto']) ? $row['foto'] : 'default-user.jpg');
     if (!file_exists($path_foto)) $path_foto = "assets/images/user/default-user.jpg";
-    
+
     $row['foto_clean'] = $path_foto;
     $kontributor_list[] = $row;
 }
@@ -26,15 +26,15 @@ $total_kontributor = count($kontributor_list);
 <div class="embedded-module embedded-kontributor" style="max-width: 960px;">
     <div class="kontributor-section position-relative">
         <div class="text-center mb-5">
-            <h4 class="font-weight-bold" style="color: var(--kandaga-dark-blue);">Kontributor Data</h4>
+            <h4 class="fw-bold" style="color: var(--kandaga-dark-blue);">Kontributor Data</h4>
         </div>
 
         <?php if ($total_kontributor > 0): ?>
-            <div id="carouselKontributor" class="carousel slide" data-ride="carousel">
+            <div id="carouselKontributor" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <?php 
+                    <?php
                     $chunks = array_chunk($kontributor_list, 3);
-                    foreach ($chunks as $index => $slide_items): 
+                    foreach ($chunks as $index => $slide_items):
                     ?>
                         <div class="carousel-item <?= ($index === 0) ? 'active' : ''; ?>">
                             <div class="row justify-content-center">

@@ -82,16 +82,8 @@ pre,
     font-family: var(--kandaga-font-sunda-kuno);
 }
 
-/* Bootstrap 4 is the application baseline. These aliases keep older
- * contributor templates readable while they are migrated gradually. */
-.fw-bold { font-weight: var(--kandaga-weight-bold) !important; }
-.fw-semibold { font-weight: var(--kandaga-weight-semibold) !important; }
-.ms-1 { margin-left: .25rem !important; }
-.ms-2 { margin-left: .5rem !important; }
-.ms-3 { margin-left: 1rem !important; }
-.me-1 { margin-right: .25rem !important; }
-.me-2 { margin-right: .5rem !important; }
-.me-3 { margin-right: 1rem !important; }
+/* Bootstrap 5.3.9 menyediakan fw-*, ms-*, dan me-* secara native;
+   tidak perlu alias tambahan di atas framework. */
 
 @media (max-width: 575.98px) {
     body.kandaga-module h1,

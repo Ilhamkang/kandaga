@@ -4,8 +4,8 @@ Lisensi **AGPL-3.0** pada file `LICENSE` berlaku untuk kode asli KANDAGA. Kompon
 
 | Komponen | Lokasi | Lisensi |
 |---|---|---|
-| Bootstrap v4.6.2 | `assets/bootstrap/`, `assets/css/bootstrap*` | MIT |
-| jQuery v3.6.0 | `assets/js/jquery-*`, `admin/assets/js/jquery-*` | MIT |
+| Bootstrap v5.3.9 | `assets/bootstrap/` | MIT |
+| jQuery v3.6.0 (full build) | `assets/js/jquery-3.6.0.min.js` | MIT |
 | Font Awesome Free 7.2.0 | `assets/fontawesome/` | Font Awesome Free License — ikon CC BY 4.0, font SIL OFL 1.1, kode MIT |
 | TinyMCE 7.7.2 | `assets/js/tinymce/`, `admin/assets/js/tinymce/` | GPL-2.0-or-later |
 | Chart.js v4.5.1 | `assets/js/chart.js` | MIT |

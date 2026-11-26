@@ -54,7 +54,7 @@ $selected_bahasa = getSelectedRelasi($conn, 'naskah_bahasa', 'id_bahasa', $id_na
 $selected_aksara = getSelectedRelasi($conn, 'naskah_aksara', 'id_aksara', $id_naskah);
 
 // 4. Ambil Data Bibliografi Terkait (FIXED: Menggunakan b.kategori dari tb_bibliografi)
-$sql_bib = "SELECT b.id, b.judul, b.penyusun, b.tahun_terbit, b.kategori 
+$sql_bib = "SELECT b.id, b.judul, b.penyusun, b.tahun_terbit, b.kategori
             FROM tb_bibliografi b
             JOIN naskah_bibliografi nb ON b.id = nb.id_bibliografi
             WHERE nb.id_naskah = ?";
@@ -114,7 +114,8 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
     margin-right:8px;
 }
 /* ================= FORM CONTROL ================= */
-.form-control{
+.form-control,
+.form-select{
     border-radius:8px;
     font-size:13px;
 }
@@ -150,23 +151,23 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
     <input type="hidden" name="id" value="<?= $id_naskah ?>">
 
     <div class="form-card">
-        <div class="section-title"><i class="fa-solid fa-sitemap"></i> Struktur & Lokasi Historis <small class="text-muted ml-2">(opsional)</small></div>
+        <div class="section-title"><i class="fa-solid fa-sitemap"></i> Struktur & Lokasi Historis <small class="text-muted ms-2">(opsional)</small></div>
         <?php $ks=$ks_data['structure']; ?>
         <div class="row">
-            <div class="col-md-3 mb-3"><label>Tipe Record</label><select name="record_type" class="form-control"><option value="induk" <?= ($ks['record_type']??'induk')==='induk'?'selected':'' ?>>Naskah induk</option><option value="unit" <?= ($ks['record_type']??'')==='unit'?'selected':'' ?>>Unit naskah</option></select></div>
-            <div class="col-md-5 mb-3"><label>Naskah Induk</label><select name="parent_id" class="form-control"><option value="">-- Tidak ada / record induk --</option><?php if ($parent_options): while($p=mysqli_fetch_assoc($parent_options)): ?><option value="<?= (int)$p['id'] ?>" <?= (int)($ks['parent_id']??0)===(int)$p['id']?'selected':'' ?>>#<?= (int)$p['id'] ?> · <?= htmlspecialchars($p['kode_inventaris'].' — '.$p['judul'], ENT_QUOTES, 'UTF-8') ?></option><?php endwhile; endif; ?></select></div>
+            <div class="col-md-3 mb-3"><label>Tipe Record</label><select name="record_type" class="form-select"><option value="induk" <?= ($ks['record_type']??'induk')==='induk'?'selected':'' ?>>Naskah induk</option><option value="unit" <?= ($ks['record_type']??'')==='unit'?'selected':'' ?>>Unit naskah</option></select></div>
+            <div class="col-md-5 mb-3"><label>Naskah Induk</label><select name="parent_id" class="form-select"><option value="">-- Tidak ada / record induk --</option><?php if ($parent_options): while($p=mysqli_fetch_assoc($parent_options)): ?><option value="<?= (int)$p['id'] ?>" <?= (int)($ks['parent_id']??0)===(int)$p['id']?'selected':'' ?>>#<?= (int)$p['id'] ?> · <?= htmlspecialchars($p['kode_inventaris'].' — '.$p['judul'], ENT_QUOTES, 'UTF-8') ?></option><?php endwhile; endif; ?></select></div>
             <div class="col-md-2 mb-3"><label>Label Unit</label><input type="text" name="unit_label" class="form-control" value="<?= htmlspecialchars((string)($ks['unit_label']??''), ENT_QUOTES, 'UTF-8') ?>"></div>
             <div class="col-md-2 mb-3"><label>Urutan</label><input type="number" min="1" name="unit_order" class="form-control" value="<?= htmlspecialchars((string)($ks['unit_order']??''), ENT_QUOTES, 'UTF-8') ?>"></div>
             <div class="col-md-12 mb-3"><label>Catatan struktur</label><textarea name="structure_notes" class="form-control" rows="2"><?= htmlspecialchars((string)($ks['notes']??''), ENT_QUOTES, 'UTF-8') ?></textarea></div>
         </div>
-        <hr><label class="font-weight-bold">Lokasi historis</label>
+        <hr><label class="fw-bold">Lokasi historis</label>
         <div id="location-history-edit">
         <?php $locations=$ks_data['locations']; if (!$locations) $locations=[['location_kind'=>'asal','place_name'=>'','district'=>'','province'=>'','country'=>'','period_label'=>'','certainty'=>'belum_diketahui','source_text'=>'']]; foreach($locations as $i=>$loc): ?>
             <div class="row location-history-row mb-2"><div class="col-md-2"><select name="location_history[<?= (int)$i ?>][kind]" class="form-control"><option value="asal" <?= ($loc['location_kind']??'')==='asal'?'selected':'' ?>>Asal</option><option value="ditemukan" <?= ($loc['location_kind']??'')==='ditemukan'?'selected':'' ?>>Ditemukan</option><option value="sebelumnya" <?= ($loc['location_kind']??'')==='sebelumnya'?'selected':'' ?>>Lokasi sebelumnya</option></select></div><div class="col-md-3"><input name="location_history[<?= (int)$i ?>][place]" class="form-control" placeholder="Tempat/desa" value="<?= htmlspecialchars((string)($loc['place_name']??''),ENT_QUOTES,'UTF-8') ?>"></div><div class="col-md-2"><input name="location_history[<?= (int)$i ?>][district]" class="form-control" placeholder="Kota/kabupaten" value="<?= htmlspecialchars((string)($loc['district']??''),ENT_QUOTES,'UTF-8') ?>"></div><div class="col-md-2"><input name="location_history[<?= (int)$i ?>][province]" class="form-control" placeholder="Provinsi" value="<?= htmlspecialchars((string)($loc['province']??''),ENT_QUOTES,'UTF-8') ?>"></div><div class="col-md-2"><input name="location_history[<?= (int)$i ?>][country]" class="form-control" placeholder="Negara" value="<?= htmlspecialchars((string)($loc['country']??''),ENT_QUOTES,'UTF-8') ?>"></div><div class="col-md-1"><button type="button" class="btn btn-outline-danger" onclick="this.closest('.location-history-row').remove()">×</button></div></div>
         <?php endforeach; ?></div>
         <button type="button" class="btn btn-sm btn-outline-primary" onclick="addHistoryRowEdit()">+ Lokasi historis</button>
         <small class="text-muted d-block mt-2">Lokasi sekarang tetap mengikuti Lembaga Penyimpan.</small>
-        <hr><label class="font-weight-bold">Identitas alternatif</label>
+        <hr><label class="fw-bold">Identitas alternatif</label>
         <div id="identifier-edit"><?php $ids=$ks_data['identifiers']; if(!$ids)$ids=[['scheme'=>'','identifier_value'=>'','source_label'=>'','is_primary'=>0]]; foreach($ids as $i=>$ident): ?><div class="row identifier-row mb-2"><div class="col-md-3"><input name="identifier[<?= (int)$i ?>][scheme]" class="form-control" placeholder="Shelfmark / Leiden" value="<?= htmlspecialchars((string)($ident['scheme']??''),ENT_QUOTES,'UTF-8') ?>"></div><div class="col-md-4"><input name="identifier[<?= (int)$i ?>][value]" class="form-control" placeholder="Nilai identitas" value="<?= htmlspecialchars((string)($ident['identifier_value']??''),ENT_QUOTES,'UTF-8') ?>"></div><div class="col-md-4"><input name="identifier[<?= (int)$i ?>][source]" class="form-control" placeholder="Sumber" value="<?= htmlspecialchars((string)($ident['source_label']??''),ENT_QUOTES,'UTF-8') ?>"></div><div class="col-md-1"><button type="button" class="btn btn-outline-danger" onclick="this.closest('.identifier-row').remove()">×</button></div></div><?php endforeach; ?></div>
         <button type="button" class="btn btn-sm btn-outline-primary" onclick="addIdentifierRowEdit()">+ Identitas</button>
     </div>
@@ -181,7 +182,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
             <div class="col-md-6 mb-3">
                 <label>Lembaga Penyimpan</label>
-                <select name="id_lokasi" class="form-control select-clean select-location" data-placeholder="Ketik nama lembaga atau lokasi...">
+                <select name="id_lokasi" class="form-select select-clean select-location" data-placeholder="Ketik nama lembaga atau lokasi...">
                     <option value="">-- Pilih Lokasi --</option>
                     <?php mysqli_data_seek($data_lokasi, 0); while($l=mysqli_fetch_assoc($data_lokasi)): ?>
                         <option value="<?= $l['id_lokasi'] ?>" <?= $l['id_lokasi'] == $naskah['id_lokasi'] ? 'selected' : '' ?>>
@@ -208,11 +209,11 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
         <div class="row">
 
             <div class="col-md-4 mb-3">
-                <label class="small font-weight-bold">Alas Tulis</label>
+                <label class="small fw-bold">Alas Tulis</label>
                 <div id="container-alas_tulis">
                     <?php if (!empty($selected_alas)): foreach ($selected_alas as $index => $current_id): ?>
                     <div class="dynamic-row">
-                        <select name="alas_tulis[]" class="form-control select-clean">
+                        <select name="alas_tulis[]" class="form-select select-clean">
                             <option value="">-- Alas Tulis --</option>
                             <?php mysqli_data_seek($data_alas, 0); while($a=mysqli_fetch_assoc($data_alas)): ?>
                                 <option value="<?= $a['id_alas_tulis'] ?>" <?= $a['id_alas_tulis'] == $current_id ? 'selected' : '' ?>>
@@ -226,7 +227,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
                     </div>
                     <?php endforeach; else: ?>
                     <div class="dynamic-row">
-                        <select name="alas_tulis[]" class="form-control select-clean">
+                        <select name="alas_tulis[]" class="form-select select-clean">
                             <option value="">-- Alas Tulis --</option>
                             <?php mysqli_data_seek($data_alas, 0); while($a=mysqli_fetch_assoc($data_alas)): ?>
                                 <option value="<?= $a['id_alas_tulis'] ?>"><?= $a['nama_alas_tulis'] ?></option>
@@ -239,11 +240,11 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
             </div>
 
             <div class="col-md-4 mb-3">
-                <label class="small font-weight-bold">Bahasa</label>
+                <label class="small fw-bold">Bahasa</label>
                 <div id="container-bahasa">
                     <?php if (!empty($selected_bahasa)): foreach ($selected_bahasa as $index => $current_id): ?>
                     <div class="dynamic-row">
-                        <select name="bahasa[]" class="form-control select-clean">
+                        <select name="bahasa[]" class="form-select select-clean">
                             <option value="">-- Bahasa --</option>
                             <?php mysqli_data_seek($data_bahasa, 0); while($b=mysqli_fetch_assoc($data_bahasa)): ?>
                                 <option value="<?= $b['id_bahasa'] ?>" <?= $b['id_bahasa'] == $current_id ? 'selected' : '' ?>>
@@ -257,7 +258,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
                     </div>
                     <?php endforeach; else: ?>
                     <div class="dynamic-row">
-                        <select name="bahasa[]" class="form-control select-clean">
+                        <select name="bahasa[]" class="form-select select-clean">
                             <option value="">-- Bahasa --</option>
                             <?php mysqli_data_seek($data_bahasa, 0); while($b=mysqli_fetch_assoc($data_bahasa)): ?>
                                 <option value="<?= $b['id_bahasa'] ?>"><?= $b['nama_bahasa'] ?></option>
@@ -270,11 +271,11 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
             </div>
 
             <div class="col-md-4 mb-3">
-                <label class="small font-weight-bold">Aksara</label>
+                <label class="small fw-bold">Aksara</label>
                 <div id="container-aksara">
                     <?php if (!empty($selected_aksara)): foreach ($selected_aksara as $index => $current_id): ?>
                     <div class="dynamic-row">
-                        <select name="aksara[]" class="form-control select-clean">
+                        <select name="aksara[]" class="form-select select-clean">
                             <option value="">-- Aksara --</option>
                             <?php mysqli_data_seek($data_aksara, 0); while($a=mysqli_fetch_assoc($data_aksara)): ?>
                                 <option value="<?= $a['id_aksara'] ?>" <?= $a['id_aksara'] == $current_id ? 'selected' : '' ?>>
@@ -288,7 +289,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
                     </div>
                     <?php endforeach; else: ?>
                     <div class="dynamic-row">
-                        <select name="aksara[]" class="form-control select-clean">
+                        <select name="aksara[]" class="form-select select-clean">
                             <option value="">-- Aksara --</option>
                             <?php mysqli_data_seek($data_aksara, 0); while($a=mysqli_fetch_assoc($data_aksara)): ?>
                                 <option value="<?= $a['id_aksara'] ?>"><?= $a['nama_aksara'] ?></option>
@@ -311,17 +312,17 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
         <div class="section-title"><i class="fa-solid fa-layer-group"></i> Bibliografi</div>
 
         <div id="container-katalog">
-            <label class="small font-weight-bold">Katalog</label>
+            <label class="small fw-bold">Katalog</label>
             <?php if (!empty($bib_katalog)): foreach ($bib_katalog as $index => $bib): ?>
             <div class="dynamic-row">
-                <select name="katalog[]" class="form-control select-ajax-bib" data-kategori="katalog">
+                <select name="katalog[]" class="form-select select-ajax-bib" data-kategori="katalog">
                     <option value="<?= $bib['id'] ?>" selected><?= "[{$bib['tahun_terbit']}] {$bib['penyusun']} - {$bib['judul']}" ?></option>
                 </select>
                 <?php if ($index > 0): ?><button type="button" class="btn btn-danger btn-remove-row">×</button><?php endif; ?>
             </div>
             <?php endforeach; else: ?>
             <div class="dynamic-row">
-                <select name="katalog[]" class="form-control select-ajax-bib" data-kategori="katalog"></select>
+                <select name="katalog[]" class="form-select select-ajax-bib" data-kategori="katalog"></select>
             </div>
             <?php endif; ?>
         </div>
@@ -330,17 +331,17 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
         <hr>
 
         <div id="container-pub_primer">
-            <label class="small font-weight-bold">Publikasi Primer</label>
+            <label class="small fw-bold">Publikasi Primer</label>
             <?php if (!empty($bib_primer)): foreach ($bib_primer as $index => $bib): ?>
             <div class="dynamic-row">
-                <select name="pub_primer[]" class="form-control select-ajax-bib" data-kategori="referensi primer">
+                <select name="pub_primer[]" class="form-select select-ajax-bib" data-kategori="referensi primer">
                     <option value="<?= $bib['id'] ?>" selected><?= "[{$bib['tahun_terbit']}] {$bib['penyusun']} - {$bib['judul']}" ?></option>
                 </select>
                 <?php if ($index > 0): ?><button type="button" class="btn btn-danger btn-remove-row">×</button><?php endif; ?>
             </div>
             <?php endforeach; else: ?>
             <div class="dynamic-row">
-                <select name="pub_primer[]" class="form-control select-ajax-bib" data-kategori="referensi primer"></select>
+                <select name="pub_primer[]" class="form-select select-ajax-bib" data-kategori="referensi primer"></select>
             </div>
             <?php endif; ?>
         </div>
@@ -349,17 +350,17 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
         <hr>
 
         <div id="container-pub_sekunder">
-            <label class="small font-weight-bold">Publikasi Sekunder</label>
+            <label class="small fw-bold">Publikasi Sekunder</label>
             <?php if (!empty($bib_sekunder)): foreach ($bib_sekunder as $index => $bib): ?>
             <div class="dynamic-row">
-                <select name="pub_sekunder[]" class="form-control select-ajax-bib" data-kategori="referensi sekunder">
+                <select name="pub_sekunder[]" class="form-select select-ajax-bib" data-kategori="referensi sekunder">
                     <option value="<?= $bib['id'] ?>" selected><?= "[{$bib['tahun_terbit']}] {$bib['penyusun']} - {$bib['judul']}" ?></option>
                 </select>
                 <?php if ($index > 0): ?><button type="button" class="btn btn-danger btn-remove-row">×</button><?php endif; ?>
             </div>
             <?php endforeach; else: ?>
             <div class="dynamic-row">
-                <select name="pub_sekunder[]" class="form-control select-ajax-bib" data-kategori="referensi sekunder"></select>
+                <select name="pub_sekunder[]" class="form-select select-ajax-bib" data-kategori="referensi sekunder"></select>
             </div>
             <?php endif; ?>
         </div>
@@ -420,8 +421,8 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
                 <input type="file" accept="image/jpeg,image/png,image/gif,image/webp" name="gambar" class="form-control mb-2">
                 <?php if (!empty($naskah['gambar'])): ?>
                     <small class="text-muted d-block">
-                        <i class="fa-solid fa-image mr-1"></i> File saat ini: 
-                        <a href="<?= BASE_URL ?>/assets/images/naskah/<?= $naskah['gambar'] ?>" target="_blank" class="text-primary font-weight-bold">
+                        <i class="fa-solid fa-image me-1"></i> File saat ini:
+                        <a href="<?= BASE_URL ?>/assets/images/naskah/<?= $naskah['gambar'] ?>" target="_blank" class="text-primary fw-bold">
                             <?= htmlspecialchars($naskah['gambar']) ?>
                         </a>
                     </small>
@@ -458,7 +459,7 @@ $(function(){
 
 function addHistoryRowEdit(){
     const box=document.getElementById('location-history-edit'); const i=box.querySelectorAll('.location-history-row').length; const row=document.createElement('div'); row.className='row location-history-row mb-2';
-    row.innerHTML=`<div class="col-md-2"><select name="location_history[${i}][kind]" class="form-control"><option value="asal">Asal</option><option value="ditemukan">Ditemukan</option><option value="sebelumnya">Lokasi sebelumnya</option></select></div><div class="col-md-3"><input name="location_history[${i}][place]" class="form-control" placeholder="Tempat/desa"></div><div class="col-md-2"><input name="location_history[${i}][district]" class="form-control" placeholder="Kota/kabupaten"></div><div class="col-md-2"><input name="location_history[${i}][province]" class="form-control" placeholder="Provinsi"></div><div class="col-md-2"><input name="location_history[${i}][country]" class="form-control" placeholder="Negara"></div><div class="col-md-1"><button type="button" class="btn btn-outline-danger" onclick="this.closest('.location-history-row').remove()">×</button></div>`;
+    row.innerHTML=`<div class="col-md-2"><select name="location_history[${i}][kind]" class="form-select"><option value="asal">Asal</option><option value="ditemukan">Ditemukan</option><option value="sebelumnya">Lokasi sebelumnya</option></select></div><div class="col-md-3"><input name="location_history[${i}][place]" class="form-control" placeholder="Tempat/desa"></div><div class="col-md-2"><input name="location_history[${i}][district]" class="form-control" placeholder="Kota/kabupaten"></div><div class="col-md-2"><input name="location_history[${i}][province]" class="form-control" placeholder="Provinsi"></div><div class="col-md-2"><input name="location_history[${i}][country]" class="form-control" placeholder="Negara"></div><div class="col-md-1"><button type="button" class="btn btn-outline-danger" onclick="this.closest('.location-history-row').remove()">×</button></div>`;
     box.appendChild(row);
 }
 function addIdentifierRowEdit(){const box=document.getElementById('identifier-edit');const i=box.querySelectorAll('.identifier-row').length;const row=document.createElement('div');row.className='row identifier-row mb-2';row.innerHTML=`<div class="col-md-3"><input name="identifier[${i}][scheme]" class="form-control" placeholder="Shelfmark / Leiden"></div><div class="col-md-4"><input name="identifier[${i}][value]" class="form-control" placeholder="Nilai identitas"></div><div class="col-md-4"><input name="identifier[${i}][source]" class="form-control" placeholder="Sumber"></div><div class="col-md-1"><button type="button" class="btn btn-outline-danger" onclick="this.closest('.identifier-row').remove()">×</button></div>`;box.appendChild(row);}
@@ -513,16 +514,16 @@ window.addStatic = function(type) {
 
     const firstRow = container.querySelector('.dynamic-row');
 
-    
+
     const newRow = $(firstRow).clone(false);
     newRow.find('select').val('').removeClass('select2-hidden-accessible');
     newRow.find('.select2-container').remove();
     newRow.find('select').removeAttr('data-select2-id tabindex aria-hidden').find('option').removeAttr('data-select2-id');
-    
+
     if (!newRow.find('.btn-remove-row').length) {
-        newRow.append('<button type="button" class="btn btn-danger btn-remove-row ml-2">×</button>');
+        newRow.append('<button type="button" class="btn btn-danger btn-remove-row ms-2">×</button>');
     }
-    
+
     container.appendChild(newRow[0]);
     initSelect2();
 };
@@ -575,7 +576,7 @@ window.BibliografiModule = (function(){
         const row = document.createElement('div');
         row.className = 'dynamic-row';
         row.innerHTML = `
-            <select name="${type}[]" class="form-control select-ajax-bib" data-kategori="${type === 'katalog' ? 'katalog' : (type === 'pub_primer' ? 'referensi primer' : 'referensi sekunder')}"></select>
+            <select name="${type}[]" class="form-select select-ajax-bib" data-kategori="${type === 'katalog' ? 'katalog' : (type === 'pub_primer' ? 'referensi primer' : 'referensi sekunder')}"></select>
             <button type="button" class="btn btn-danger btn-remove-row">×</button>
         `;
 
@@ -589,7 +590,7 @@ window.BibliografiModule = (function(){
 // AJAX SUBMIT FORM EDIT
 $('#formEditNaskah').on('submit', function(e){
     e.preventDefault();
-    
+
     // --- TAMBAHKAN INI ---
     // Pastikan data dari TinyMCE dipindahkan ke textarea sebelum FormData dibuat
     if (typeof tinymce !== 'undefined') {

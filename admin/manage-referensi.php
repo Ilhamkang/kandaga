@@ -93,10 +93,10 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'aksara';
 <div class="container-fluid py-4">
     <h3 class="mb-4">Manajemen Data Master</h3>
     <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item"><a class="nav-link <?= $active_tab == 'aksara' ? 'active' : '' ?>" data-toggle="tab" href="#aksara">Aksara</a></li>
-        <li class="nav-item"><a class="nav-link <?= $active_tab == 'alas' ? 'active' : '' ?>" data-toggle="tab" href="#alas">Alas Tulis</a></li>
-        <li class="nav-item"><a class="nav-link <?= $active_tab == 'bahasa' ? 'active' : '' ?>" data-toggle="tab" href="#bahasa">Bahasa</a></li>
-        <li class="nav-item"><a class="nav-link <?= $active_tab == 'lokasi' ? 'active' : '' ?>" data-toggle="tab" href="#lokasi">Lokasi</a></li>
+        <li class="nav-item"><a class="nav-link <?= $active_tab == 'aksara' ? 'active' : '' ?>" data-bs-toggle="tab" href="#aksara">Aksara</a></li>
+        <li class="nav-item"><a class="nav-link <?= $active_tab == 'alas' ? 'active' : '' ?>" data-bs-toggle="tab" href="#alas">Alas Tulis</a></li>
+        <li class="nav-item"><a class="nav-link <?= $active_tab == 'bahasa' ? 'active' : '' ?>" data-bs-toggle="tab" href="#bahasa">Bahasa</a></li>
+        <li class="nav-item"><a class="nav-link <?= $active_tab == 'lokasi' ? 'active' : '' ?>" data-bs-toggle="tab" href="#lokasi">Lokasi</a></li>
     </ul>
 
     <div class="tab-content bg-white p-3 border border-top-0">
@@ -178,28 +178,28 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'aksara';
     </div>
 </div>
 
-<div class="modal fade" id="modalAksara"><div class="modal-dialog"><form method="POST" class="modal-content"><div class="modal-header"><h5>Aksara</h5></div><div class="modal-body"><input type="hidden" name="id_aksara" id="id_aksara"><div class="form-group"><label>Nama</label><input type="text" name="nama_aksara" id="nama_aksara" class="form-control" required></div><div class="form-group"><label>Deskripsi</label><textarea name="deskripsi" id="deskripsi_aksara" class="form-control"></textarea></div><div class="form-group"><label>Tahun</label><input type="number" name="tahun_ditemukan" id="tahun_ditemukan" class="form-control"></div></div><div class="modal-footer"><button type="submit" name="simpan_aksara" class="btn btn-primary">Simpan</button></div></form></div></div>
+<div class="modal fade" id="modalAksara"><div class="modal-dialog"><form method="POST" class="modal-content"><div class="modal-header"><h5>Aksara</h5></div><div class="modal-body"><input type="hidden" name="id_aksara" id="id_aksara"><div class="mb-3"><label>Nama</label><input type="text" name="nama_aksara" id="nama_aksara" class="form-control" required></div><div class="mb-3"><label>Deskripsi</label><textarea name="deskripsi" id="deskripsi_aksara" class="form-control"></textarea></div><div class="mb-3"><label>Tahun</label><input type="number" name="tahun_ditemukan" id="tahun_ditemukan" class="form-control"></div></div><div class="modal-footer"><button type="submit" name="simpan_aksara" class="btn btn-primary">Simpan</button></div></form></div></div>
 
-<div class="modal fade" id="modalAlas"><div class="modal-dialog"><form method="POST" class="modal-content"><div class="modal-header"><h5>Alas Tulis</h5></div><div class="modal-body"><input type="hidden" name="id_alas_tulis" id="id_alas"><div class="form-group"><label>Nama</label><input type="text" name="nama_alas_tulis" id="nama_alas" class="form-control" required></div></div><div class="modal-footer"><button type="submit" name="simpan_alas" class="btn btn-primary">Simpan</button></div></form></div></div>
+<div class="modal fade" id="modalAlas"><div class="modal-dialog"><form method="POST" class="modal-content"><div class="modal-header"><h5>Alas Tulis</h5></div><div class="modal-body"><input type="hidden" name="id_alas_tulis" id="id_alas"><div class="mb-3"><label>Nama</label><input type="text" name="nama_alas_tulis" id="nama_alas" class="form-control" required></div></div><div class="modal-footer"><button type="submit" name="simpan_alas" class="btn btn-primary">Simpan</button></div></form></div></div>
 
-<div class="modal fade" id="modalBahasa"><div class="modal-dialog"><form method="POST" class="modal-content"><div class="modal-header"><h5>Bahasa</h5></div><div class="modal-body"><input type="hidden" name="id_bahasa" id="id_bahasa"><div class="form-group"><label>Nama</label><input type="text" name="nama_bahasa" id="nama_bahasa" class="form-control" required></div><div class="form-group"><label>Kode ISO</label><input type="text" name="kode_iso" id="kode_iso" class="form-control"></div><div class="form-group"><label>Deskripsi</label><textarea name="deskripsi" id="deskripsi_bahasa" class="form-control"></textarea></div></div><div class="modal-footer"><button type="submit" name="simpan_bahasa" class="btn btn-primary">Simpan</button></div></form></div></div>
+<div class="modal fade" id="modalBahasa"><div class="modal-dialog"><form method="POST" class="modal-content"><div class="modal-header"><h5>Bahasa</h5></div><div class="modal-body"><input type="hidden" name="id_bahasa" id="id_bahasa"><div class="mb-3"><label>Nama</label><input type="text" name="nama_bahasa" id="nama_bahasa" class="form-control" required></div><div class="mb-3"><label>Kode ISO</label><input type="text" name="kode_iso" id="kode_iso" class="form-control"></div><div class="mb-3"><label>Deskripsi</label><textarea name="deskripsi" id="deskripsi_bahasa" class="form-control"></textarea></div></div><div class="modal-footer"><button type="submit" name="simpan_bahasa" class="btn btn-primary">Simpan</button></div></form></div></div>
 
-<div class="modal fade" id="modalLokasi"><div class="modal-dialog"><form method="POST" enctype="multipart/form-data" class="modal-content"><div class="modal-header"><h5>Lokasi</h5></div><div class="modal-body"><input type="hidden" name="id_lokasi" id="id_lokasi"><input type="hidden" name="foto_lama" id="foto_lama"><div class="text-center mb-3"><img id="preview_foto" src="" style="max-width:150px; display:none;"></div><div class="form-group"><label>Nama</label><input type="text" name="nama_tempat" id="nama_tempat" class="form-control" required></div><div class="form-group"><label>Negara</label><input type="text" name="negara" id="negara" class="form-control"></div><div class="form-group"><label>Alamat</label><textarea name="alamat" id="alamat" class="form-control"></textarea></div><div class="form-group"><label>Deskripsi</label><textarea name="deskripsi" id="deskripsi_lokasi" class="form-control"></textarea></div><div class="form-group"><label>Foto</label><input type="file" name="foto_lokasi" class="form-control"></div></div><div class="modal-footer"><button type="submit" name="simpan_lokasi" class="btn btn-primary">Simpan</button></div></form></div></div>
+<div class="modal fade" id="modalLokasi"><div class="modal-dialog"><form method="POST" enctype="multipart/form-data" class="modal-content"><div class="modal-header"><h5>Lokasi</h5></div><div class="modal-body"><input type="hidden" name="id_lokasi" id="id_lokasi"><input type="hidden" name="foto_lama" id="foto_lama"><div class="text-center mb-3"><img id="preview_foto" src="" style="max-width:150px; display:none;"></div><div class="mb-3"><label>Nama</label><input type="text" name="nama_tempat" id="nama_tempat" class="form-control" required></div><div class="mb-3"><label>Negara</label><input type="text" name="negara" id="negara" class="form-control"></div><div class="mb-3"><label>Alamat</label><textarea name="alamat" id="alamat" class="form-control"></textarea></div><div class="mb-3"><label>Deskripsi</label><textarea name="deskripsi" id="deskripsi_lokasi" class="form-control"></textarea></div><div class="mb-3"><label>Foto</label><input type="file" name="foto_lokasi" class="form-control"></div></div><div class="modal-footer"><button type="submit" name="simpan_lokasi" class="btn btn-primary">Simpan</button></div></form></div></div>
 
 <script>
-function resetAksara() { $('#id_aksara').val(''); $('#modalAksara').modal('show'); }
-function editAksara(id, n, d, t) { $('#id_aksara').val(id); $('#nama_aksara').val(n); $('#deskripsi_aksara').val(d); $('#tahun_ditemukan').val(t); $('#modalAksara').modal('show'); }
+function resetAksara() { $('#id_aksara').val(''); bootstrap.Modal.getOrCreateInstance(document.getElementById('modalAksara')).show(); }
+function editAksara(id, n, d, t) { $('#id_aksara').val(id); $('#nama_aksara').val(n); $('#deskripsi_aksara').val(d); $('#tahun_ditemukan').val(t); bootstrap.Modal.getOrCreateInstance(document.getElementById('modalAksara')).show(); }
 
-function resetAlas() { $('#id_alas').val(''); $('#modalAlas').modal('show'); }
-function editAlas(id, n) { $('#id_alas').val(id); $('#nama_alas').val(n); $('#modalAlas').modal('show'); }
+function resetAlas() { $('#id_alas').val(''); bootstrap.Modal.getOrCreateInstance(document.getElementById('modalAlas')).show(); }
+function editAlas(id, n) { $('#id_alas').val(id); $('#nama_alas').val(n); bootstrap.Modal.getOrCreateInstance(document.getElementById('modalAlas')).show(); }
 
-function resetBahasa() { $('#id_bahasa').val(''); $('#modalBahasa').modal('show'); }
-function editBahasa(id, n, k, d) { $('#id_bahasa').val(id); $('#nama_bahasa').val(n); $('#kode_iso').val(k); $('#deskripsi_bahasa').val(d); $('#modalBahasa').modal('show'); }
+function resetBahasa() { $('#id_bahasa').val(''); bootstrap.Modal.getOrCreateInstance(document.getElementById('modalBahasa')).show(); }
+function editBahasa(id, n, k, d) { $('#id_bahasa').val(id); $('#nama_bahasa').val(n); $('#kode_iso').val(k); $('#deskripsi_bahasa').val(d); bootstrap.Modal.getOrCreateInstance(document.getElementById('modalBahasa')).show(); }
 
-function resetLokasi() { $('#id_lokasi').val(''); $('#preview_foto').hide(); $('#modalLokasi').modal('show'); }
-function editLokasi(id, n, ng, al, des, ft) { 
-    $('#id_lokasi').val(id); $('#nama_tempat').val(n); $('#negara').val(ng); $('#alamat').val(al); $('#deskripsi_lokasi').val(des); $('#foto_lama').val(ft); 
+function resetLokasi() { $('#id_lokasi').val(''); $('#preview_foto').hide(); bootstrap.Modal.getOrCreateInstance(document.getElementById('modalLokasi')).show(); }
+function editLokasi(id, n, ng, al, des, ft) {
+    $('#id_lokasi').val(id); $('#nama_tempat').val(n); $('#negara').val(ng); $('#alamat').val(al); $('#deskripsi_lokasi').val(des); $('#foto_lama').val(ft);
     if(ft) { $('#preview_foto').attr('src', '../assets/images/'+ft).show(); } else { $('#preview_foto').hide(); }
-    $('#modalLokasi').modal('show'); 
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('modalLokasi')).show();
 }
 </script>

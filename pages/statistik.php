@@ -18,47 +18,47 @@ require_once __DIR__ . '/../config/database.php';
 function getStatistikRelasional($conn, $tipe) {
     switch ($tipe) {
         case 'negara':
-            $sql = "SELECT l.negara AS nama, COUNT(k.id) AS jumlah 
-                    FROM katalog k 
-                    JOIN tb_lokasi l ON k.id_lokasi = l.id_lokasi 
-                    WHERE l.negara != '' AND l.negara IS NOT NULL 
-                    GROUP BY l.negara 
+            $sql = "SELECT l.negara AS nama, COUNT(k.id) AS jumlah
+                    FROM katalog k
+                    JOIN tb_lokasi l ON k.id_lokasi = l.id_lokasi
+                    WHERE l.negara != '' AND l.negara IS NOT NULL
+                    GROUP BY l.negara
                     ORDER BY jumlah DESC";
             break;
         case 'id_lokasi':
-            $sql = "SELECT l.nama_tempat AS nama, COUNT(k.id) AS jumlah 
-                    FROM katalog k 
-                    JOIN tb_lokasi l ON k.id_lokasi = l.id_lokasi 
-                    GROUP BY l.id_lokasi, l.nama_tempat 
+            $sql = "SELECT l.nama_tempat AS nama, COUNT(k.id) AS jumlah
+                    FROM katalog k
+                    JOIN tb_lokasi l ON k.id_lokasi = l.id_lokasi
+                    GROUP BY l.id_lokasi, l.nama_tempat
                     ORDER BY jumlah DESC";
             break;
         case 'aksara':
-            $sql = "SELECT m.nama_aksara AS nama, COUNT(DISTINCT j.id_naskah) AS jumlah 
+            $sql = "SELECT m.nama_aksara AS nama, COUNT(DISTINCT j.id_naskah) AS jumlah
                     FROM tb_aksara m
                     JOIN naskah_aksara j ON m.id_aksara = j.id_aksara
-                    JOIN katalog kr ON kr.id = j.id_naskah GROUP BY m.id_aksara, m.nama_aksara 
+                    JOIN katalog kr ON kr.id = j.id_naskah GROUP BY m.id_aksara, m.nama_aksara
                     ORDER BY jumlah DESC";
             break;
         case 'bahasa':
-            $sql = "SELECT m.nama_bahasa AS nama, COUNT(DISTINCT j.id_naskah) AS jumlah 
+            $sql = "SELECT m.nama_bahasa AS nama, COUNT(DISTINCT j.id_naskah) AS jumlah
                     FROM tb_bahasa m
                     JOIN naskah_bahasa j ON m.id_bahasa = j.id_bahasa
-                    JOIN katalog kr ON kr.id = j.id_naskah GROUP BY m.id_bahasa, m.nama_bahasa 
+                    JOIN katalog kr ON kr.id = j.id_naskah GROUP BY m.id_bahasa, m.nama_bahasa
                     ORDER BY jumlah DESC";
             break;
         case 'alas_tulis':
-            $sql = "SELECT m.nama_alas_tulis AS nama, COUNT(DISTINCT j.id_naskah) AS jumlah 
+            $sql = "SELECT m.nama_alas_tulis AS nama, COUNT(DISTINCT j.id_naskah) AS jumlah
                     FROM tb_alas_tulis m
                     JOIN naskah_alas_tulis j ON m.id_alas_tulis = j.id_alas_tulis
-                    JOIN katalog kr ON kr.id = j.id_naskah GROUP BY m.id_alas_tulis, m.nama_alas_tulis 
+                    JOIN katalog kr ON kr.id = j.id_naskah GROUP BY m.id_alas_tulis, m.nama_alas_tulis
                     ORDER BY jumlah DESC";
             break;
         case 'view':
-            $sql = "SELECT k.judul AS nama, COUNT(nv.id) AS jumlah 
-                    FROM naskah_views nv 
-                    JOIN katalog k ON nv.id_naskah = k.id 
-                    GROUP BY k.id, k.judul 
-                    ORDER BY jumlah DESC 
+            $sql = "SELECT k.judul AS nama, COUNT(nv.id) AS jumlah
+                    FROM naskah_views nv
+                    JOIN katalog k ON nv.id_naskah = k.id
+                    GROUP BY k.id, k.judul
+                    ORDER BY jumlah DESC
                     LIMIT 10";
             break;
         default:
@@ -102,11 +102,11 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
     <title>Statistik - KANDAGA</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/fontawesome/css/all.min.css">
     <script src="<?= BASE_URL; ?>/assets/js/chart.js"></script>
-    
+
     <style>
         body { background-color: #f8fafc; color: #334155; font-family: 'Inter', sans-serif; }
         .page-header { background: white; padding: 60px 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 40px; }
@@ -144,20 +144,20 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
 
 <div class="page-header text-center">
     <div class="container">
-        <h2 class="font-weight-bold">Statistik KANDAGA</h2>
+        <h2 class="fw-bold">Statistik KANDAGA</h2>
         <p class="text-muted">Data internal katalog dan pemanfaatan katalog dalam dua klaster.</p>
     </div>
 </div>
 
 <div class="container pb-5">
-    <p class="small text-muted mb-2"><i class="fas fa-clock mr-1"></i> Pembaruan katalog terakhir: <strong><?= $researchStats['updated_at'] ? htmlspecialchars(date('d-m-Y H:i', strtotime($researchStats['updated_at'])), ENT_QUOTES, 'UTF-8') : 'Belum tersedia' ?></strong></p>
+    <p class="small text-muted mb-2"><i class="fas fa-clock me-1"></i> Pembaruan katalog terakhir: <strong><?= $researchStats['updated_at'] ? htmlspecialchars(date('d-m-Y H:i', strtotime($researchStats['updated_at'])), ENT_QUOTES, 'UTF-8') : 'Belum tersedia' ?></strong></p>
     <div class="research-status-card mb-4">
         <div class="research-status-head">
             <div class="research-status-title">
                 <i class="fas fa-book-reader" aria-hidden="true"></i>
-                <div><h3 class="mb-1 font-weight-bold">Status relasi naskah dengan penelitian</h3><p class="research-status-note mb-0">Relasi referensi primer dan sekunder yang tercatat dalam katalog.</p></div>
+                <div><h3 class="mb-1 fw-bold">Status relasi naskah dengan penelitian</h3><p class="research-status-note mb-0">Relasi referensi primer dan sekunder yang tercatat dalam katalog.</p></div>
             </div>
-            <button type="button" class="btn research-status-detail" data-toggle="modal" data-target="#researchStatusDetailModal"><i class="fas fa-list-ul mr-1" aria-hidden="true"></i>Rincian</button>
+            <button type="button" class="btn research-status-detail" data-bs-toggle="modal" data-bs-target="#researchStatusDetailModal"><i class="fas fa-list-ul me-1" aria-hidden="true"></i>Rincian</button>
         </div>
         <div class="d-flex align-items-end justify-content-between mt-3"><div class="research-status-total"><?= number_format($researchTotal) ?><small>Total naskah terukur</small></div><span class="badge-count"><?= number_format($researchPercent, 1) ?>% terkait</span></div>
         <div class="research-progress" role="img" aria-label="<?= number_format($researchPercent, 1) ?> persen naskah memiliki referensi bibliografi"><span class="research-progress-related" style="width: <?= htmlspecialchars((string)$researchPercent, ENT_QUOTES, 'UTF-8') ?>%"></span><span class="research-progress-unrelated" style="width: <?= htmlspecialchars((string)(100 - $researchPercent), ENT_QUOTES, 'UTF-8') ?>%"></span></div>
@@ -166,57 +166,57 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
     </div>
     <p class="small text-muted mb-4">Hanya relasi sumber primer dan sekunder yang dihitung; relasi katalog tidak termasuk.</p>
     <?php foreach (['catalog' => array_filter($daftar_statistik, fn($item) => $item['tipe'] !== 'view'), 'traffic' => array_filter($daftar_statistik, fn($item) => $item['tipe'] === 'view')] as $cluster => $clusterItems): ?>
-    <?php if ($cluster === 'catalog'): ?><h3 class="font-weight-bold">Data internal katalog</h3><p class="text-muted">Sebaran metadata naskah. Naskah dengan beberapa bahasa atau aksara dapat dihitung pada beberapa kategori.</p><?php else: ?><h3 class="font-weight-bold">Pemanfaatan katalog</h3><p class="text-muted">Naskah dan kata kunci yang paling sering digunakan pembaca.</p><?php endif; ?>
+    <?php if ($cluster === 'catalog'): ?><h3 class="fw-bold">Data internal katalog</h3><p class="text-muted">Sebaran metadata naskah. Naskah dengan beberapa bahasa atau aksara dapat dihitung pada beberapa kategori.</p><?php else: ?><h3 class="fw-bold">Pemanfaatan katalog</h3><p class="text-muted">Naskah dan kata kunci yang paling sering digunakan pembaca.</p><?php endif; ?>
     <div class="row <?= $cluster === 'traffic' ? 'traffic-stat-row' : '' ?>">
         <?php if($cluster==='traffic'){echo '<div class="col-lg-6 mb-4">';include __DIR__.'/../includes/popular-manuscripts.php';echo '</div><div class="col-lg-6 mb-4">';include __DIR__.'/../includes/top-searches.php';echo '</div>';$clusterItems=[];} ?>
         <?php foreach ($clusterItems as $item): ?>
-            <?php 
+            <?php
                 $labels = [];
                 $values = [];
                 $table_rows_html = '';
-                
+
                 $res = getStatistikRelasional($conn, $item['tipe']);
                 if ($res && mysqli_num_rows($res) > 0) {
                     while ($data = mysqli_fetch_assoc($res)) {
                         $nama_item = !empty($data['nama']) ? $data['nama'] : 'Tidak Terdefinisi';
                         $labels[] = $nama_item;
                         $values[] = (int)$data['jumlah'];
-                        
+
                         $table_rows_html .= '<tr>
-                            <td class="pl-4 py-2 small font-weight-bold">'.htmlspecialchars($nama_item).'</td>
-                            <td class="text-right pr-4 py-2"><span class="badge-count">'.number_format($data['jumlah']).'</span></td>
+                            <td class="ps-4 py-2 small fw-bold">'.htmlspecialchars($nama_item).'</td>
+                            <td class="text-end pe-4 py-2"><span class="badge-count">'.number_format($data['jumlah']).'</span></td>
                         </tr>';
                     }
                 } else {
                     $table_rows_html = '<tr><td colspan="2" class="text-center text-muted small py-4">Data tidak ditemukan</td></tr>';
                 }
             ?>
-            
+
             <div class="col-lg-6 col-md-12 mb-4">
                 <div class="stat-card shadow-sm">
                     <div class="stat-card-header">
                         <div class="stat-card-header-left">
                             <i id="html-icon-<?= $item['id'] ?>" class="fas <?= $item['ikon'] ?> main-icon"></i>
-                            <h6 class="mb-0 font-weight-bold d-inline-block"><?= $item['judul'] ?></h6>
+                            <h6 class="mb-0 fw-bold d-inline-block"><?= $item['judul'] ?></h6>
                         </div>
                         <button type="button" class="btn-zoom-stat visual-zoom-trigger"
-                                data-judul="<?= htmlspecialchars($item['judul']) ?>" 
+                                data-judul="<?= htmlspecialchars($item['judul']) ?>"
                                 data-ikon="html-icon-<?= $item['id'] ?>"
-                                data-labels='<?= htmlspecialchars(json_encode($labels), ENT_QUOTES, 'UTF-8') ?>' 
+                                data-labels='<?= htmlspecialchars(json_encode($labels), ENT_QUOTES, 'UTF-8') ?>'
                                 data-values='<?= json_encode($values) ?>'>
-                            <i class="fas fa-expand-alt mr-1"></i> Perbesar
+                            <i class="fas fa-expand-alt me-1"></i> Perbesar
                         </button>
                     </div>
-                    
+
                     <ul class="nav nav-tabs" id="tab<?= $item['id'] ?>" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="pie-tab-<?= $item['id'] ?>" data-toggle="tab" href="#pie-panel-<?= $item['id'] ?>" role="tab"><i class="fas fa-chart-pie mr-1"></i> Pie</a>
+                            <a class="nav-link active" id="pie-tab-<?= $item['id'] ?>" data-bs-toggle="tab" href="#pie-panel-<?= $item['id'] ?>" role="tab"><i class="fas fa-chart-pie me-1"></i> Pie</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="bar-tab-<?= $item['id'] ?>" data-toggle="tab" href="#bar-panel-<?= $item['id'] ?>" role="tab"><i class="fas fa-chart-bar mr-1"></i> Batang</a>
+                            <a class="nav-link" id="bar-tab-<?= $item['id'] ?>" data-bs-toggle="tab" href="#bar-panel-<?= $item['id'] ?>" role="tab"><i class="fas fa-chart-bar me-1"></i> Batang</a>
                         </li>
                     </ul>
-                    
+
                     <div class="row no-gutters">
                         <div class="col-md-6 border-right">
                             <div class="tab-content">
@@ -232,14 +232,14 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <div class="table-container">
                                 <table class="table table-hover mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="pl-4">Item</th>
-                                            <th class="text-right pr-4"><?= $item['tipe'] === 'view' ? 'Kunjungan' : 'Naskah' ?></th>
+                                            <th class="ps-4">Item</th>
+                                            <th class="text-end pe-4"><?= $item['tipe'] === 'view' ? 'Kunjungan' : 'Naskah' ?></th>
                                         </tr>
                                     </thead>
                                     <tbody id="table-body-src-<?= $item['id'] ?>">
@@ -301,15 +301,15 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
 <div class="modal fade" id="researchStatusDetailModal" tabindex="-1" role="dialog" aria-labelledby="researchStatusDetailTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content border-0 shadow-lg" style="border-radius:18px;overflow:hidden;">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title font-weight-bold" id="researchStatusDetailTitle"><i class="fas fa-book-reader mr-2" aria-hidden="true"></i>Rincian relasi penelitian</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Tutup"><span aria-hidden="true">&times;</span></button>
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title fw-bold" id="researchStatusDetailTitle"><i class="fas fa-book-reader me-2" aria-hidden="true"></i>Rincian relasi penelitian</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body">
                 <p class="small text-muted mb-3">Ringkasan ini menghitung relasi sumber primer dan sekunder yang tercatat pada naskah. Relasi katalog tidak termasuk.</p>
-                <div class="research-detail-row"><div class="flex-grow-1"><div class="research-detail-label">Memiliki referensi bibliografi</div><div class="research-detail-bar"><span style="width: <?= htmlspecialchars((string)$researchPercent, ENT_QUOTES, 'UTF-8') ?>%"></span></div></div><div class="text-right"><div class="research-detail-value text-primary"><?= number_format($researchStats['researched']) ?></div><small class="text-muted"><?= number_format($researchPercent, 1) ?>%</small></div></div>
-                <div class="research-detail-row"><div class="flex-grow-1"><div class="research-detail-label">Belum memiliki referensi bibliografi</div><div class="research-detail-bar"><span class="muted" style="width: <?= htmlspecialchars((string)(100 - $researchPercent), ENT_QUOTES, 'UTF-8') ?>%"></span></div></div><div class="text-right"><div class="research-detail-value"><?= number_format($researchStats['unresearched']) ?></div><small class="text-muted"><?= number_format(100 - $researchPercent, 1) ?>%</small></div></div>
-                <p class="small text-muted mt-3 mb-0"><i class="fas fa-info-circle mr-1" aria-hidden="true"></i>Terakhir diperbarui: <?= $researchStats['updated_at'] ? htmlspecialchars(date('d-m-Y H:i', strtotime($researchStats['updated_at'])), ENT_QUOTES, 'UTF-8') : 'Belum tersedia' ?></p>
+                <div class="research-detail-row"><div class="flex-grow-1"><div class="research-detail-label">Memiliki referensi bibliografi</div><div class="research-detail-bar"><span style="width: <?= htmlspecialchars((string)$researchPercent, ENT_QUOTES, 'UTF-8') ?>%"></span></div></div><div class="text-end"><div class="research-detail-value text-primary"><?= number_format($researchStats['researched']) ?></div><small class="text-muted"><?= number_format($researchPercent, 1) ?>%</small></div></div>
+                <div class="research-detail-row"><div class="flex-grow-1"><div class="research-detail-label">Belum memiliki referensi bibliografi</div><div class="research-detail-bar"><span class="muted" style="width: <?= htmlspecialchars((string)(100 - $researchPercent), ENT_QUOTES, 'UTF-8') ?>%"></span></div></div><div class="text-end"><div class="research-detail-value"><?= number_format($researchStats['unresearched']) ?></div><small class="text-muted"><?= number_format(100 - $researchPercent, 1) ?>%</small></div></div>
+                <p class="small text-muted mt-3 mb-0"><i class="fas fa-info-circle me-1" aria-hidden="true"></i>Terakhir diperbarui: <?= $researchStats['updated_at'] ? htmlspecialchars(date('d-m-Y H:i', strtotime($researchStats['updated_at'])), ENT_QUOTES, 'UTF-8') : 'Belum tersedia' ?></p>
             </div>
         </div>
     </div>
@@ -319,18 +319,16 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content" style="border-radius: 24px; border: none; overflow: hidden;">
             <div class="modal-header px-4 py-3 align-items-center" style="background: #1e293b; color: white; border-bottom: none;">
-                <h5 class="modal-title font-weight-bold d-flex align-items-center" id="modalTitleText"></h5>
-                <button type="button" class="close text-white opacity-100" data-dismiss="modal" aria-label="Close" style="outline: none;">
-                    <span aria-hidden="true" style="font-size: 1.8rem;">&times;</span>
-                </button>
+                <h5 class="modal-title fw-bold d-flex align-items-center" id="modalTitleText"></h5>
+                <button type="button" class="btn-close btn-close-white opacity-100" data-bs-dismiss="modal" aria-label="Close" style="outline: none;"></button>
             </div>
             <div class="modal-body bg-light p-4">
                 <ul class="nav nav-pills mb-3 justify-content-center" id="modalTabChart" role="tablist">
                     <li class="nav-item mx-1">
-                        <a class="nav-link active px-4 py-2" id="modal-pie-tab" data-toggle="pill" href="#modal-pie-panel" role="tab"><i class="fas fa-chart-pie mr-2"></i>Diagram Lingkaran</a>
+                        <a class="nav-link active px-4 py-2" id="modal-pie-tab" data-bs-toggle="pill" href="#modal-pie-panel" role="tab"><i class="fas fa-chart-pie me-2"></i>Diagram Lingkaran</a>
                     </li>
                     <li class="nav-item mx-1">
-                        <a class="nav-link px-4 py-2" id="modal-bar-tab" data-toggle="pill" href="#modal-bar-panel" role="tab"><i class="fas fa-chart-bar mr-2"></i>Diagram Batang</a>
+                        <a class="nav-link px-4 py-2" id="modal-bar-tab" data-bs-toggle="pill" href="#modal-bar-panel" role="tab"><i class="fas fa-chart-bar me-2"></i>Diagram Batang</a>
                     </li>
                 </ul>
                 <div class="row align-items-center">
@@ -353,10 +351,10 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
                     <div class="col-lg-5">
                         <div class="modal-table-container bg-white shadow-sm">
                             <table class="table table-hover table-striped mb-0">
-                                <thead class="thead-light">
+                                <thead class="table-light">
                                     <tr>
-                                        <th class="pl-4 py-3">Kategori Metadata</th>
-                                        <th class="text-right pr-4 py-3">Jumlah</th>
+                                        <th class="ps-4 py-3">Kategori Metadata</th>
+                                        <th class="text-end pe-4 py-3">Jumlah</th>
                                     </tr>
                                 </thead>
                                 <tbody id="modalTableBody"></tbody>
@@ -369,7 +367,7 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
     </div>
 </div>
 
-<script src="<?= BASE_URL; ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL; ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL; ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -386,9 +384,9 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
             var originalCardId = iconId.replace('html-icon-', '');
             var tableContent = $('#table-body-src-' + originalCardId).html();
 
-            $('#modalTitleText').html('<i class="' + iconClass + ' mr-3 text-primary"></i> Analisis Data Rinci: ' + judul);
+            $('#modalTitleText').html('<i class="' + iconClass + ' me-3 text-primary"></i> Analisis Data Rinci: ' + judul);
             $('#modalTableBody').html(tableContent);
-            $('#modalPerbesarStatistik').modal('show');
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('modalPerbesarStatistik')).show();
 
             setTimeout(function() {
                 if (modalPieChartInstance) modalPieChartInstance.destroy();

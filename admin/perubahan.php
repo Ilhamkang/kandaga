@@ -43,14 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
 <div class="container-fluid">
     <div class="card shadow-sm border-0 card-custom">
         <div class="header-custom d-flex justify-content-between align-items-center">
-            <span><i class="fa-solid fa-clock-rotate-left mr-2"></i>Riwayat Aktivitas</span>
-            
+            <span><i class="fa-solid fa-clock-rotate-left me-2"></i>Riwayat Aktivitas</span>
+
             <ul class="nav nav-pills" id="logTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="global-tab" data-toggle="pill" href="#global-log" role="tab">Log Global</a>
+                    <a class="nav-link active" id="global-tab" data-bs-toggle="pill" href="#global-log" role="tab">Log Global</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="my-tab" data-toggle="pill" href="#my-log" role="tab">Aktivitas Saya</a>
+                    <a class="nav-link" id="my-tab" data-bs-toggle="pill" href="#my-log" role="tab">Aktivitas Saya</a>
                 </li>
             </ul>
         </div>
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
                                 <tr>
                                     <td><?= date('H:i, d M Y', strtotime($l['waktu'])); ?></td>
                                     <td><?= htmlspecialchars($l['username']); ?></td>
-                                    <td><span class="badge badge-secondary"><?= htmlspecialchars($l['aksi']) ?></span></td>
+                                    <td><span class="badge bg-secondary"><?= htmlspecialchars($l['aksi']) ?></span></td>
                                     <td><code><?= $l['ip_address'] ?></code></td>
                                 </tr>
                             <?php endwhile; ?>
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
                             while ($l = mysqli_fetch_array($logs_my)): ?>
                                 <tr>
                                     <td><?= date('H:i, d M Y', strtotime($l['waktu'])); ?></td>
-                                    <td><span class="badge badge-warning"><?= htmlspecialchars($l['aksi']) ?></span></td>
+                                    <td><span class="badge bg-warning"><?= htmlspecialchars($l['aksi']) ?></span></td>
                                     <td><code><?= $l['ip_address'] ?></code></td>
                                 </tr>
                             <?php endwhile; ?>
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
         // Inisialisasi tab Bootstrap
         $('#logTab a').on('click', function (e) {
             e.preventDefault();
-            $(this).tab('show');
+            bootstrap.Tab.getOrCreateInstance(this).show();
         });
     });
 </script>

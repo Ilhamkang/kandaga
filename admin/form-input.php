@@ -57,7 +57,8 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 }
 
 /* ================= FORM CONTROL ================= */
-.form-control{
+.form-control,
+.form-select{
     border-radius:8px;
     font-size:13px;
 }
@@ -87,17 +88,17 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <!-- ================= STRUKTUR & PROVENANCE (OPSIONAL) ================= -->
 <div class="form-card">
-<div class="section-title"><i class="fa-solid fa-sitemap"></i> Struktur & Lokasi Historis <small class="text-muted ml-2">(opsional)</small></div>
+<div class="section-title"><i class="fa-solid fa-sitemap"></i> Struktur & Lokasi Historis <small class="text-muted ms-2">(opsional)</small></div>
 <div class="row">
-<div class="col-md-3 mb-3"><label>Tipe Record</label><select name="record_type" class="form-control"><option value="induk">Naskah induk</option><option value="unit">Unit naskah</option></select></div>
-<div class="col-md-5 mb-3"><label>Naskah Induk</label><select name="parent_id" class="form-control"><option value="">-- Tidak ada / record induk --</option><?php if ($parent_options): while($p=mysqli_fetch_assoc($parent_options)): ?><option value="<?= (int)$p['id'] ?>">#<?= (int)$p['id'] ?> · <?= htmlspecialchars($p['kode_inventaris'].' — '.$p['judul'], ENT_QUOTES, 'UTF-8') ?></option><?php endwhile; endif; ?></select></div>
+<div class="col-md-3 mb-3"><label>Tipe Record</label><select name="record_type" class="form-select"><option value="induk">Naskah induk</option><option value="unit">Unit naskah</option></select></div>
+<div class="col-md-5 mb-3"><label>Naskah Induk</label><select name="parent_id" class="form-select"><option value="">-- Tidak ada / record induk --</option><?php if ($parent_options): while($p=mysqli_fetch_assoc($parent_options)): ?><option value="<?= (int)$p['id'] ?>">#<?= (int)$p['id'] ?> · <?= htmlspecialchars($p['kode_inventaris'].' — '.$p['judul'], ENT_QUOTES, 'UTF-8') ?></option><?php endwhile; endif; ?></select></div>
 <div class="col-md-2 mb-3"><label>Label Unit</label><input type="text" name="unit_label" class="form-control" placeholder="Unit 1"></div>
 <div class="col-md-2 mb-3"><label>Urutan</label><input type="number" min="1" name="unit_order" class="form-control"></div>
 <div class="col-md-12 mb-3"><label>Catatan struktur</label><textarea name="structure_notes" class="form-control" rows="2"></textarea></div>
 </div>
-<hr><label class="font-weight-bold">Lokasi historis</label><div id="location-history-input"><div class="row location-history-row mb-2"><div class="col-md-2"><select name="location_history[0][kind]" class="form-control"><option value="asal">Asal</option><option value="ditemukan">Ditemukan</option><option value="sebelumnya">Lokasi sebelumnya</option></select></div><div class="col-md-3"><input name="location_history[0][place]" class="form-control" placeholder="Tempat/desa"></div><div class="col-md-2"><input name="location_history[0][district]" class="form-control" placeholder="Kota/kabupaten"></div><div class="col-md-2"><input name="location_history[0][province]" class="form-control" placeholder="Provinsi"></div><div class="col-md-2"><input name="location_history[0][country]" class="form-control" placeholder="Negara"></div><div class="col-md-1"><button type="button" class="btn btn-outline-primary" onclick="addHistoryRow()">+</button></div></div></div>
+<hr><label class="fw-bold">Lokasi historis</label><div id="location-history-input"><div class="row location-history-row mb-2"><div class="col-md-2"><select name="location_history[0][kind]" class="form-select"><option value="asal">Asal</option><option value="ditemukan">Ditemukan</option><option value="sebelumnya">Lokasi sebelumnya</option></select></div><div class="col-md-3"><input name="location_history[0][place]" class="form-control" placeholder="Tempat/desa"></div><div class="col-md-2"><input name="location_history[0][district]" class="form-control" placeholder="Kota/kabupaten"></div><div class="col-md-2"><input name="location_history[0][province]" class="form-control" placeholder="Provinsi"></div><div class="col-md-2"><input name="location_history[0][country]" class="form-control" placeholder="Negara"></div><div class="col-md-1"><button type="button" class="btn btn-outline-primary" onclick="addHistoryRow()">+</button></div></div></div>
 <small class="text-muted">Lokasi sekarang tetap dipilih pada field Lembaga Penyimpan.</small>
-<hr><label class="font-weight-bold">Identitas alternatif</label>
+<hr><label class="fw-bold">Identitas alternatif</label>
 <div id="identifier-input"><div class="row identifier-row mb-2"><div class="col-md-3"><input name="identifier[0][scheme]" class="form-control" placeholder="Shelfmark / Leiden"></div><div class="col-md-4"><input name="identifier[0][value]" class="form-control" placeholder="Nilai identitas"></div><div class="col-md-4"><input name="identifier[0][source]" class="form-control" placeholder="Sumber"></div><div class="col-md-1"><button type="button" class="btn btn-outline-primary" onclick="addIdentifierRow()">+</button></div></div></div>
 </div>
 
@@ -113,7 +114,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <div class="col-md-6 mb-3">
 <label>Lembaga Penyimpan</label>
-<select name="id_lokasi" class="form-control select-clean select-location" data-placeholder="Ketik nama lembaga atau lokasi...">
+<select name="id_lokasi" class="form-select select-clean select-location" data-placeholder="Ketik nama lembaga atau lokasi...">
 <option value="">-- Pilih Lokasi --</option>
 <?php while($l=mysqli_fetch_assoc($data_lokasi)): ?>
 <option value="<?= $l['id_lokasi'] ?>"><?= htmlspecialchars($l['nama_tempat']) ?></option>
@@ -128,10 +129,10 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <div class="col-md-12 mt-3">
     <label>Riwayat Naskah</label>
-    <textarea 
+    <textarea
         id="riwayat_naskah"
-        name="riwayat_naskah" 
-        class="form-control tinymce" 
+        name="riwayat_naskah"
+        class="form-control tinymce"
         rows="5"></textarea>
 </div>
 
@@ -148,11 +149,11 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <!-- ================= ALAS TULIS ================= -->
 <div class="col-md-4 mb-3">
-<label class="small font-weight-bold">Alas Tulis</label>
+<label class="small fw-bold">Alas Tulis</label>
 
 <div id="container-alas_tulis">
     <div class="dynamic-row">
-        <select name="alas_tulis[]" class="form-control select-clean">
+        <select name="alas_tulis[]" class="form-select select-clean">
             <option value="">-- Alas Tulis --</option>
             <?php mysqli_data_seek($data_alas,0); while($a=mysqli_fetch_assoc($data_alas)): ?>
                 <option value="<?= $a['id_alas_tulis'] ?>">
@@ -172,11 +173,11 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <!-- ================= BAHASA ================= -->
 <div class="col-md-4 mb-3">
-<label class="small font-weight-bold">Bahasa</label>
+<label class="small fw-bold">Bahasa</label>
 
 <div id="container-bahasa">
     <div class="dynamic-row">
-        <select name="bahasa[]" class="form-control select-clean">
+        <select name="bahasa[]" class="form-select select-clean">
             <option value="">-- Bahasa --</option>
             <?php mysqli_data_seek($data_bahasa,0); while($b=mysqli_fetch_assoc($data_bahasa)): ?>
                 <option value="<?= $b['id_bahasa'] ?>">
@@ -196,11 +197,11 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <!-- ================= AKSARA ================= -->
 <div class="col-md-4 mb-3">
-<label class="small font-weight-bold">Aksara</label>
+<label class="small fw-bold">Aksara</label>
 
 <div id="container-aksara">
     <div class="dynamic-row">
-        <select name="aksara[]" class="form-control select-clean">
+        <select name="aksara[]" class="form-select select-clean">
             <option value="">-- Aksara --</option>
             <?php mysqli_data_seek($data_aksara,0); while($a=mysqli_fetch_assoc($data_aksara)): ?>
                 <option value="<?= $a['id_aksara'] ?>">
@@ -221,10 +222,10 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 <!-- ================= DESKRIPSI FISIK ================= -->
 <div class="col-md-12 mt-3">
     <label>Deskripsi Fisik</label>
-    <textarea 
+    <textarea
         id="deskripsi_fisik"
-        name="deskripsi_fisik" 
-        class="form-control tinymce" 
+        name="deskripsi_fisik"
+        class="form-control tinymce"
         rows="5"></textarea>
 </div>
 </div>
@@ -235,18 +236,18 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 <div class="section-title"><i class="fa-solid fa-layer-group"></i> Bibliografi</div>
 
 <div id="container-katalog">
-<label class="small font-weight-bold">Katalog</label>
+<label class="small fw-bold">Katalog</label>
 <div class="dynamic-row">
-<select name="katalog[]" class="form-control select-ajax-bib" data-kategori="katalog"></select>
+<select name="katalog[]" class="form-select select-ajax-bib" data-kategori="katalog"></select>
 </div>
 </div>
 <button type="button" class="btn btn-sm btn-info" onclick="BibliografiModule.addRow('katalog')">+ Katalog</button>
 
 <hr>
 <div id="container-pub_primer">
-<label class="small font-weight-bold">Publikasi Primer</label>
+<label class="small fw-bold">Publikasi Primer</label>
 <div class="dynamic-row">
-<select name="pub_primer[]" class="form-control select-ajax-bib" data-kategori="referensi primer"></select>
+<select name="pub_primer[]" class="form-select select-ajax-bib" data-kategori="referensi primer"></select>
 </div>
 </div>
 <button type="button" class="btn btn-sm btn-danger" onclick="BibliografiModule.addRow('pub_primer')">+ Primer</button>
@@ -254,9 +255,9 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 <hr>
 
 <div id="container-pub_sekunder">
-<label class="small font-weight-bold">Publikasi Sekunder</label>
+<label class="small fw-bold">Publikasi Sekunder</label>
 <div class="dynamic-row">
-<select name="pub_sekunder[]" class="form-control select-ajax-bib" data-kategori="referensi sekunder"></select>
+<select name="pub_sekunder[]" class="form-select select-ajax-bib" data-kategori="referensi sekunder"></select>
 </div>
 </div>
 <button type="button" class="btn btn-sm btn-success" onclick="BibliografiModule.addRow('pub_sekunder')">+ Sekunder</button>
@@ -333,7 +334,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <!-- ================= SUBMIT ================= -->
 <div class="sticky-submit d-flex justify-content-end">
-    <button type="button" class="btn btn-light mr-2" onclick="history.back()">Batal</button>
+    <button type="button" class="btn btn-light me-2" onclick="history.back()">Batal</button>
     <button type="submit" class="btn btn-primary">Simpan</button>
 </div>
 
@@ -353,7 +354,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 $(function(){
     initSelect2();
     BibliografiModule.init(document);
-    
+
     // INI KUNCI: Inisialisasi semua textarea dengan class .tinymce secara sekaligus
     // Kita tidak perlu memanggil satu-satu berdasarkan ID
     initTinyMCE('.tinymce', 300);
@@ -405,7 +406,7 @@ function initSelect2(){
 ========================================================= */
 window.addStatic = function(type) {
     const container = document.getElementById('container-' + type);
-    
+
     // --- LOGIKA VALIDASI STRICT ---
     // Ambil semua select di dalam container
     const selects = container.querySelectorAll('select');
@@ -429,23 +430,23 @@ window.addStatic = function(type) {
     // (Lanjutkan dengan kode cloning Anda yang sebelumnya)
     const firstRow = container.querySelector('.dynamic-row');
 
-    
+
     const newRow = $(firstRow).clone(false);
-    
+
     newRow.find('select').val('').removeClass('select2-hidden-accessible');
     newRow.find('.select2-container').remove();
     newRow.find('select').removeAttr('data-select2-id tabindex aria-hidden').find('option').removeAttr('data-select2-id');
-    
+
     if (!newRow.find('.btn-remove-row').length) {
-        newRow.append('<button type="button" class="btn btn-danger btn-remove-row ml-2">×</button>');
+        newRow.append('<button type="button" class="btn btn-danger btn-remove-row ms-2">×</button>');
     }
-    
+
     newRow.find('.btn-remove-row').on('click', function() {
         $(this).parent().remove();
     });
-    
+
     container.appendChild(newRow[0]);
-    
+
     $('.select-clean').not('.select2-hidden-accessible').select2({
         width: '100%',
         dropdownParent: $(document.body)
@@ -495,7 +496,7 @@ window.BibliografiModule = (function(){
 
 function addRow(type) {
         const container = document.getElementById('container-' + type);
-        
+
         // --- LOGIKA VALIDASI BARU ---
         // Cari semua select di dalam container ini
         const selects = container.querySelectorAll('select');
@@ -520,7 +521,7 @@ function addRow(type) {
         row.className = 'dynamic-row';
 
         row.innerHTML = `
-            <select name="${type}[]" class="form-control select-ajax-bib" data-kategori="${type === 'katalog' ? 'katalog' : (type === 'pub_primer' ? 'referensi primer' : 'referensi sekunder')}"></select>
+            <select name="${type}[]" class="form-select select-ajax-bib" data-kategori="${type === 'katalog' ? 'katalog' : (type === 'pub_primer' ? 'referensi primer' : 'referensi sekunder')}"></select>
             <button type="button" class="btn btn-danger btn-remove-row">×</button>
         `;
 
@@ -541,7 +542,7 @@ $('#formNaskah').on('submit', function(e){
     e.preventDefault();
 
     // --- FIX: Sinkronisasi TinyMCE ke Textarea ---
-    // Fungsi ini akan mengambil konten dari semua editor TinyMCE 
+    // Fungsi ini akan mengambil konten dari semua editor TinyMCE
     // dan memasukkannya kembali ke dalam masing-masing textarea aslinya.
     if (typeof tinymce !== 'undefined') {
         tinymce.triggerSave();
@@ -580,7 +581,7 @@ function addHistoryRow(){
     const box=document.getElementById('location-history-input');
     const i=box.querySelectorAll('.location-history-row').length;
     const row=document.createElement('div'); row.className='row location-history-row mb-2';
-    row.innerHTML=`<div class="col-md-2"><select name="location_history[${i}][kind]" class="form-control"><option value="asal">Asal</option><option value="ditemukan">Ditemukan</option><option value="sebelumnya">Lokasi sebelumnya</option></select></div><div class="col-md-3"><input name="location_history[${i}][place]" class="form-control" placeholder="Tempat/desa"></div><div class="col-md-2"><input name="location_history[${i}][district]" class="form-control" placeholder="Kota/kabupaten"></div><div class="col-md-2"><input name="location_history[${i}][province]" class="form-control" placeholder="Provinsi"></div><div class="col-md-2"><input name="location_history[${i}][country]" class="form-control" placeholder="Negara"></div><div class="col-md-1"><button type="button" class="btn btn-outline-danger" onclick="this.closest('.location-history-row').remove()">×</button></div>`;
+    row.innerHTML=`<div class="col-md-2"><select name="location_history[${i}][kind]" class="form-select"><option value="asal">Asal</option><option value="ditemukan">Ditemukan</option><option value="sebelumnya">Lokasi sebelumnya</option></select></div><div class="col-md-3"><input name="location_history[${i}][place]" class="form-control" placeholder="Tempat/desa"></div><div class="col-md-2"><input name="location_history[${i}][district]" class="form-control" placeholder="Kota/kabupaten"></div><div class="col-md-2"><input name="location_history[${i}][province]" class="form-control" placeholder="Provinsi"></div><div class="col-md-2"><input name="location_history[${i}][country]" class="form-control" placeholder="Negara"></div><div class="col-md-1"><button type="button" class="btn btn-outline-danger" onclick="this.closest('.location-history-row').remove()">×</button></div>`;
     box.appendChild(row);
 }
 function addIdentifierRow(){const box=document.getElementById('identifier-input');const i=box.querySelectorAll('.identifier-row').length;const row=document.createElement('div');row.className='row identifier-row mb-2';row.innerHTML=`<div class="col-md-3"><input name="identifier[${i}][scheme]" class="form-control" placeholder="Shelfmark / Leiden"></div><div class="col-md-4"><input name="identifier[${i}][value]" class="form-control" placeholder="Nilai identitas"></div><div class="col-md-4"><input name="identifier[${i}][source]" class="form-control" placeholder="Sumber"></div><div class="col-md-1"><button type="button" class="btn btn-outline-danger" onclick="this.closest('.identifier-row').remove()">×</button></div>`;box.appendChild(row);}

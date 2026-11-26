@@ -48,44 +48,42 @@ if ($pesan === 'gagal') {
 
     <?php if (!empty($alert_text)): ?>
         <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
-            <small><i class="fa fa-exclamation-circle mr-1"></i> <?php echo $alert_text; ?></small>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <small><i class="fa fa-exclamation-circle me-1"></i> <?php echo $alert_text; ?></small>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
 
     <form id="loginForm" action="<?= BASE_URL ?>/actions/proses-login.php" method="POST">
         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
-        <div class="form-group">
+        <div class="mb-3">
             <label>Username</label>
             <div class="input-group">
-                <div class="input-group-prepend">
+
                     <span class="input-group-text"><i class="fa fa-user"></i></span>
-                </div>
+
                 <input type="text" name="username" class="form-control" required autofocus autocomplete="off">
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
             <label>Kata Sandi</label>
             <div class="input-group">
-                <div class="input-group-prepend">
+
                     <span class="input-group-text"><i class="fa fa-lock"></i></span>
-                </div>
+
                 <input type="password" name="password" id="passwordField" class="form-control" required autocomplete="off">
-                <div class="input-group-append">
+
                     <span class="input-group-text">
                         <i class="fa fa-eye" id="togglePassword" style="cursor:pointer;"></i>
                     </span>
-                </div>
+
             </div>
         </div>
-        
+
         <button type="submit" class="btn btn-login" id="btnSubmit">MASUK</button>
     </form>
-    
+
     <div class="text-center mt-3">
         <a href="<?= BASE_URL ?>/" class="text-decoration-none" style="color:#0f2042; font-size:0.8rem;">
             <i class="fa-solid fa-arrow-left"></i> Kembali ke Katalog
@@ -93,8 +91,8 @@ if ($pesan === 'gagal') {
     </div>
 </div>
 
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
-<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <script>
     // Toggle Password Visibility

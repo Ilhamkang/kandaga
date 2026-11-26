@@ -15,7 +15,7 @@
         $(document).on('click', '.email-item', function(){
             $('.email-item').removeClass('active');
             $(this).addClass('active');
-            
+
             let data = $(this).data('json');
             $('#email-content').html(`
                 <div class="mail-subject">${data.subjek}</div>
@@ -72,7 +72,7 @@
     }
 
     window.updateBadge = function(total){
-        if(total > 0) $('#badge-area').html('<span class="badge badge-primary p-2">' + total + ' unread</span>');
+        if(total > 0) $('#badge-area').html('<span class="badge bg-primary p-2">' + total + ' unread</span>');
         else $('#badge-area').html('<small class="text-muted">Semua dibaca</small>');
     }
 })(jQuery);

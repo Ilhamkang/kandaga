@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
-error_reporting(0); 
+error_reporting(0);
 ini_set('display_errors', 0);
 ob_start();
 
@@ -55,8 +55,8 @@ $allowed_pages = [
     'dashboard', 'perubahan', 'tampil-naskah', 'form-input', 'tampil-lokasi', 'cek_sesi', 'test-download',
     'form-edit', 'form-edit_lokasi', 'form-lokasi', 'entri_katalog', 'update', 'metadata-importer', 'catalog-importer',
     'profil-user', 'feedback-naskah', 'inbox', 'daftar-pustaka', 'form-bibliografi', 'form-pendaftaran-user',
-    'status-pengguna', 'daftar-pengguna', 'log-user', 
-    'statistik', 'form-kabar', 'daftar-post', 'form-edit-kabar', 
+    'status-pengguna', 'daftar-pengguna', 'log-user',
+    'statistik', 'form-kabar', 'daftar-post', 'form-edit-kabar',
     'form-kurasi-koleksi', 'manage-referensi', 'pengaturan'
 ];
 
@@ -66,7 +66,7 @@ $admin_only_pages = [
     'form-kabar', 'daftar-post', 'form-edit-kabar', 'form-kurasi-koleksi', 'manage-referensi', 'pengaturan'
 ];
 
-if (!in_array($page, $allowed_pages)) { $page = 'dashboard'; } 
+if (!in_array($page, $allowed_pages)) { $page = 'dashboard'; }
 
 if (in_array($page, $admin_only_pages, true)) kandagaAuthorize(true);
 
@@ -93,8 +93,8 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Goah KANDAGA | Admin</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css"> 
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css"> 
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>/assets/images/favicon.png">
     <link rel="shortcut icon" type="image/png" href="<?= BASE_URL ?>/assets/images/favicon.png">
     <link rel="stylesheet" href="assets/css/style-index-admin.css">
@@ -108,7 +108,7 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
     <script src="<?= BASE_URL ?>/admin/assets/js/tinymce/tinymce.min.js"></script>
     <script src="<?= BASE_URL ?>/admin/assets/js/sweetalert2.min.js"></script>
     <script src="<?= BASE_URL ?>/assets/js/mobile-detect.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
- 
+
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
 
@@ -123,23 +123,23 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
 
     <nav class="navbar navbar-expand navbar-light fixed-top shadow-sm bg-white" style="z-index: 1050;">
         <div class="container-fluid">
-            <button class="btn btn-link text-dark mr-3" id="sidebarToggle">
+            <button class="btn btn-link text-dark me-3" id="sidebarToggle">
                 <i class="fas fa-bars"></i>
             </button>
             <a class="navbar-brand d-flex align-items-center" href="index.php">
                 <img src="<?= BASE_URL ?>/assets/images/favicon.png" height="35" alt="Logo">
-                <span class="ml-2 font-weight-bold">KANDAGA <span class="text-primary">GOAH</span></span>
+                <span class="ms-2 fw-bold">KANDAGA <span class="text-primary">GOAH</span></span>
             </a>
-            <ul class="navbar-nav ml-auto align-items-center">
+            <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 text-dark small font-weight-bold"><?= htmlspecialchars($display_name); ?></span>
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="me-2 text-dark small fw-bold"><?= htmlspecialchars($display_name); ?></span>
                         <img class="img-profile rounded-circle border" src="<?= $path_foto_user; ?>" style="width: 32px; height: 32px; object-fit: cover;">
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow border-0 mt-2" aria-labelledby="userDropdown" style="border-radius: 8px;">
-                        <a class="dropdown-item py-2" href="index.php?page=profil-user"><i class="fas fa-user mr-2 text-gray-400"></i> Profil Saya</a>
+                    <div class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="userDropdown" style="border-radius: 8px;">
+                        <a class="dropdown-item py-2" href="index.php?page=profil-user"><i class="fas fa-user me-2 text-gray-400"></i> Profil Saya</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item py-2 text-danger" href="javascript:void(0)" onclick="logout()"><i class="fas fa-sign-out-alt mr-2"></i> Keluar</a>
+                        <a class="dropdown-item py-2 text-danger" href="javascript:void(0)" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Keluar</a>
                     </div>
                 </li>
             </ul>
@@ -152,16 +152,16 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                 <a href="<?= BASE_URL ?>/" target="_blank" class="nav-link"><i class="fa-solid fa-globe"></i> <span>Web Katalog</span></a>
                 <a href="index.php?page=dashboard" class="nav-link <?= ($page == 'dashboard') ? 'active' : ''; ?>"><i class="fa-solid fa-table-columns"></i> <span>Dashboard</span></a>
                 <a href="index.php?page=perubahan" class="nav-link <?= ($page == 'perubahan') ? 'active' : ''; ?>"><i class="fa-solid fa-clock-rotate-left"></i> <span>Aktivitas Terbaru</span></a>
-                
+
                 <?php if ($role_user === 'admin'): ?>
-                    <?php 
+                    <?php
                     $unread = 0;
                     $q_inbox = $conn->query("SELECT COUNT(*) as total FROM tb_inbox WHERE status = 'unread'");
                     if ($q_inbox) { $unread = $q_inbox->fetch_assoc()['total']; }
                     ?>
                     <a href="index.php?page=inbox" class="nav-link <?= ($page == 'inbox') ? 'active' : ''; ?>">
                         <i class="fa-solid fa-envelope"></i> <span>Inbox Feedback</span>
-                        <?php if ($unread > 0): ?><span class="badge badge-danger ml-auto" style="font-size: 10px;"><?= $unread ?></span><?php endif; ?>
+                        <?php if ($unread > 0): ?><span class="badge bg-danger ms-auto" style="font-size: 10px;"><?= $unread ?></span><?php endif; ?>
                     </a>
                     <?php
                     require_once __DIR__ . '/../includes/manuscript-feedback.php';
@@ -170,9 +170,9 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                         if (kandagaFeedbackReady($conn)) $feedbackUnread = (int)$conn->query("SELECT COUNT(*) AS total FROM tb_naskah_feedback WHERE status='unread'")->fetch_assoc()['total'];
                     } catch (Throwable $e) { error_log('Kandaga feedback sidebar: ' . $e->getMessage()); }
                     ?>
-                    <a href="index.php?page=feedback-naskah" class="nav-link <?= ($page === 'feedback-naskah') ? 'active' : ''; ?>"><i class="fa-solid fa-comment-dots"></i><span>Feedback Naskah</span><span id="feedbackNavCount" class="badge badge-danger ml-auto <?= $feedbackUnread ? '' : 'd-none' ?>"><?= $feedbackUnread ?></span></a>
+                    <a href="index.php?page=feedback-naskah" class="nav-link <?= ($page === 'feedback-naskah') ? 'active' : ''; ?>"><i class="fa-solid fa-comment-dots"></i><span>Feedback Naskah</span><span id="feedbackNavCount" class="badge bg-danger ms-auto <?= $feedbackUnread ? '' : 'd-none' ?>"><?= $feedbackUnread ?></span></a>
                 <?php endif; ?>
-                
+
                 <div class="sidebar-heading">Koleksi Naskah</div>
                 <hr class="sidebar-divider">
                 <a href="index.php?page=tampil-naskah" class="nav-link <?= ($page == 'tampil-naskah') ? 'active' : ''; ?>"><i class="fa-solid fa-database"></i> <span>Daftar Naskah</span></a>
@@ -195,7 +195,7 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                 <a href="index.php?page=form-kurasi-koleksi" class="nav-link <?= ($page == 'form-kurasi-koleksi') ? 'active' : ''; ?>"><i class="fa-solid fa-scroll"></i> <span>Kurator</span></a>
                 <a href="index.php?page=pengaturan" class="nav-link <?= ($page == 'pengaturan') ? 'active' : ''; ?>"><i class="fa-solid fa-sliders"></i> <span>Pengaturan</span></a>
                 <?php endif; ?>
-                
+
 
                 <div class="sidebar-heading">Manajemen Pengguna</div>
                 <hr class="sidebar-divider">
@@ -205,17 +205,17 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                 <a href="index.php?page=form-pendaftaran-user" class="nav-link <?= ($page == 'pendaftaran-user') ? 'active' : ''; ?>"><i class="fa-solid fa-user-plus"></i> <span>Tambah Pengguna</span></a>
                 <a href="index.php?page=status-pengguna" class="nav-link <?= ($page == 'status-pengguna') ? 'active' : ''; ?>"><i class="fa-solid fa-user-plus"></i> <span>Monitor Status</span></a>
                 <a href="index.php?page=log-user" class="nav-link <?= ($page == 'log-user') ? 'active' : ''; ?>"><i class="fa-solid fa-clock-rotate-left"></i> <span>Log Aktivitas</span></a>
-                
+
                 <div class="sidebar-heading">Properti Sistem</div>
                 <hr class="sidebar-divider">
                 <a href="index.php?page=statistik" class="nav-link <?= ($page == 'statistik') ? 'active' : ''; ?>"><i class="fa-solid fa-chart-line"></i> <span>Statistik Katalog</span></a>
                 <a href="index.php?page=update" class="nav-link <?= ($page == 'update') ? 'active' : ''; ?>">
-                    <i class="fa-solid fa-cloud-arrow-down"></i> <span>Pusat Pembaruan</span> 
+                    <i class="fa-solid fa-cloud-arrow-down"></i> <span>Pusat Pembaruan</span>
                     <?php if ($update_available): ?>
-                        <span class="badge badge-warning ml-auto" style="font-size: 10px; animation: blink 1s infinite;">baru</span>
+                        <span class="badge bg-warning ms-auto" style="font-size: 10px; animation: blink 1s infinite;">baru</span>
                     <?php endif; ?>
                 </a>
-                
+
                 <?php endif; ?>
             </div>
         </nav>
@@ -228,12 +228,12 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                         <li class="breadcrumb-item active text-capitalize"><?= str_replace('_', ' ', str_replace('-', ' ', $page)); ?></li>
                     </ol>
                 </nav>
-                <?php 
+                <?php
                 $file_path = __DIR__ . '/' . $page . ".php";
-                if (file_exists($file_path)) { 
-                    include($file_path); 
-                } else { 
-                    echo "<div class='card border-0 shadow-sm p-5 text-center'><h4>Modul '$page' tidak ditemukan.</h4></div>"; 
+                if (file_exists($file_path)) {
+                    include($file_path);
+                } else {
+                    echo "<div class='card border-0 shadow-sm p-5 text-center'><h4>Modul '$page' tidak ditemukan.</h4></div>";
                 }
                 ?>
             </div>
@@ -337,7 +337,7 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
         if (typeof applySelect2BibliografiAjax === 'function') applySelect2BibliografiAjax();
     });
 
-    function logout() { 
+    function logout() {
         Swal.fire({ title: 'Keluar Sistem?', text: "Yakin ingin keluar?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#0f2345', confirmButtonText: 'Ya, Keluar' }).then((result) => { if (result.isConfirmed) { window.location.href = "logout.php"; } });
     }
 </script>

@@ -9,7 +9,7 @@ body.kandaga-module #kontenUtama select,
 body.kandaga-module #kontenUtama textarea,
 body.kandaga-module #kontenUtama button,
 body.kandaga-module #kontenUtama .form-control,
-body.kandaga-module #kontenUtama .custom-select {
+body.kandaga-module #kontenUtama .form-select {
     font-family: var(--kandaga-font-ui);
 }
 
@@ -37,8 +37,8 @@ body.kandaga-module #kontenUtama .form-label {
 }
 
 body.kandaga-module #kontenUtama .form-control,
-body.kandaga-module #kontenUtama .custom-select,
-body.kandaga-module #kontenUtama .custom-file-label {
+body.kandaga-module #kontenUtama .form-select,
+body.kandaga-module #kontenUtama .form-label {
     font-size: var(--kandaga-text-md);
     line-height: 1.4;
 }

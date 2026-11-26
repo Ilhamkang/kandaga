@@ -18,8 +18,8 @@ $current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 
 // 1. Query Utama - Mengambil data katalog dan lokasinya
 $query = "SELECT k.*, l.nama_tempat, l.foto_lokasi, l.negara, l.alamat
-          FROM katalog k 
-          LEFT JOIN tb_lokasi l ON k.id_lokasi = l.id_lokasi 
+          FROM katalog k
+          LEFT JOIN tb_lokasi l ON k.id_lokasi = l.id_lokasi
           WHERE k.id = ?";
 
 $stmt = $conn->prepare($query);
@@ -34,7 +34,7 @@ if (!$row) {
 
 // 2. Mengambil Data Relasi Banyak-ke-Banyak (Aksara, Bahasa, Alas Tulis)
 function getNamaRelasi($conn, $tableMaster, $tableJunction, $colId, $colNama, $id_naskah) {
-    $sql = "SELECT DISTINCT m.{$colNama} 
+    $sql = "SELECT DISTINCT m.{$colNama}
             FROM {$tableMaster} m
             JOIN {$tableJunction} j ON m.{$colId} = j.{$colId}
             WHERE j.id_naskah = ?
@@ -80,16 +80,16 @@ $string_alas_tulis = getNamaRelasi($conn, 'tb_alas_tulis', 'naskah_alas_tulis', 
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
 <div class="container py-5">
-    
+
     <div class="mb-4">
-        <a href="search.php" class="text-secondary text-decoration-none small font-weight-bold">
-            <i class="fas fa-arrow-left mr-1"></i> Kembali ke Katalog
+        <a href="search.php" class="text-secondary text-decoration-none small fw-bold">
+            <i class="fas fa-arrow-left me-1"></i> Kembali ke Katalog
         </a>
     </div>
 
     <div class="detail-card shadow-sm">
-        <h3 class="font-weight-bold mb-4 text-dark"><?= htmlspecialchars($row['judul'] ?? '-') ?></h3>
-        
+        <h3 class="fw-bold mb-4 text-dark"><?= htmlspecialchars($row['judul'] ?? '-') ?></h3>
+
         <div class="table-responsive">
             <table class="table table-detail">
                 <tbody>
@@ -99,7 +99,7 @@ $string_alas_tulis = getNamaRelasi($conn, 'tb_alas_tulis', 'naskah_alas_tulis', 
                     </tr>
                     <tr>
                         <th>Kode Inventaris</th>
-                        <td><code class="text-dark font-weight-bold"><?= htmlspecialchars($row['kode_inventaris'] ?? '-') ?></code></td>
+                        <td><code class="text-dark fw-bold"><?= htmlspecialchars($row['kode_inventaris'] ?? '-') ?></code></td>
                     </tr>
                     <tr>
                         <th>Aksara</th>
@@ -130,8 +130,8 @@ $string_alas_tulis = getNamaRelasi($conn, 'tb_alas_tulis', 'naskah_alas_tulis', 
         </div>
 
         <div class="export-box d-flex flex-wrap align-items-center justify-content-start">
-            <div class="mr-4 mb-2 mb-md-0">
-                <span class="text-muted small font-weight-bold text-uppercase tracking-wider">
+            <div class="me-4 mb-2 mb-md-0">
+                <span class="text-muted small fw-bold text-uppercase tracking-wider">
                 Ekspor Metadata Berkas:
                 </span>
             </div>
@@ -151,7 +151,7 @@ $string_alas_tulis = getNamaRelasi($conn, 'tb_alas_tulis', 'naskah_alas_tulis', 
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
 
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

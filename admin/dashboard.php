@@ -12,7 +12,7 @@ if (!isset($conn)) die("Koneksi database tidak ditemukan.");
 // --- 1. SETUP USER ---
 $nama_sapaan  = $_SESSION['nama'] ?? 'Penyunting';
 $role_user    = $_SESSION['role'] ?? 'kontributor';
-$current_user = $_SESSION['username'] ?? ''; 
+$current_user = $_SESSION['username'] ?? '';
 $is_admin     = (strtolower(trim($role_user)) === 'admin');
 
 // --- 2. BACKEND ENGINE ---
@@ -42,7 +42,7 @@ $stats['total_terlibat'] = (int)$stmt_terlibat->get_result()->fetch_row()[0];
 $stmt_terlibat->close();
 
 // B. Data Riwayat (Log) - Tetap filter login/logout
-$sql_log = $is_admin 
+$sql_log = $is_admin
     ? "SELECT waktu, aksi, ip_address FROM user_logs WHERE aksi NOT LIKE '%login%' AND aksi NOT LIKE '%logout%' ORDER BY id_log DESC LIMIT 10"
     : "SELECT waktu, aksi, ip_address FROM user_logs WHERE username = ? AND aksi NOT LIKE '%login%' AND aksi NOT LIKE '%logout%' ORDER BY id_log DESC LIMIT 10";
 
@@ -92,13 +92,13 @@ function kandagaDashboardImage($n){return kandagaImageUrl((array)$n);}
 
     <div class="dashboard-welcome mb-4 d-flex justify-content-between align-items-center">
         <div class="position-relative" style="z-index:1">
-            <div class="welcome-kicker mb-2"><i class="fa-solid fa-leaf mr-1" aria-hidden="true"></i> Ruang kerja Kandaga</div>
-            <h2 class="font-weight-bold mb-2">Sampurasun, <?= htmlspecialchars($nama_sapaan); ?>!</h2>
-            <p class="mb-0 small">Wilujeng sumping di Goah. <span class="badge role-badge ml-1"><?= htmlspecialchars($role_user); ?></span></p>
+            <div class="welcome-kicker mb-2"><i class="fa-solid fa-leaf me-1" aria-hidden="true"></i> Ruang kerja Kandaga</div>
+            <h2 class="fw-bold mb-2">Sampurasun, <?= htmlspecialchars($nama_sapaan); ?>!</h2>
+            <p class="mb-0 small">Wilujeng sumping di Goah. <span class="badge role-badge ms-1"><?= htmlspecialchars($role_user); ?></span></p>
         </div>
         <div class="welcome-clock d-none d-sm-block">
             <div id="realtime-clock">00:00:00</div>
-            <div id="realtime-date" class="small text-muted font-weight-bold">Memuat...</div>
+            <div id="realtime-date" class="small text-muted fw-bold">Memuat...</div>
         </div>
     </div>
 
@@ -110,16 +110,16 @@ function kandagaDashboardImage($n){return kandagaImageUrl((array)$n);}
 
     <div class="workspace-split-grid">
         <div class="workspace-block">
-            <div class="block-title-bar"><h5><i class="fa-solid fa-clock-rotate-left mr-2"></i>Riwayat Aktivitas</h5></div>
+            <div class="block-title-bar"><h5><i class="fa-solid fa-clock-rotate-left me-2"></i>Riwayat Aktivitas</h5></div>
             <ul class="list-unstyled m-0">
-                <?php while ($log = $dataset_log->fetch_assoc()): 
+                <?php while ($log = $dataset_log->fetch_assoc()):
                     $aksi = strtolower($log['aksi']);
                     $icon = strpos($aksi, 'tambah') !== false ? 'fa-plus-circle text-success' : (strpos($aksi, 'edit') !== false ? 'fa-pen-to-square text-primary' : 'fa-history text-secondary');
                 ?>
                 <li class="naskah-node-item d-flex align-items-center">
-                    <i class="fa-solid <?= $icon; ?> mr-3" style="width: 20px;"></i>
+                    <i class="fa-solid <?= $icon; ?> me-3" style="width: 20px;"></i>
                     <div>
-                        <div class="small font-weight-bold text-dark"><?= htmlspecialchars($log['aksi']); ?></div>
+                        <div class="small fw-bold text-dark"><?= htmlspecialchars($log['aksi']); ?></div>
                         <small class="text-muted"><?= date('d M H:i', strtotime($log['waktu'])); ?></small>
                     </div>
                 </li>
@@ -128,9 +128,9 @@ function kandagaDashboardImage($n){return kandagaImageUrl((array)$n);}
         </div>
 
         <div class="workspace-block">
-            <div class="block-title-bar"><h5><i class="fa-solid <?= $is_admin ? 'fa-folder-plus' : 'fa-eye'; ?> mr-2"></i>Naskah Terbaru</h5></div>
+            <div class="block-title-bar"><h5><i class="fa-solid <?= $is_admin ? 'fa-folder-plus' : 'fa-eye'; ?> me-2"></i>Naskah Terbaru</h5></div>
             <ul class="list-unstyled m-0">
-                <?php while ($n = $data_naskah->fetch_assoc()): 
+                <?php while ($n = $data_naskah->fetch_assoc()):
                     $img=BASE_URL.'/assets/images/msc-placeholder.png';
                     if(!empty($n['url_gambar_eksternal']) && filter_var($n['url_gambar_eksternal'],FILTER_VALIDATE_URL) && in_array(strtolower(parse_url($n['url_gambar_eksternal'],PHP_URL_SCHEME)),['http','https'],true))$img=$n['url_gambar_eksternal'];
                     elseif(!empty($n['gambar']) && is_file(__DIR__.'/../assets/images/naskah/'.basename($n['gambar'])))$img=BASE_URL.'/assets/images/naskah/'.rawurlencode(basename($n['gambar']));
@@ -138,11 +138,11 @@ function kandagaDashboardImage($n){return kandagaImageUrl((array)$n);}
                 ?>
                 <li class="naskah-node-item">
                     <a href="<?= BASE_URL ?>/detail.php?id=<?= (int)$n['id'] ?>" class="latest-manuscript text-decoration-none text-dark">
-                        <img src="<?= htmlspecialchars($img,ENT_QUOTES,'UTF-8') ?>" alt="Gambar naskah" style="border-radius:8px" class="mr-3 shadow-sm border">
+                        <img src="<?= htmlspecialchars($img,ENT_QUOTES,'UTF-8') ?>" alt="Gambar naskah" style="border-radius:8px" class="me-3 shadow-sm border">
                         <div>
-                            <div class="font-weight-bold">
+                            <div class="fw-bold">
                                 <?= htmlspecialchars($n['judul'] ?? ''); ?>
-                                <p class="small text-muted mt-2 mb-1"><i class="fa-solid fa-building-columns mr-1"></i><?= htmlspecialchars($n['nama_tempat']??'') ?></p><p class="small text-muted"><i class="fa-solid fa-barcode mr-1"></i><?= htmlspecialchars($n['kode_inventaris']?:'Tanpa nomor inventaris') ?></p>
+                                <p class="small text-muted mt-2 mb-1"><i class="fa-solid fa-building-columns me-1"></i><?= htmlspecialchars($n['nama_tempat']??'') ?></p><p class="small text-muted"><i class="fa-solid fa-barcode me-1"></i><?= htmlspecialchars($n['kode_inventaris']?:'Tanpa nomor inventaris') ?></p>
                             </div>
                             <small class="text-muted">
                                 <?= htmlspecialchars($n['penginput_awal'] ?? ''); ?> &bull; <?= date('d M Y', strtotime($n['tanggal_input'] ?? 'now')); ?>
@@ -154,8 +154,8 @@ function kandagaDashboardImage($n){return kandagaImageUrl((array)$n);}
             </ul>
             <div class="block-title-bar small">5 entri terbaru lainnya yang saya input</div>
             <ul class="list-unstyled m-0 dashboard-entry-list">
-            <?php while($recent=$recentPersonal->fetch_assoc()): ?><li class="naskah-node-item"><a class="d-flex align-items-center text-decoration-none text-dark" href="<?= BASE_URL ?>/detail.php?id=<?= (int)$recent['id'] ?>"><img src="<?= htmlspecialchars(kandagaDashboardImage($recent),ENT_QUOTES,'UTF-8') ?>" alt="" class="rounded border mr-3" loading="lazy"><div class="small"><strong><?= htmlspecialchars($recent['judul'],ENT_QUOTES,'UTF-8') ?></strong><div class="text-muted"><?= htmlspecialchars($recent['nama_tempat']??'',ENT_QUOTES,'UTF-8') ?> · <?= date('d M Y',strtotime($recent['tanggal_input']??'now')) ?></div></div></a></li><?php endwhile;if(!$recentPersonal->num_rows): ?><li class="p-3 text-muted small">Belum ada entri lainnya.</li><?php endif; ?></ul>
-            <?php if($editedWatchlist): ?><details class="p-3"><summary class="small font-weight-bold">Watchlist naskah yang saya sunting</summary><ul class="small mt-2"><?php foreach($editedWatchlist as $watched): ?><li><a href="<?= BASE_URL ?>/detail.php?id=<?= (int)$watched['id'] ?>"><?= htmlspecialchars($watched['judul'],ENT_QUOTES,'UTF-8') ?></a></li><?php endforeach; ?></ul></details><?php endif; ?>
+            <?php while($recent=$recentPersonal->fetch_assoc()): ?><li class="naskah-node-item"><a class="d-flex align-items-center text-decoration-none text-dark" href="<?= BASE_URL ?>/detail.php?id=<?= (int)$recent['id'] ?>"><img src="<?= htmlspecialchars(kandagaDashboardImage($recent),ENT_QUOTES,'UTF-8') ?>" alt="" class="rounded border me-3" loading="lazy"><div class="small"><strong><?= htmlspecialchars($recent['judul'],ENT_QUOTES,'UTF-8') ?></strong><div class="text-muted"><?= htmlspecialchars($recent['nama_tempat']??'',ENT_QUOTES,'UTF-8') ?> · <?= date('d M Y',strtotime($recent['tanggal_input']??'now')) ?></div></div></a></li><?php endwhile;if(!$recentPersonal->num_rows): ?><li class="p-3 text-muted small">Belum ada entri lainnya.</li><?php endif; ?></ul>
+            <?php if($editedWatchlist): ?><details class="p-3"><summary class="small fw-bold">Watchlist naskah yang saya sunting</summary><ul class="small mt-2"><?php foreach($editedWatchlist as $watched): ?><li><a href="<?= BASE_URL ?>/detail.php?id=<?= (int)$watched['id'] ?>"><?= htmlspecialchars($watched['judul'],ENT_QUOTES,'UTF-8') ?></a></li><?php endforeach; ?></ul></details><?php endif; ?>
         </div>
     </div>
 </div>

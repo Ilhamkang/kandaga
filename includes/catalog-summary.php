@@ -8,6 +8,6 @@ function kandagaCatalogSummary($conn) {
 }
 function kandagaCatalogBadges($conn) {
     $summary=kandagaCatalogSummary($conn);$html='<div class="catalog-type-badges d-flex flex-wrap mb-3" aria-label="Jumlah jenis metadata katalog">';
-    foreach (['bahasa'=>['Bahasa','fa-language'],'aksara'=>['Aksara','fa-pen-fancy'],'alas_tulis'=>['Alas tulis','fa-scroll']] as $key=>[$label,$icon])$html.='<span class="badge badge-light border px-3 py-2 mr-2 mb-2"><i class="fa-solid '.$icon.' mr-1" aria-hidden="true"></i>'.$label.' <strong class="ml-1">'.number_format($summary[$key]).'</strong></span>';
+    foreach (['bahasa'=>['Bahasa','fa-language'],'aksara'=>['Aksara','fa-pen-fancy'],'alas_tulis'=>['Alas tulis','fa-scroll']] as $key=>[$label,$icon])$html.='<span class="badge bg-light border px-3 py-2 me-2 mb-2"><i class="fa-solid '.$icon.' me-1" aria-hidden="true"></i>'.$label.' <strong class="ms-1">'.number_format($summary[$key]).'</strong></span>';
     return $html.'</div>';
 }

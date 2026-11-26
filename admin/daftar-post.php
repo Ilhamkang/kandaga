@@ -11,9 +11,9 @@ if (session_status() == PHP_SESSION_NONE) { if (session_status() === PHP_SESSION
 include '../config/database.php';
 
 // 1. Ambil data postingan
-$query = "SELECT tb_kabar.*, users.nama as penulis 
-          FROM tb_kabar 
-          LEFT JOIN users ON tb_kabar.penulis_id = users.id 
+$query = "SELECT tb_kabar.*, users.nama as penulis
+          FROM tb_kabar
+          LEFT JOIN users ON tb_kabar.penulis_id = users.id
           ORDER BY tb_kabar.id_kabar DESC";
 
 $result = mysqli_query($conn, $query) or die("Query Gagal: " . mysqli_error($conn));
@@ -25,7 +25,7 @@ $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_
 
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="font-weight-bold">Daftar Postingan</h4>
+        <h4 class="fw-bold">Daftar Postingan</h4>
         <button class="btn btn-primary shadow-sm" onclick="tambahPost()">+ Tambah Tulisan</button>
     </div>
 
@@ -36,7 +36,7 @@ $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_
                     <input type="text" id="inputSearch" class="form-control" placeholder="Cari judul...">
                 </div>
                 <div class="col-md-3">
-                    <select id="selectKategori" class="form-select form-control">
+                    <select id="selectKategori" class="form-select">
                         <option value="">Semua Kategori</option>
                         <?php while($kat = mysqli_fetch_assoc($res_kat)): ?>
                             <option value="<?= htmlspecialchars($kat['kategori']) ?>"><?= ucfirst($kat['kategori']) ?></option>
@@ -53,7 +53,7 @@ $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_
                 <thead class="table-light">
                     <tr>
                         <th width="50" class="text-center">#</th>
-                        <th width="80">Gambar</th> 
+                        <th width="80">Gambar</th>
                         <th style="cursor: pointer;" onclick="sortTable(2)">Judul</th>
                         <th>Kategori</th>
                         <th>Penulis</th>
@@ -62,10 +62,10 @@ $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_
                     </tr>
                 </thead>
                 <tbody id="bodyTabel">
-                <?php 
+                <?php
                 if (mysqli_num_rows($result) > 0) {
-                    $no = 1; 
-                    while ($row = mysqli_fetch_assoc($result)) : 
+                    $no = 1;
+                    while ($row = mysqli_fetch_assoc($result)) :
                         $status_indo = ($row['status'] == 'published') ? 'Diterbitkan' : 'Draf';
                         $thumb_path = (!empty($row['thumbnail'])) ? '../assets/images/post/' . htmlspecialchars($row['thumbnail']) : '../assets/images/default-post.png';
                 ?>
@@ -85,14 +85,14 @@ $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_
                                 <div class="btn-group btn-group-sm">
                                     <button class="btn btn-outline-primary" onclick="editPost(<?= $row['id_kabar']; ?>)">Edit</button>
                                     <button class="btn btn-outline-info" onclick="window.open('../kabar/<?= htmlspecialchars($row['slug']); ?>', '_blank')">Lihat</button>
-                                    <button class="btn btn-outline-danger btn-hapus" 
-                                            data-id="<?= $row['id_kabar']; ?>" 
+                                    <button class="btn btn-outline-danger btn-hapus"
+                                            data-id="<?= $row['id_kabar']; ?>"
                                             data-judul="<?= htmlspecialchars($row['judul']); ?>">Hapus</button>
                                 </div>
                             </td>
                         </tr>
-                <?php 
-                    endwhile; 
+                <?php
+                    endwhile;
                 } else {
                     echo "<tr><td colspan='7' class='text-center'>Tidak ada data postingan ditemukan.</td></tr>";
                 }
@@ -161,7 +161,7 @@ jQuery(document).ready(function($) {
                     success: function(res) {
                         if(res.status === 'success') {
                             Swal.fire('Terhapus!', res.message, 'success').then(() => {
-                                $('#kontenUtama').load('daftar-post.php'); 
+                                $('#kontenUtama').load('daftar-post.php');
                             });
                         } else {
                             Swal.fire('Gagal!', res.message, 'error');

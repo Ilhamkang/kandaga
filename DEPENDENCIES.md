@@ -6,8 +6,8 @@ Lisensi masing-masing tetap berlaku dan tidak diubah oleh lisensi AGPL-3.0 pada 
 
 | Komponen | Versi | Lisensi | Lokasi | Catatan |
 |---|---|---|---|---|
-| Bootstrap | 4.6.2 | MIT | `assets/bootstrap/` | Stabil; tidak ada perbaikan keamanan besar yang tertunda. |
-| jQuery | 3.6.0 | MIT | `assets/js/jquery-3.6.0.min.js` | Core tidak punya CVE langsung pada versi ini. Awasi plugin di sekitarnya. |
+| Bootstrap | 5.3.9 | MIT | `assets/bootstrap/` | Rilis stabil terbaru (11 Nov 2026). v4.6.2 sudah EOL. Satu-satunya salinan; semua modul memuat path ini. |
+| jQuery | 3.6.0 | MIT | `assets/js/jquery-3.6.0.min.js` | Satu-satunya salinan yang dipakai (full build). Salinan slim dan berkas 0 byte dihapus. |
 | Font Awesome Free | 7.2.0 | Ikon CC BY 4.0, font SIL OFL 1.1, kode MIT | `assets/fontawesome/` | Sesuai ketentuan Font Awesome Free. |
 | TinyMCE | 7.7.2 | GPL-2.0-or-later | `assets/js/tinymce/`, `admin/assets/js/tinymce/` | Di atas patch XSS 7.2.0 (CVE-2024-38356/38357). Tidak perlu tindakan. |
 | Chart.js | 4.5.1 | MIT | `assets/js/chart.js` | Versi terkini pada jalur 4.x. |
@@ -27,6 +27,8 @@ Komponen yang ikut dihapus bersama `dompdf`:
 | `sabberworm/php-css-parser` | 8.7.0 | MIT |
 
 ## Catatan audit
+
+Pada rilis 3.1.67, seluruh markup dan skrip aplikasi dikonversi dari Bootstrap 4 ke 5.3.9: `data-*` → `data-bs-*`, utilitas `mr/ml/pr/pl` → `me/ms/pe/ps`, `font-weight-*` → `fw-*`, `form-group/form-row` → `mb-3`/`row g-2`, `form-control` pada `<select>` → `form-select`, wrapper `input-group-append/prepend` → anak langsung `input-group`, `btn-block` → `w-100`, `form-inline` → utilitas flex, badge → `badge bg-*`, tombol `close` → `btn-close`, dan plugin jQuery `.modal()`/`.tab()`/`.tooltip()` → API Bootstrap 5. Semua halaman kini memuat `bootstrap.bundle.min.js` (sudah termasuk Popper) sehingga tidak ada campuran bundle dan non-bundle.
 
 Karena KANDAGA tidak memakai `composer.json`/`package.json`, Dependabot tidak dapat memindai dependency secara otomatis. Pemeriksaan dilakukan manual dengan:
 

@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/bootstrap.php';
  * detail-koleksi.php
  * Versi Lengkap: Perbaikan error, pencarian, pagination, dan profil kurator
  */
-ini_set('display_errors', 0); 
+ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
 require_once __DIR__ . '/../config/database.php';
@@ -14,20 +14,20 @@ if (!defined('BASE_URL')) define('BASE_URL', '');
 $slug   = $_GET['slug'] ?? null;
 $id     = $_GET['id'] ?? null;
 $page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$search = $_GET['search'] ?? ''; 
-$limit  = 12; 
+$search = $_GET['search'] ?? '';
+$limit  = 12;
 $offset = ($page - 1) * $limit;
 
 // 2. Query Data Lokasi & Kurator
 if ($slug) {
-    $stmt = $conn->prepare("SELECT l.*, u.id as id_kurator, u.nama as nama_kurator, u.foto as foto_kurator 
+    $stmt = $conn->prepare("SELECT l.*, u.id as id_kurator, u.nama as nama_kurator, u.foto as foto_kurator
                             FROM tb_lokasi l
                             LEFT JOIN tb_kurasi_koleksi k ON l.id_lokasi = k.id_lokasi
                             LEFT JOIN users u ON k.id_user = u.id
                             WHERE l.slug = ?");
     $stmt->bind_param("s", $slug);
 } else if ($id) {
-    $stmt = $conn->prepare("SELECT l.*, u.id as id_kurator, u.nama as nama_kurator, u.foto as foto_kurator 
+    $stmt = $conn->prepare("SELECT l.*, u.id as id_kurator, u.nama as nama_kurator, u.foto as foto_kurator
                             FROM tb_lokasi l
                             LEFT JOIN tb_kurasi_koleksi k ON l.id_lokasi = k.id_lokasi
                             LEFT JOIN users u ON k.id_user = u.id
@@ -104,7 +104,7 @@ $src_user = (!empty($data_lokasi['foto_kurator']) && file_exists(__DIR__ . '/../
             <div class="col-lg-8 order-2 order-lg-1">
                 <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom">
                     <div>
-                        <h3 class="font-weight-bold text-dark mb-1">Inventaris Manuskrip</h3>
+                        <h3 class="fw-bold text-dark mb-1">Inventaris Manuskrip</h3>
                         <p class="text-muted small mb-0">Total <?= $total_naskah ?> naskah ditemukan.</p>
                     </div>
                 </div>
@@ -121,11 +121,11 @@ $src_user = (!empty($data_lokasi['foto_kurator']) && file_exists(__DIR__ . '/../
                         <?php endif; ?>
                     </div>
                 </form>
-                
+
                 <div class="row g-4">
                     <?php if ($naskah_result->num_rows > 0): ?>
                         <?php while ($naskah = $naskah_result->fetch_assoc()): ?>
-                            <?php 
+                            <?php
                                 $src_naskah = kandagaImageUrl($naskah);
                             ?>
                             <div class="col-xl-4 col-md-6 col-sm-12">
@@ -135,9 +135,9 @@ $src_user = (!empty($data_lokasi['foto_kurator']) && file_exists(__DIR__ . '/../
                                             <img src="<?= htmlspecialchars((string)$src_naskah, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="img-naskah-thumb" alt="<?= htmlspecialchars((string)$naskah['judul']) ?>"<?= kandagaImageFallbackAttribute() ?>>
                                         </div>
                                         <div class="card-body p-3">
-                                            <h6 class="font-weight-bold text-truncate"><?= htmlspecialchars((string)$naskah['judul']) ?></h6>
+                                            <h6 class="fw-bold text-truncate"><?= htmlspecialchars((string)$naskah['judul']) ?></h6>
                                             <div class="badge-code mt-2">
-                                                <i class="fas fa-archive mr-1"></i> <?= htmlspecialchars((string)$naskah['kode_inventaris']) ?>
+                                                <i class="fas fa-archive me-1"></i> <?= htmlspecialchars((string)$naskah['kode_inventaris']) ?>
                                             </div>
                                         </div>
                                     </div>
@@ -154,37 +154,37 @@ $src_user = (!empty($data_lokasi['foto_kurator']) && file_exists(__DIR__ . '/../
                 <?php if ($total_pages > 1): ?>
                 <nav class="mt-5">
                     <ul class="pagination justify-content-center flex-wrap">
-                        <?php 
+                        <?php
                         $range = 5;
                         $start = max(1, $page - 2);
                         $end = min($total_pages, $start + $range - 1);
-                        
+
                         $base_url_pagination = $base_url_reset . ($search ? "&search=" . urlencode((string)$search) : "");
 
                         if ($page > 1) echo '<li class="page-item"><a class="page-link" href="'.$base_url_pagination.'&page='.($page-1).'">«</a></li>';
-                        
+
                         for ($i = $start; $i <= $end; $i++): ?>
                             <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
                                 <a class="page-link" href="<?= $base_url_pagination ?>&page=<?= $i ?>"><?= $i ?></a>
                             </li>
-                        <?php endfor; 
-                        
+                        <?php endfor;
+
                         if ($page < $total_pages) echo '<li class="page-item"><a class="page-link" href="'.$base_url_pagination.'&page='.($page+1).'">»</a></li>';
                         ?>
                     </ul>
                 </nav>
                 <?php endif; ?>
             </div>
-            
+
             <div class="col-lg-4 order-1 order-lg-2 mb-4">
                 <div class="card-meta-lokasi sidebar-sticky shadow-sm">
                     <img src="<?= htmlspecialchars((string)$src_lokasi) ?>" class="img-sidebar-cover" alt="Foto Tempat">
                     <div class="card-body p-4">
-                        <h4 class="font-weight-bold"><?= htmlspecialchars((string)$data_lokasi['nama_tempat']) ?></h4>
+                        <h4 class="fw-bold"><?= htmlspecialchars((string)$data_lokasi['nama_tempat']) ?></h4>
                         <p class="text-muted small"><?= htmlspecialchars((string)($data_lokasi['alamat'] ?? 'Alamat tidak tersedia')) ?></p>
                         <hr>
-                        <h6 class="text-muted font-weight-bold text-uppercase" style="font-size: 0.75rem;">Kurator</h6>
-                        
+                        <h6 class="text-muted fw-bold text-uppercase" style="font-size: 0.75rem;">Kurator</h6>
+
                         <?php if (!empty($data_lokasi['id_kurator'])): ?>
                             <a href="<?= BASE_URL ?>/pages/detail-kontributor.php?id=<?= urlencode((string)$data_lokasi['id_kurator']) ?>" class="text-decoration-none">
                                 <div class="box-kurator d-flex align-items-center">
@@ -205,7 +205,7 @@ $src_user = (!empty($data_lokasi['foto_kurator']) && file_exists(__DIR__ . '/../
     </div>
     <?php include __DIR__ . '/../includes/footer.php'; ?>
 
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

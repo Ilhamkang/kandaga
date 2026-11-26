@@ -58,10 +58,10 @@ $catalogCards = [
 <div id="statisticsDashboard" class="statistics-dashboard container-fluid p-3" data-detail-endpoint="<?= htmlspecialchars(BASE_URL . '/admin/actions/statistics-detail.php', ENT_QUOTES, 'UTF-8') ?>">
     <div class="stats-header">
         <div><h3>Statistik Kandaga</h3><p>Ringkasan katalog dan pemanfaatan halaman yang ringan; rincian dimuat hanya saat diperlukan.</p></div>
-        <form method="get" action="<?= htmlspecialchars(BASE_URL . '/admin/index.php', ENT_QUOTES, 'UTF-8') ?>" class="form-inline">
+        <form method="get" action="<?= htmlspecialchars(BASE_URL . '/admin/index.php', ENT_QUOTES, 'UTF-8') ?>" class="d-flex align-items-center gap-2 flex-wrap">
             <input type="hidden" name="page" value="statistik">
-            <label for="statisticsPeriod" class="sr-only">Periode grafik</label>
-            <select id="statisticsPeriod" name="analytics_period" class="form-control form-control-sm stats-period" onchange="this.form.submit()">
+            <label for="statisticsPeriod" class="visually-hidden">Periode grafik</label>
+            <select id="statisticsPeriod" name="analytics_period" class="form-select-sm stats-period" onchange="this.form.submit()">
                 <?php foreach (['7' => '7 hari', '30' => '30 hari', '90' => '90 hari'] as $value => $label): ?><option value="<?= $value ?>" <?= $period === $value ? 'selected' : '' ?>><?= $label ?></option><?php endforeach; ?>
             </select>
         </form>
@@ -79,7 +79,7 @@ $catalogCards = [
 
     <?php if ($traffic !== null): ?>
         <section class="stats-panel" aria-labelledby="dailyStatsTitle">
-            <div class="stats-panel-heading"><div><h4 id="dailyStatsTitle">Akses halaman harian</h4><p class="stats-caption mb-0">Agregat halaman publik; tanpa log request mentah atau identitas pengunjung.</p></div><span class="badge badge-light border"><?= $period ?> hari</span></div>
+            <div class="stats-panel-heading"><div><h4 id="dailyStatsTitle">Akses halaman harian</h4><p class="stats-caption mb-0">Agregat halaman publik; tanpa log request mentah atau identitas pengunjung.</p></div><span class="badge bg-light border"><?= $period ?> hari</span></div>
             <?php if ($daily): ?><div class="stats-chart" role="img" aria-label="Grafik kunjungan harian">
                 <?php foreach ($daily as $index => $point): $views = (int)($point['views'] ?? 0); $height = max(2, (int)round(($views / $maxDaily) * 100)); $label = date('d M', strtotime((string)$point['day'])); ?>
                     <div class="stats-bar-wrap" title="<?= htmlspecialchars($label . ': ' . number_format($views) . ' kunjungan', ENT_QUOTES, 'UTF-8') ?>"><div class="stats-bar" style="height:<?= $height ?>%"></div><?php if ($index === 0 || $index === count($daily)-1 || $index % 5 === 0): ?><span class="stats-bar-label"><?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?></span><?php endif; ?></div>
@@ -104,6 +104,6 @@ $catalogCards = [
 </div>
 
 <div class="modal fade" id="statisticsDetailModal" tabindex="-1" role="dialog" aria-labelledby="statisticsDetailTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="statisticsDetailTitle">Rincian statistik</h5><button type="button" class="close" data-dismiss="modal" aria-label="Tutup"><span aria-hidden="true">&times;</span></button></div><div class="modal-body" id="statisticsDetailBody"><p class="text-muted mb-0">Pilih rincian statistik.</p></div><div class="modal-footer"><button type="button" class="btn btn-light border" data-dismiss="modal">Tutup</button></div></div></div>
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="statisticsDetailTitle">Rincian statistik</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div><div class="modal-body" id="statisticsDetailBody"><p class="text-muted mb-0">Pilih rincian statistik.</p></div><div class="modal-footer"><button type="button" class="btn btn-light border" data-bs-dismiss="modal">Tutup</button></div></div></div>
 </div>
 <script src="<?= htmlspecialchars(BASE_URL . '/admin/assets/js/statistics-dashboard.js?v=3.1.54', ENT_QUOTES, 'UTF-8') ?>" defer></script>

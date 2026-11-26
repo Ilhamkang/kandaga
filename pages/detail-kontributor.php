@@ -1,14 +1,14 @@
 <?php
-require_once __DIR__ . '/../config/bootstrap.php'; 
-require_once __DIR__ . '/../config/database.php'; 
+require_once __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/../config/database.php';
 
 // Pastikan BASE_URL terdefinisi
 if (!defined('BASE_URL')) define('BASE_URL', '');
 
 $user_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-if ($user_id <= 0) { 
-    header("Location: " . BASE_URL . "/pages/kontributor.php"); 
-    exit; 
+if ($user_id <= 0) {
+    header("Location: " . BASE_URL . "/pages/kontributor.php");
+    exit;
 }
 
 // Ambil data user
@@ -17,13 +17,13 @@ $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
-if (!$user) { 
-    die("<div class='container mt-5 text-center'><h3>User tidak ditemukan.</h3><a href='" . BASE_URL . "/pages/kontributor.php' class='btn btn-primary'>Kembali</a></div>"); 
+if (!$user) {
+    die("<div class='container mt-5 text-center'><h3>User tidak ditemukan.</h3><a href='" . BASE_URL . "/pages/kontributor.php' class='btn btn-primary'>Kembali</a></div>");
 }
 
 $username = $user['username'];
 require_once __DIR__ . '/../includes/contribution-data.php';
-$catalogLogCondition = kandagaCatalogLogCondition('user_logs'); 
+$catalogLogCondition = kandagaCatalogLogCondition('user_logs');
 
 // --- PERUBAHAN LOGIKA STATISTIK ---
 // Menggunakan user_logs agar sinkron dengan dashboard
@@ -40,8 +40,8 @@ $stmt_edit->execute();
 $total_edit = (int)$stmt_edit->get_result()->fetch_row()[0];
 
 // Daftar Naskah (Tetap mengambil dari katalog untuk menampilkan list naskah yang dikelola)
-$sql_naskah = "SELECT id, judul, kode_inventaris FROM katalog 
-               WHERE penginput_awal = ? OR penyunting_terakhir = ? 
+$sql_naskah = "SELECT id, judul, kode_inventaris FROM katalog
+               WHERE penginput_awal = ? OR penyunting_terakhir = ?
                ORDER BY id DESC";
 $stmt_naskah = $conn->prepare($sql_naskah);
 $stmt_naskah->bind_param("ss", $username, $username);
@@ -85,7 +85,7 @@ $q_naskah = $stmt_naskah->get_result();
                 <h3 class="fw-bold mb-1"><?= htmlspecialchars($user['nama']); ?></h3>
                 <span class="badge bg-primary text-uppercase"><?= htmlspecialchars($user['role']); ?></span>
                 <p class="text-muted mt-2 mb-0"><i class="fas fa-university me-2"></i><?= htmlspecialchars($user['afiliasi'] ?? 'Independen'); ?></p>
-                <button type="button" class="btn btn-sm btn-outline-primary mt-3" data-toggle="modal" data-target="#modalProfil">
+                <button type="button" class="btn btn-sm btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalProfil">
                     <i class="fas fa-id-card me-1"></i> Lihat Profil Lengkap
                 </button>
             </div>
@@ -108,8 +108,8 @@ $q_naskah = $stmt_naskah->get_result();
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content" style="border-radius: 20px; border: none; overflow: hidden;">
                 <div class="modal-header px-4 py-3" style="background: #1e293b; color: white; border: none;">
-                    <h5 class="modal-title font-weight-bold">Profil Lengkap</h5>
-                    <button type="button" class="close text-white opacity-100" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title fw-bold">Profil Lengkap</h5>
+                    <button type="button" class="btn-close btn-close-white opacity-100" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4 bg-white">
                     <div class="row">
@@ -117,10 +117,10 @@ $q_naskah = $stmt_naskah->get_result();
                             <img src="<?= htmlspecialchars($path_foto); ?>" class="modal-img-banner shadow-sm" alt="Foto">
                         </div>
                         <div class="col-md-8">
-                            <div class="font-weight-bold text-dark" style="font-size: 1.1rem;"><?= htmlspecialchars($user['nama']); ?></div>
-                            <div class="text-dark"><i class="fas fa-university text-secondary mr-2"></i><?= htmlspecialchars($user['afiliasi'] ?? 'Independen'); ?></div>
+                            <div class="fw-bold text-dark" style="font-size: 1.1rem;"><?= htmlspecialchars($user['nama']); ?></div>
+                            <div class="text-dark"><i class="fas fa-university text-secondary me-2"></i><?= htmlspecialchars($user['afiliasi'] ?? 'Independen'); ?></div>
                             <div class="mt-2">
-                                <span class="badge badge-pill badge-primary px-3 py-1 shadow-sm text-uppercase"><?= htmlspecialchars($user['role']); ?></span>
+                                <span class="badge rounded-pill bg-primary px-3 py-1 shadow-sm text-uppercase"><?= htmlspecialchars($user['role']); ?></span>
                             </div>
                             <div class="mt-2 pt-3 border-top">
                                 <p class="text-muted small" style="line-height: 1.6; text-align: justify;">
@@ -161,7 +161,7 @@ $q_naskah = $stmt_naskah->get_result();
 </div>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

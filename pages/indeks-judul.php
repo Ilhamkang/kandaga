@@ -22,11 +22,11 @@ $page = min($page, $totalPages);
 $offset = ($page - 1) * $limit;
 
 // 3. Query Utama
-$sqlIndeks = "SELECT judul, COUNT(*) as jumlah, MAX(id) as id_naskah 
-              FROM katalog 
-              WHERE judul LIKE '$abjad%' 
-              GROUP BY judul 
-              ORDER BY judul ASC 
+$sqlIndeks = "SELECT judul, COUNT(*) as jumlah, MAX(id) as id_naskah
+              FROM katalog
+              WHERE judul LIKE '$abjad%'
+              GROUP BY judul
+              ORDER BY judul ASC
               LIMIT $offset, $limit";
 $resultIndeks = mysqli_query($conn, $sqlIndeks);
 ?>
@@ -50,11 +50,11 @@ $resultIndeks = mysqli_query($conn, $sqlIndeks);
 
 <div class="page-header">
     <div class="container text-center">
-        <h2 class="font-weight-bold mb-2">Indeks Judul</h2>
+        <h2 class="fw-bold mb-2">Indeks Judul</h2>
         <p class="text-muted">Menampilkan koleksi naskah berdasarkan urutan alfabetis</p>
         <div class="d-flex flex-wrap justify-content-center mt-4">
             <?php foreach (range('A', 'Z') as $char): ?>
-                <a href="<?= BASE_URL ?>/indeks-judul.php?letter=<?= $char ?>" 
+                <a href="<?= BASE_URL ?>/indeks-judul.php?letter=<?= $char ?>"
                    class="btn-letter <?= ($abjad == $char) ? 'active' : '' ?>">
                     <?= $char ?>
                 </a>
@@ -71,15 +71,15 @@ $resultIndeks = mysqli_query($conn, $sqlIndeks);
                     Menampilkan <?= $totalData > 0 ? (($page - 1) * $limit + 1) : 0 ?>–<?= min($page * $limit, (int)$totalData) ?> dari <?= (int)$totalData ?> judul.
                 </div>
                 <div class="list-group list-group-flush">
-                    <?php if (mysqli_num_rows($resultIndeks) > 0): 
-                        while ($row = mysqli_fetch_assoc($resultIndeks)): 
-                            $targetLink = ($row['jumlah'] == 1) 
-                                          ? BASE_URL . "/detail.php?id=".$row['id_naskah'] 
+                    <?php if (mysqli_num_rows($resultIndeks) > 0):
+                        while ($row = mysqli_fetch_assoc($resultIndeks)):
+                            $targetLink = ($row['jumlah'] == 1)
+                                          ? BASE_URL . "/detail.php?id=".$row['id_naskah']
                                           : BASE_URL . "/search.php?search=".urlencode($row['judul']);
                     ?>
                         <div class="list-group-item d-flex justify-content-between align-items-center">
                             <a href="<?= $targetLink ?>" class="judul-link">
-                                <i class="fa-solid fa-book-bookmark mr-3 text-primary opacity-50"></i>
+                                <i class="fa-solid fa-book-bookmark me-3 text-primary opacity-50"></i>
                                 <?= htmlspecialchars($row['judul']) ?>
                             </a>
                             <span class="naskah-count"><?= $row['jumlah'] ?> naskah</span>
@@ -134,7 +134,7 @@ $resultIndeks = mysqli_query($conn, $sqlIndeks);
 <?php include __DIR__ . '/../includes/footer.php'; ?>
 
 
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>

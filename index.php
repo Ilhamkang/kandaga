@@ -1,4 +1,4 @@
-<?php 
+<?php
 // 1. Panggil config.php dengan benar (di baris paling atas)
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/includes/version.php';
@@ -10,7 +10,7 @@ if (isset($_GET['p']) && is_string($_GET['p']) && $_GET['p'] !== 'home') {
         header('Location: ' . BASE_URL . '/pages/' . $route . '.php' . ($params ? '?' . http_build_query($params) : ''), true, 302);
         exit;
     }
-} 
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -19,7 +19,7 @@ if (isset($_GET['p']) && is_string($_GET['p']) && $_GET['p'] !== 'home') {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Katalog Naskah Sunda - Kairaga</title>
     <?php $seoType = 'website'; $seoTitle = 'KANDAGA — Katalog Naskah Sunda'; $seoDescription = 'Katalog digital manuskrip Sunda, metadata pernaskahan, koleksi, dan sumber digital.'; $seoUrl = BASE_URL . '/'; include __DIR__ . '/includes/seo-meta.php'; ?>
-    
+
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>/assets/images/favicon.png">
@@ -33,23 +33,23 @@ if (isset($_GET['p']) && is_string($_GET['p']) && $_GET['p'] !== 'home') {
 </head>
 <body class="kandaga-public kandaga-home-page">
 
-<?php 
+<?php
 // Gunakan __DIR__ untuk memastikan include selalu menemukan file 'includes/navbar.php'
-include __DIR__ . '/includes/navbar.php'; 
+include __DIR__ . '/includes/navbar.php';
 ?>
 
 <div class="body-wrapper">
     <div id="dynamic-content">
-        <?php 
+        <?php
         // Mengambil parameter 'p' dari URL
         $page = isset($_GET['p']) ? preg_replace('/[^a-zA-Z0-9_-]/', '', $_GET['p']) : 'home';
         $file = __DIR__ . '/pages/' . $page . '.php';
 
         // Jika file ada di folder /pages/, include. Jika tidak, ke home.
         if (file_exists($file)) {
-            include($file); 
+            include($file);
         } else {
-            include(__DIR__ . '/includes/home.php'); 
+            include(__DIR__ . '/includes/home.php');
         }
         ?>
     </div>
@@ -62,7 +62,7 @@ include __DIR__ . '/includes/navbar.php';
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
 
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/fade-in.js"></script>
 

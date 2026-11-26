@@ -41,53 +41,53 @@ if (!file_exists($path_foto)) {
 
     <form id="formProfil" enctype="multipart/form-data">
         <input type="hidden" name="user_id" value="<?= $data['id']; ?>">
-        
+
         <div class="row">
             <div class="col-md-4">
                 <div class="card p-4 text-center">
-                    <img src="<?= $path_foto; ?>?v=<?= time(); ?>" class="rounded-circle" style="width:150px; height:150px; object-fit:cover; margin:0 auto 15px;" id="avatarPreview">                    <h5 class="font-weight-bold"><?= htmlspecialchars($data['nama']); ?></h5>
-                    <span class="badge badge-info mb-3"><?= htmlspecialchars($data['role']); ?></span>
-                    
+                    <img src="<?= $path_foto; ?>?v=<?= time(); ?>" class="rounded-circle" style="width:150px; height:150px; object-fit:cover; margin:0 auto 15px;" id="avatarPreview">                    <h5 class="fw-bold"><?= htmlspecialchars($data['nama']); ?></h5>
+                    <span class="badge bg-info mb-3"><?= htmlspecialchars($data['role']); ?></span>
+
                     <a href="../detail-kontributor?id=<?= urlencode($data['id']); ?>" target="_blank" class="btn btn-outline-primary btn-sm mb-3">
                         <i class="fa fa-eye"></i> Lihat Profil Publik
                     </a>
 
-                    <div class="form-group text-left">
+                    <div class="mb-3 text-start">
                         <label>Ganti Foto</label>
-                        <input type="file" class="form-control-file" name="foto_user" id="inputFoto" accept="image/*">
+                        <input type="file" class="form-control" name="foto_user" id="inputFoto" accept="image/*">
                     </div>
                 </div>
             </div>
 
             <div class="col-md-8">
                 <div class="card p-4">
-                    <h5 class="font-weight-bold text-primary mb-3">Informasi Akun</h5>
+                    <h5 class="fw-bold text-primary mb-3">Informasi Akun</h5>
                     <div class="row">
-                        <div class="col-md-6 form-group">
+                        <div class="mb-3 col-md-6">
                             <label>Username (ID Akses)</label>
                             <input type="text" class="form-control bg-light" value="<?= htmlspecialchars($data['username']); ?>" readonly>
                         </div>
-                        <div class="col-md-6 form-group">
+                        <div class="mb-3 col-md-6">
                             <label>Nama Lengkap</label>
                             <input type="text" class="form-control" name="nama" value="<?= htmlspecialchars($data['nama']); ?>" required>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12 form-group">
+                        <div class="mb-3 col-md-12">
                             <label>Afiliasi</label>
                             <input type="text" class="form-control" name="afiliasi" value="<?= htmlspecialchars($data['afiliasi'] ?? ''); ?>" placeholder="Masukkan instansi/afiliasi Anda">
                         </div>
                     </div>
-                    
-                    <div class="form-group">
+
+                    <div class="mb-3">
                         <label>Deskripsi Kepakaran</label>
                         <textarea class="form-control" name="deskripsi" rows="3"><?= htmlspecialchars($data['deskripsi'] ?? ''); ?></textarea>
                     </div>
 
-                    <h5 class="font-weight-bold text-warning mt-3 mb-3">Keamanan</h5>
+                    <h5 class="fw-bold text-warning mt-3 mb-3">Keamanan</h5>
                     <div class="row">
-                        <div class="col-md-6 form-group">
+                        <div class="mb-3 col-md-6">
                             <label>Password Baru</label>
                             <input type="password" class="form-control" name="password_baru" placeholder="Minimal 6 karakter">
                         </div>

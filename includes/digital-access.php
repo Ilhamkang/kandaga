@@ -70,7 +70,7 @@ if (!function_exists('kandagaNormalizeDigitalUrl')) {
                 . ' href="' . $href . '"' . $target
                 . ' title="' . $label . '" aria-label="' . $label . '">'
                 . '<i class="fa-solid ' . $icon . '" aria-hidden="true"></i>'
-                . '<span class="sr-only">' . $label . '</span></a>';
+                . '<span class="visually-hidden">' . $label . '</span></a>';
         }
         return $html . '</div>';
     }
@@ -97,6 +97,6 @@ if (!function_exists('kandagaNormalizeDigitalUrl')) {
             $html .= '<i class="fa-solid ' . $icon . ' kandaga-digital-indicator kandaga-digital-indicator-' . $type . '"'
                 . ' title="' . $label . '" aria-label="' . $label . '" aria-hidden="true"></i>';
         }
-        return $html . '<span class="sr-only">' . htmlspecialchars(implode(' dan ', $labels), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</span></span>';
+        return $html . '<span class="visually-hidden">' . htmlspecialchars(implode(' dan ', $labels), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</span></span>';
     }
 }

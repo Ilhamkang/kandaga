@@ -21,11 +21,11 @@
             : text(value);
     }
     function showModal() {
-        if (window.jQuery && typeof window.jQuery.fn.modal === 'function') window.jQuery(modal).modal('show');
+        if (window.bootstrap && window.bootstrap.Modal) window.bootstrap.Modal.getOrCreateInstance(modal).show();
         else { modal.classList.add('show'); modal.style.display = 'block'; modal.removeAttribute('aria-hidden'); }
     }
     function hideModal() {
-        if (window.jQuery && typeof window.jQuery.fn.modal === 'function') window.jQuery(modal).modal('hide');
+        if (window.bootstrap && window.bootstrap.Modal) window.bootstrap.Modal.getOrCreateInstance(modal).hide();
         else { modal.classList.remove('show'); modal.style.display = 'none'; modal.setAttribute('aria-hidden', 'true'); }
     }
     function loading(message) {
@@ -102,5 +102,5 @@
     root.querySelectorAll('[data-stat-detail]').forEach(function (button) {
         button.addEventListener('click', function () { load(button.dataset.statDetail, button.dataset.statLabel); });
     });
-    modal.querySelectorAll('[data-dismiss="modal"]').forEach(function (button) { button.addEventListener('click', hideModal); });
+    modal.querySelectorAll('[data-bs-dismiss="modal"]').forEach(function (button) { button.addEventListener('click', hideModal); });
 })();

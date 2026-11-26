@@ -1,13 +1,15 @@
-# v3.1.67 — Kerapian halaman Tentang & Disclaimer dan pengerasan keamanan rilis
+# v3.1.67 — Kerapian Tentang & Disclaimer, upgrade Bootstrap 5.3.9, dan pengerasan keamanan rilis
 
 - Merapikan redaksi Ketentuan Penggunaan & Penafian: pernyataan persetujuan aktif disederhanakan, klaim hak cipta sepihak dirumuskan ulang, dan keterbukaan kode dideklarasikan eksplisit (repo GitHub publik AGPL-3.0, data CC BY-NC-SA 4.0, kanal pelaporan kerentanan).
 - Merapikan grid logo dukungan, foto profil, badge versi, roadmap, dan kotak dukungan pada halaman Tentang.
 - Menambahkan `SECURITY.md` untuk pelaporan kerentanan privat, versi yang didukung, timeline respons, dan proses rilis keamanan.
 - Menambahkan `DEPENDENCIES.md` dan menyelaraskan `THIRD_PARTY_NOTICES.md` sebagai inventaris pustaka pihak ketiga.
+- Mengupgrade bundle Bootstrap di `assets/bootstrap/` dari 4.6.2 ke 5.3.9 secara in-place dan mengonversi markup/skrip aplikasi ke API serta kelas Bootstrap 5 (`data-bs-*`, `me/ms/pe/ps`, `fw-*`, `form-select`, `badge bg-*`, `btn-close`, input group tanpa wrapper, dan API Modal/Tab/Tooltip).
+- Menyamakan jQuery ke satu build penuh 3.6.0, menghapus salinan slim dan berkas 0 byte, serta mencabut shim kelas Bootstrap 5 dari `module-fonts.css`.
 - Menghapus `assets/js/dompdf/` beserta 317 berkasnya karena tidak dipakai aplikasi; berkas lama akan dihapus saat pembaruan lewat daftar `delete` manifest.
 - Menonaktifkan perilaku `sticky` pada sidebar halaman Tentang di layar kecil.
 
-Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan fitur katalog. Paket ini code-only dengan penghapusan 317 berkas dompdf.
+Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan fitur katalog. Paket ini code-only; daftar `delete` manifest berisi 320 berkas usang (317 dompdf dan 3 jQuery duplikat).
 
 # v3.1.66 — Kanal rilis GitHub untuk Update Center
 
