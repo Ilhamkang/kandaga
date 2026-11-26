@@ -78,7 +78,7 @@ $resultLokasi = mysqli_query($conn, $sqlLokasi);
     </style>
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
-<body class="kandaga-module">
+<body class="kandaga-module kandaga-location-index-page">
 
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
@@ -91,7 +91,7 @@ $resultLokasi = mysqli_query($conn, $sqlLokasi);
 
 <div class="container pb-5">
     <?php if ($resultLokasi && mysqli_num_rows($resultLokasi) > 0): ?>
-        <div class="row">
+        <div class="row row-cols-2">
             <?php while ($row = mysqli_fetch_assoc($resultLokasi)): ?>
                 <?php
                     $img_filename = $row['foto_lokasi'] ?? '';

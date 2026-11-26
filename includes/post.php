@@ -10,7 +10,7 @@ $q_terbaru = mysqli_query($conn, "SELECT * FROM tb_kabar WHERE status = 'publish
         <a href="kabar/" class="text-decoration-none" style="color: #c5a880; font-weight: 600;">Lihat Semua &rarr;</a>
     </div>
 
-    <div class="row">
+    <div class="row row-cols-2">
         <?php while ($row = mysqli_fetch_assoc($q_terbaru)): ?>
             <div class="col-md-4 mb-4">
                 <div class="card h-100" style="border: 1px solid #e2e8f0; border-radius: 4px; transition: 0.2s;">

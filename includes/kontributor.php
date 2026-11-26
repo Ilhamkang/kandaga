@@ -37,7 +37,7 @@ $total_kontributor = count($kontributor_list);
                     foreach ($chunks as $index => $slide_items):
                     ?>
                         <div class="carousel-item <?= ($index === 0) ? 'active' : ''; ?>">
-                            <div class="row justify-content-center">
+                            <div class="row row-cols-2 justify-content-center">
                                 <?php foreach ($slide_items as $item): ?>
                                     <div class="col-md-4 col-sm-6 mb-4">
                                         <!-- ID sekarang sudah tersedia di $item['id'] -->

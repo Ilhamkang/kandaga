@@ -117,3 +117,37 @@
         margin-bottom: 0 !important;
     }
 }
+
+/* Two compact article cards per row on phones; desktop keeps three. */
+@media (max-width: 767.98px) {
+    .kandaga-post-list-page .article-list-shell .row.row-cols-2 > * {
+        min-width: 0;
+    }
+
+    .kandaga-post-list-page .card-post {
+        border-radius: 10px;
+    }
+
+    .kandaga-post-list-page .thumb-img {
+        height: 120px;
+    }
+
+    .kandaga-post-list-page .card-post .card-body {
+        padding: .75rem !important;
+    }
+
+    .kandaga-post-list-page .card-title-link {
+        font-size: .84rem;
+        line-height: 1.3;
+    }
+
+    .kandaga-post-list-page .card-text-summary {
+        font-size: .72rem;
+        line-height: 1.35;
+        text-align: left;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}

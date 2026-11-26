@@ -57,7 +57,7 @@ $result = mysqli_query($conn, $query);
     </style>
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
-<body class="kandaga-module">
+<body class="kandaga-module kandaga-collection-page">
 
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
@@ -69,7 +69,7 @@ $result = mysqli_query($conn, $query);
 </div>
 
 <div class="container pb-5">
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="row row-cols-2 row-cols-md-2 row-cols-lg-3 g-4">
         <?php if ($result && mysqli_num_rows($result) > 0): ?>
             <?php while ($row = mysqli_fetch_assoc($result)): ?>
                 <?php
@@ -86,7 +86,7 @@ $result = mysqli_query($conn, $query);
                                 : BASE_URL . '/assets/images/user/default-user.jpg';
                 ?>
 
-                <div class="col mb-4">
+                <div class="col">
                     <a href="<?= BASE_URL ?>/koleksi/<?= htmlspecialchars($row['slug']) ?>" class="text-decoration-none">
                         <div class="card-koleksi-premium shadow-sm">
                             <div class="img-koleksi-container">

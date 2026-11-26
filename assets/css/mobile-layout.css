@@ -333,3 +333,236 @@
         word-break: break-word;
     }
 }
+
+/* Mobile card grids: at most two compact cards per row. Search results and
+   related manuscripts already used two columns and keep their own rules. */
+@media (max-width: 767.98px) {
+    body.kandaga-home-page .home-container .row.row-cols-2 > [class*="col-"],
+    body.kandaga-collection-page .row.row-cols-2 > [class*="col-"],
+    body.kandaga-collection-detail-page .row.row-cols-2 > [class*="col-"],
+    body.kandaga-contributors-page .row.row-cols-2 > [class*="col-"],
+    body.kandaga-location-index-page .row.row-cols-2 > [class*="col-"],
+    body.kandaga-catalog-page .row.row-cols-2 > [class*="col-"] {
+        min-width: 0;
+    }
+
+    /* Beranda: naskah terbaru. */
+    body.kandaga-home-page .naskah-baru-card > div:first-child {
+        height: 132px !important;
+    }
+
+    body.kandaga-home-page .naskah-baru-card .card-body {
+        padding: .6rem !important;
+    }
+
+    body.kandaga-home-page .naskah-baru-card .small {
+        font-size: .68rem !important;
+        line-height: 1.25;
+    }
+
+    body.kandaga-home-page .naskah-baru-title {
+        font-size: .82rem !important;
+        line-height: 1.25 !important;
+        height: 2.5em !important;
+        margin-bottom: 0 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+    }
+
+    /* Beranda: kontributor dalam carousel. */
+    body.kandaga-home-page .kontributor-card {
+        padding: .85rem !important;
+    }
+
+    body.kandaga-home-page .kontributor-card .avatar-kontributor-wrapper {
+        width: 64px;
+        height: 64px;
+        margin-bottom: .5rem;
+    }
+
+    body.kandaga-home-page .kontributor-card .nama-kontributor {
+        font-size: .82rem;
+    }
+
+    body.kandaga-home-page .kontributor-card .deskripsi-kontributor {
+        font-size: .7rem;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Beranda: kabar terbaru. */
+    body.kandaga-home-page .kandaga-latest-posts img {
+        height: 132px !important;
+    }
+
+    body.kandaga-home-page .kandaga-latest-posts .card-body {
+        padding: .75rem !important;
+    }
+
+    body.kandaga-home-page .kandaga-latest-posts h5 {
+        font-size: .86rem !important;
+        line-height: 1.3 !important;
+    }
+
+    body.kandaga-home-page .kandaga-latest-posts .card-body p {
+        font-size: .72rem !important;
+        line-height: 1.35;
+        margin-bottom: 0 !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Halaman koleksi. */
+    body.kandaga-collection-page .card-koleksi-premium {
+        border-radius: 12px;
+    }
+
+    body.kandaga-collection-page .img-koleksi-container {
+        padding-top: 62%;
+    }
+
+    body.kandaga-collection-page .card-body-koleksi {
+        padding: .75rem;
+    }
+
+    body.kandaga-collection-page .koleksi-title {
+        font-size: .88rem;
+        line-height: 1.3;
+        height: 2.6rem;
+        margin-bottom: .5rem;
+    }
+
+    body.kandaga-collection-page .kurator-wrapper {
+        padding: .5rem;
+    }
+
+    body.kandaga-collection-page .kurator-avatar {
+        width: 30px;
+        height: 30px;
+    }
+
+    body.kandaga-collection-page .kurator-name {
+        font-size: .72rem;
+    }
+
+    body.kandaga-collection-page .btn-koleksi-action {
+        font-size: .7rem;
+        margin-top: .5rem;
+    }
+
+    /* Detail koleksi: inventaris naskah. */
+    body.kandaga-collection-detail-page .card-manuskrip {
+        border-radius: 12px;
+    }
+
+    body.kandaga-collection-detail-page .img-naskah-wrapper {
+        padding-top: 92%;
+    }
+
+    body.kandaga-collection-detail-page .card-manuskrip .card-body {
+        padding: .7rem !important;
+    }
+
+    body.kandaga-collection-detail-page .card-manuskrip h6 {
+        font-size: .84rem;
+    }
+
+    body.kandaga-collection-detail-page .badge-code {
+        font-size: .66rem;
+        padding: 3px 6px;
+    }
+
+    /* Halaman kontributor. */
+    body.kandaga-contributors-page .avatar-wrapper {
+        padding-top: 1rem;
+    }
+
+    body.kandaga-contributors-page .profile-img-medium {
+        width: 68px;
+        height: 68px;
+    }
+
+    body.kandaga-contributors-page .card-kontributor-premium .card-body {
+        padding: .65rem .6rem .8rem !important;
+    }
+
+    body.kandaga-contributors-page .card-kontributor-premium h6 {
+        font-size: .8rem;
+    }
+
+    body.kandaga-contributors-page .card-kontributor-premium .badge {
+        font-size: .6rem !important;
+        padding: .2rem .5rem !important;
+    }
+
+    body.kandaga-contributors-page .card-kontributor-premium .small {
+        font-size: .68rem !important;
+    }
+
+    /* Indeks lokasi. */
+    body.kandaga-location-index-page .location-grid-card {
+        border-radius: 12px;
+    }
+
+    body.kandaga-location-index-page .img-grid-container {
+        padding-top: 62%;
+    }
+
+    body.kandaga-location-index-page .card-body-grid {
+        padding: .75rem;
+    }
+
+    body.kandaga-location-index-page .institution-grid-name {
+        font-size: .86rem;
+        height: 2.5rem;
+        margin-bottom: .25rem;
+    }
+
+    body.kandaga-location-index-page .country-meta {
+        font-size: .7rem;
+        margin-bottom: .5rem;
+    }
+
+    body.kandaga-location-index-page .badge-naskah-floating {
+        top: 8px;
+        right: 8px;
+        font-size: .64rem;
+        padding: 4px 8px;
+    }
+
+    body.kandaga-location-index-page .btn-detail-trigger {
+        font-size: .72rem;
+        padding: .5rem;
+    }
+
+    /* Indeks katalog. */
+    body.kandaga-catalog-page .catalog-card {
+        padding: .75rem;
+        border-radius: 12px;
+    }
+
+    body.kandaga-catalog-page .catalog-cover {
+        height: 120px;
+    }
+
+    body.kandaga-catalog-page .catalog-card h3 {
+        font-size: .88rem;
+        line-height: 1.3;
+    }
+
+    body.kandaga-catalog-page .catalog-card .d-flex.justify-content-between.align-items-center {
+        flex-wrap: wrap;
+        gap: .4rem;
+    }
+
+    body.kandaga-catalog-page .catalog-count {
+        font-size: .7rem;
+    }
+}

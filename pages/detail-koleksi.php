@@ -95,7 +95,7 @@ $src_user = (!empty($data_lokasi['foto_kurator']) && file_exists(__DIR__ . '/../
     </style>
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
-<body class="kandaga-module">
+<body class="kandaga-module kandaga-collection-detail-page">
     <?php require_once __DIR__ . '/../includes/analytics-context.php'; kandagaSetPageContext('collection','/koleksi/'.(int)$data_lokasi['id_lokasi'],$data_lokasi['nama_tempat'],(int)$data_lokasi['id_lokasi']); ?>
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
@@ -122,13 +122,13 @@ $src_user = (!empty($data_lokasi['foto_kurator']) && file_exists(__DIR__ . '/../
                     </div>
                 </form>
 
-                <div class="row g-4">
+                <div class="row row-cols-2 g-4">
                     <?php if ($naskah_result->num_rows > 0): ?>
                         <?php while ($naskah = $naskah_result->fetch_assoc()): ?>
                             <?php
                                 $src_naskah = kandagaImageUrl($naskah);
                             ?>
-                            <div class="col-xl-4 col-md-6 col-sm-12">
+                            <div class="col-xl-4 col-md-6">
                                 <a href="<?= BASE_URL ?>/detail.php?id=<?= htmlspecialchars((string)$naskah['id']) ?>" class="text-decoration-none text-dark">
                                     <div class="card-manuskrip shadow-sm">
                                         <div class="img-naskah-wrapper">

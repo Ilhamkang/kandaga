@@ -9,7 +9,7 @@ $sql = "SELECT id, judul, gambar, url_gambar_eksternal, kode_inventaris
 $result = mysqli_query($conn, $sql);
 ?>
 
-<div class="row mb-4">
+<div class="row row-cols-2 mb-4">
 
     <?php if ($result && mysqli_num_rows($result) > 0): ?>
         <?php while ($naskah = mysqli_fetch_assoc($result)): ?>

@@ -98,9 +98,9 @@ function get_excerpt($konten, $char_limit = 120) {
             <section class="section-kabar">
                 <div class="span section-badge-title <?= $cat['class'] ?>"><i class="fas <?= $cat['icon'] ?> me-1"></i> <?= explode(' ', $cat['title'])[0] ?></div>
                 <h4 class="section-heading"><?= $cat['title'] ?></h4>
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="row row-cols-2 row-cols-md-2 row-cols-lg-3 g-4">
                     <?php while($row = mysqli_fetch_assoc($cat['res'])): ?>
-                    <div class="col mb-4">
+                    <div class="col">
                         <div class="card-post">
                             <a href="<?= BASE_URL ?>/kabar/<?= $row['slug']; ?>">
                                 <img src="<?= BASE_URL ?>/assets/images/post/<?= $row['thumbnail']; ?>" class="thumb-img" alt="<?= htmlspecialchars($row['judul']); ?>" loading="lazy">

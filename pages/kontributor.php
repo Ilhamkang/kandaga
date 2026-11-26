@@ -47,7 +47,7 @@ require_once __DIR__ . '/../config.php';
 
 <div class="container pb-5">
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
         <?php
         $q_kontributor = mysqli_query($conn, "SELECT id, nama, foto, afiliasi, role FROM users WHERE role IN ('kontributor', 'admin') ORDER BY id ASC");
 
@@ -62,7 +62,7 @@ require_once __DIR__ . '/../config.php';
                 $badge_class = ($user['role'] === 'admin') ? 'bg-danger' : 'bg-primary';
         ?>
 
-        <div class="col mb-4">
+        <div class="col">
             <a href="<?= BASE_URL ?>/detail-kontributor.php?id=<?= (int)$user['id']; ?>" class="profile-link">
                 <div class="card-kontributor-premium text-center">
                     <div class="avatar-wrapper">

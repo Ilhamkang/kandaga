@@ -23,3 +23,8 @@
     .carousel-control-prev-kandaga { left: -20px; }
     .carousel-control-next-kandaga { right: -20px; }
     .carousel-control-prev-kandaga:hover, .carousel-control-next-kandaga:hover { background: var(--kandaga-gold); color: #fff; }
+
+    @media (max-width: 767.98px) {
+        .carousel-control-prev-kandaga { left: 0; }
+        .carousel-control-next-kandaga { right: 0; }
+    }
