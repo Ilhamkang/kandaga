@@ -57,6 +57,27 @@
     font-variant-numeric: tabular-nums;
 }
 
+.kontributor-grid {
+    display: grid;
+}
+
+.kontributor-page {
+    grid-area: 1 / 1 / 2 / 2;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity .5s ease, transform .5s ease, visibility 0s linear .5s;
+}
+
+.kontributor-page.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    transition: opacity .5s ease, transform .5s ease, visibility 0s;
+}
+
 .kontributor-grid .col { display: flex; }
 
 .kontributor-card-link {
@@ -144,6 +165,28 @@
     overflow: hidden;
 }
 
+@media (min-width: 768px) {
+    .kontributor-card {
+        padding: 1.1rem;
+        border-radius: 18px;
+    }
+
+    .avatar-kontributor-wrapper {
+        width: 76px;
+        height: 76px;
+        margin-bottom: .7rem;
+    }
+
+    .nama-kontributor { font-size: .95rem; }
+    .kontributor-role { font-size: .66rem; }
+    .deskripsi-kontributor { font-size: .78rem; line-height: 1.5; }
+}
+
+@media (min-width: 992px) {
+    .avatar-kontributor-wrapper { width: 80px; height: 80px; }
+    .deskripsi-kontributor { font-size: .8rem; }
+}
+
 @media (max-width: 767.98px) {
     .kontributor-header p { font-size: .72rem; }
     .kontributor-card { border-radius: 12px; }
@@ -164,4 +207,20 @@
     .avatar-kontributor-wrapper { width: 48px; height: 48px; }
     .nama-kontributor { font-size: .74rem; }
     .deskripsi-kontributor { font-size: .63rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .kontributor-page,
+    .kontributor-page.is-active {
+        transform: none;
+        transition: none;
+    }
+
+    .kontributor-card {
+        transition: none;
+    }
+
+    .kontributor-card:hover {
+        transform: none;
+    }
 }

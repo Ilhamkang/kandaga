@@ -1,7 +1,6 @@
 <?php
-// /asset/kontributor.php
+// Modul beranda: kontributor data.
 
-// Perbaikan SQL: Tambahkan 'id' ke dalam SELECT
 $q_kontributor = mysqli_query($conn, "
     SELECT id, username, nama, foto, deskripsi
     FROM users
@@ -11,7 +10,6 @@ $q_kontributor = mysqli_query($conn, "
 
 $kontributor_list = [];
 while ($row = mysqli_fetch_assoc($q_kontributor)) {
-    // Pastikan path foto benar
     $path_foto = "assets/images/user/" . (!empty($row['foto']) ? $row['foto'] : 'default-user.jpg');
     if (!file_exists($path_foto)) $path_foto = "assets/images/user/default-user.jpg";
 
@@ -38,7 +36,7 @@ $kontributor_pages = count($kontributor_chunks);
                     <button type="button" class="kontributor-pager-btn" data-kontributor-prev aria-label="Kontributor sebelumnya">
                         <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                     </button>
-                    <span class="kontributor-pager-indicator" data-kontributor-indicator aria-live="polite">1 / <?= $kontributor_pages ?></span>
+                    <span class="kontributor-pager-indicator" data-kontributor-indicator aria-live="off">1 / <?= $kontributor_pages ?></span>
                     <button type="button" class="kontributor-pager-btn" data-kontributor-next aria-label="Kontributor berikutnya">
                         <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                     </button>
@@ -49,10 +47,10 @@ $kontributor_pages = count($kontributor_chunks);
         <?php if ($total_kontributor > 0): ?>
             <div id="kontributorGrid" class="kontributor-grid">
                 <?php foreach ($kontributor_chunks as $index => $slide_items): ?>
-                    <div class="kontributor-page <?= ($index === 0) ? '' : 'd-none' ?>"
+                    <div class="kontributor-page <?= ($index === 0) ? 'is-active' : '' ?>"
                          data-kontributor-page="<?= $index + 1 ?>"
-                         <?= ($index === 0) ? '' : 'aria-hidden="true"' ?>>
-                        <div class="row row-cols-2 row-cols-md-4 g-3">
+                         aria-hidden="<?= ($index === 0) ? 'false' : 'true' ?>">
+                        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
                             <?php foreach ($slide_items as $item): ?>
                                 <div class="col">
                                     <a href="detail-kontributor.php?id=<?= (int)$item['id']; ?>" class="kontributor-card-link text-decoration-none text-dark">
@@ -84,28 +82,79 @@ $kontributor_pages = count($kontributor_chunks);
     const root = document.getElementById('kontributorGrid');
     if (!root) return;
 
+    const section = root.closest('.kontributor-section');
     const pages = Array.from(root.querySelectorAll('.kontributor-page'));
     if (pages.length < 2) return;
 
-    const pager = root.closest('.kontributor-section').querySelector('.kontributor-pager');
-    const prev = root.closest('.kontributor-section').querySelector('[data-kontributor-prev]');
-    const next = root.closest('.kontributor-section').querySelector('[data-kontributor-next]');
-    const indicator = root.closest('.kontributor-section').querySelector('[data-kontributor-indicator]');
-    let active = 0;
+    const prev = section.querySelector('[data-kontributor-prev]');
+    const next = section.querySelector('[data-kontributor-next]');
+    const indicator = section.querySelector('[data-kontributor-indicator]');
+
+    const desktop = window.matchMedia('(min-width: 768px)');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const AUTO_DELAY = 6500;
+
+    let active = Math.max(0, pages.findIndex(p => p.classList.contains('is-active')));
+    let timer = null;
+    let paused = false;
 
     function show(index) {
         active = (index + pages.length) % pages.length;
         pages.forEach((page, i) => {
             const visible = i === active;
-            page.classList.toggle('d-none', !visible);
+            page.classList.toggle('is-active', visible);
             page.setAttribute('aria-hidden', visible ? 'false' : 'true');
         });
         if (indicator) indicator.textContent = (active + 1) + ' / ' + pages.length;
     }
 
-    if (prev) prev.addEventListener('click', () => show(active - 1));
-    if (next) next.addEventListener('click', () => show(active + 1));
-    if (pager) pager.hidden = false;
-    show(0);
+    function stopAuto() {
+        if (timer !== null) {
+            clearInterval(timer);
+            timer = null;
+        }
+    }
+
+    function startAuto() {
+        stopAuto();
+        if (!desktop.matches || reduceMotion.matches || paused || document.hidden) return;
+        timer = setInterval(() => {
+            if (!document.hidden && !paused) show(active + 1);
+        }, AUTO_DELAY);
+    }
+
+    function go(index) {
+        show(index);
+        startAuto();
+    }
+
+    if (prev) prev.addEventListener('click', () => go(active - 1));
+    if (next) next.addEventListener('click', () => go(active + 1));
+
+    section.addEventListener('mouseenter', () => { paused = true; stopAuto(); });
+    section.addEventListener('mouseleave', () => { paused = false; startAuto(); });
+    section.addEventListener('focusin', () => { paused = true; stopAuto(); });
+    section.addEventListener('focusout', (event) => {
+        if (!section.contains(event.relatedTarget)) {
+            paused = false;
+            startAuto();
+        }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopAuto();
+        else startAuto();
+    });
+
+    if (typeof desktop.addEventListener === 'function') {
+        desktop.addEventListener('change', startAuto);
+        reduceMotion.addEventListener('change', startAuto);
+    } else {
+        desktop.addListener(startAuto);
+        reduceMotion.addListener(startAuto);
+    }
+
+    show(active);
+    startAuto();
 })();
 </script>
