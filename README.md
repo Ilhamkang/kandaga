@@ -76,4 +76,10 @@ Workflow akan membangun ZIP, menghitung checksum, mempublikasikan `version.json`
 
 > Ringkasan proyek pada README ini diambil dari halaman **“Tentang”** di aplikasi KANDAGA.
 
+## Lisensi
+
+Kode sumber KANDAGA dilisensikan di bawah **GNU Affero General Public License v3.0 (AGPL-3.0)**. Lihat file [`LICENSE`](LICENSE) untuk teks lengkapnya.
+
+Lisensi ini berlaku untuk kode aplikasi, bukan untuk data naskah, metadata koleksi, gambar, atau materi pihak ketiga. Pustaka pihak ketiga tetap mengikuti lisensi masing-masing; ringkasannya tersedia di [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
 © 2026 **KAIRAGA.COM**. Seluruh data dikelola secara mandiri oleh **Kairaga Project**.

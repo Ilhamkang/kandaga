@@ -93,6 +93,14 @@ require_once __DIR__ . '/../includes/version.php';
 
                 <span class="version-badge">Versi <?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?></span>
                 <p class="small text-muted mb-4">Iterasi berkelanjutan sejak Mei 2023 untuk aksesibilitas data budaya yang lebih baik.</p>
+
+                <hr>
+                <h4><i class="fa-solid fa-file-code mr-2 text-primary"></i>Lisensi</h4>
+                <p class="small text-muted mb-4">
+                    Kode aplikasi KANDAGA dirilis di bawah lisensi
+                    <a href="https://github.com/Ilhamkang/kandaga/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>.
+                    Data naskah, metadata koleksi, dan pustaka pihak ketiga tidak termasuk dalam lisensi kode ini.
+                </p>
                 
                 <div style="background: #fffbeb; border: 1px dashed #f59e0b; border-radius: 15px; padding: 20px;">
                     <p class="small mb-3" style="color: #92400e; line-height: 1.5;">
