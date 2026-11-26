@@ -1,3 +1,13 @@
+# v3.1.67 — Kerapian tampilan Tentang dan pengerasan keamanan rilis
+
+- Merapikan grid logo dukungan, foto profil, badge versi, roadmap, dan kotak dukungan pada halaman Tentang.
+- Menambahkan `SECURITY.md` untuk pelaporan kerentanan privat, versi yang didukung, timeline respons, dan proses rilis keamanan.
+- Menambahkan `DEPENDENCIES.md` dan menyelaraskan `THIRD_PARTY_NOTICES.md` sebagai inventaris pustaka pihak ketiga.
+- Menghapus `assets/js/dompdf/` beserta 317 berkasnya karena tidak dipakai aplikasi; berkas lama akan dihapus saat pembaruan lewat daftar `delete` manifest.
+- Menonaktifkan perilaku `sticky` pada sidebar halaman Tentang di layar kecil.
+
+Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan fitur katalog. Paket ini code-only dengan penghapusan 317 berkas dompdf.
+
 # v3.1.66 — Kanal rilis GitHub untuk Update Center
 
 - Menambahkan GitHub Actions untuk mem-build paket saat tag `v*` di-push dan mempublikasikan channel `version.json` serta ZIP ke branch `gh-pages`.

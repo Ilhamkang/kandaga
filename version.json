@@ -1,4 +1,4 @@
 {
-    "version": "3.1.66",
-    "description": "Kanal rilis GitHub untuk Update Center: build otomatis, publish ke gh-pages, checksum ZIP, dan tanpa migrasi SQL."
+    "version": "3.1.67",
+    "description": "Kerapian halaman Tentang, kebijakan keamanan, inventaris dependensi, dan penghapusan dompdf yang tidak dipakai."
 }

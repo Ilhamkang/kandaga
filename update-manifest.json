@@ -1,7 +1,7 @@
 {
     "format": 1,
     "product": "kandaga",
-    "version": "3.1.65",
+    "version": "3.1.66",
     "min_from": "3.1.64",
     "requires": {
         "php": ">=8.1",
