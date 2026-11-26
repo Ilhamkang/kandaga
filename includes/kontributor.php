@@ -23,26 +23,32 @@ $kontributor_pages = count($kontributor_chunks);
 
 <link rel="stylesheet" href="assets/css/style-kontributor.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 
-<div class="embedded-module embedded-kontributor" style="max-width: 960px;">
+<div class="embedded-module embedded-kontributor">
     <div class="kontributor-section position-relative">
-        <div class="kontributor-header d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div class="kontributor-header d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
             <div>
                 <h4 class="fw-bold mb-1" style="color: var(--kandaga-dark-blue);">Kontributor Data</h4>
                 <p class="text-muted small mb-0">Mereka yang merawat dan memperkaya data naskah KANDAGA.</p>
             </div>
 
             <?php if ($kontributor_pages > 1): ?>
-                <div class="kontributor-pager" role="group" aria-label="Navigasi halaman kontributor">
-                    <button type="button" class="kontributor-pager-btn" data-kontributor-prev aria-label="Kontributor sebelumnya">
-                        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-                    </button>
-                    <span class="kontributor-pager-indicator" data-kontributor-indicator aria-live="off">1 / <?= $kontributor_pages ?></span>
-                    <button type="button" class="kontributor-pager-btn" data-kontributor-next aria-label="Kontributor berikutnya">
-                        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-                    </button>
+                <div class="kontributor-dots" role="group" aria-label="Halaman kontributor">
+                    <?php for ($page = 1; $page <= $kontributor_pages; $page++): ?>
+                        <button type="button"
+                                class="kontributor-dot <?= ($page === 1) ? 'is-active' : '' ?>"
+                                data-kontributor-dot="<?= $page ?>"
+                                aria-label="Tampilkan kontributor halaman <?= $page ?>"
+                                aria-current="<?= ($page === 1) ? 'true' : 'false' ?>"></button>
+                    <?php endfor; ?>
                 </div>
             <?php endif; ?>
         </div>
+
+        <?php if ($kontributor_pages > 1): ?>
+            <p class="kontributor-swipe-hint small text-muted mb-3">
+                <i class="fa-solid fa-arrow-left-right me-1" aria-hidden="true"></i> Geser untuk melihat kontributor lainnya
+            </p>
+        <?php endif; ?>
 
         <?php if ($total_kontributor > 0): ?>
             <div id="kontributorGrid" class="kontributor-grid">
@@ -86,26 +92,65 @@ $kontributor_pages = count($kontributor_chunks);
     const pages = Array.from(root.querySelectorAll('.kontributor-page'));
     if (pages.length < 2) return;
 
-    const prev = section.querySelector('[data-kontributor-prev]');
-    const next = section.querySelector('[data-kontributor-next]');
-    const indicator = section.querySelector('[data-kontributor-indicator]');
+    const dotsWrap = section.querySelector('.kontributor-dots');
+    const dots = Array.from(section.querySelectorAll('[data-kontributor-dot]'));
 
     const desktop = window.matchMedia('(min-width: 768px)');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const AUTO_DELAY = 6500;
+    const SLIDE_MS = 460;
 
     let active = Math.max(0, pages.findIndex(p => p.classList.contains('is-active')));
     let timer = null;
     let paused = false;
+    let cleanupTimer = null;
 
-    function show(index) {
-        active = (index + pages.length) % pages.length;
-        pages.forEach((page, i) => {
-            const visible = i === active;
-            page.classList.toggle('is-active', visible);
-            page.setAttribute('aria-hidden', visible ? 'false' : 'true');
+    function clearSlideClasses() {
+        pages.forEach(p => p.classList.remove('is-in-left', 'is-in-right', 'is-out-left', 'is-out-right'));
+        if (cleanupTimer !== null) {
+            clearTimeout(cleanupTimer);
+            cleanupTimer = null;
+        }
+    }
+
+    function syncIndicators() {
+        pages.forEach((page, i) => page.setAttribute('aria-hidden', i === active ? 'false' : 'true'));
+        dots.forEach((dot, i) => {
+            const current = i === active;
+            dot.classList.toggle('is-active', current);
+            dot.setAttribute('aria-current', current ? 'true' : 'false');
         });
-        if (indicator) indicator.textContent = (active + 1) + ' / ' + pages.length;
+    }
+
+    function show(index, direction) {
+        const next = (index + pages.length) % pages.length;
+        if (next === active) return;
+
+        clearSlideClasses();
+        const current = pages[active];
+        const upcoming = pages[next];
+
+        if (reduceMotion.matches) {
+            pages.forEach((page, i) => page.classList.toggle('is-active', i === next));
+            active = next;
+            syncIndicators();
+            return;
+        }
+
+        current.classList.remove('is-active');
+        current.classList.add(direction > 0 ? 'is-out-left' : 'is-out-right');
+
+        upcoming.classList.add(direction > 0 ? 'is-in-right' : 'is-in-left');
+        void upcoming.offsetWidth;
+        upcoming.classList.add('is-active');
+        upcoming.classList.remove('is-in-right', 'is-in-left');
+
+        active = next;
+        syncIndicators();
+
+        cleanupTimer = setTimeout(() => {
+            clearSlideClasses();
+        }, SLIDE_MS + 60);
     }
 
     function stopAuto() {
@@ -119,17 +164,65 @@ $kontributor_pages = count($kontributor_chunks);
         stopAuto();
         if (!desktop.matches || reduceMotion.matches || paused || document.hidden) return;
         timer = setInterval(() => {
-            if (!document.hidden && !paused) show(active + 1);
+            if (!document.hidden && !paused) show(active + 1, 1);
         }, AUTO_DELAY);
     }
 
+    function directionTo(index) {
+        const forward = (index - active + pages.length) % pages.length;
+        const backward = (active - index + pages.length) % pages.length;
+        return forward <= backward ? 1 : -1;
+    }
+
     function go(index) {
-        show(index);
+        show(index, directionTo(index));
         startAuto();
     }
 
-    if (prev) prev.addEventListener('click', () => go(active - 1));
-    if (next) next.addEventListener('click', () => go(active + 1));
+    if (dotsWrap) {
+        dots.forEach((dot, i) => dot.addEventListener('click', () => go(i)));
+        dotsWrap.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+                event.preventDefault();
+                go(active + 1);
+            } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+                event.preventDefault();
+                go(active - 1);
+            }
+        });
+    }
+
+    let startX = null;
+    let startY = null;
+    let tracking = false;
+
+    root.addEventListener('pointerdown', (event) => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        startX = event.clientX;
+        startY = event.clientY;
+        tracking = true;
+    });
+
+    root.addEventListener('pointerup', (event) => {
+        if (!tracking || startX === null || startY === null) return;
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        tracking = false;
+        startX = null;
+        startY = null;
+
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+            const direction = dx < 0 ? 1 : -1;
+            show(active + direction, direction);
+            startAuto();
+        }
+    });
+
+    root.addEventListener('pointercancel', () => {
+        tracking = false;
+        startX = null;
+        startY = null;
+    });
 
     section.addEventListener('mouseenter', () => { paused = true; stopAuto(); });
     section.addEventListener('mouseleave', () => { paused = false; startAuto(); });
@@ -154,7 +247,7 @@ $kontributor_pages = count($kontributor_chunks);
         reduceMotion.addListener(startAuto);
     }
 
-    show(active);
+    syncIndicators();
     startAuto();
 })();
 </script>

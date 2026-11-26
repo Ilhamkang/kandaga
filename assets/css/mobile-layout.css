@@ -111,10 +111,6 @@
         padding-right: 0 !important;
     }
 
-    body.kandaga-public .home-container .embedded-kontributor {
-        max-width: 960px !important;
-    }
-
     body.kandaga-public .home-container .home-section {
         padding-top: var(--kandaga-mobile-section-gap) !important;
         padding-bottom: var(--kandaga-mobile-section-gap) !important;

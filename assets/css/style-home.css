@@ -6,6 +6,17 @@
 
     /* Hero Section */
     .hero-section { background: #ffffff; padding: 100px 0; border: none; }
+
+    /* Gradasi lembut mengikuti palet biru-tua dan emas KANDAGA. */
+    body.kandaga-home-page {
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 58%, #f4f7fb 100%);
+    }
+
+    body.kandaga-home-page .hero-section {
+        background:
+            radial-gradient(760px 220px at 50% 0%, rgba(197, 168, 128, .14), transparent 72%),
+            linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+    }
     
     /* Stat Cards */
     .stat-card { 
@@ -21,6 +32,26 @@
     /* Section Styling */
     .bg-light-gray { background-color: #f8fafc; padding: 80px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
     .bg-white-section { background-color: #ffffff; padding: 80px 0; }
+
+    body.kandaga-home-page .home-section.bg-light {
+        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    }
+
+    body.kandaga-home-page .home-section-contributors {
+        position: relative;
+        background:
+            radial-gradient(760px 260px at 82% 0%, rgba(15, 32, 66, .07), transparent 70%),
+            radial-gradient(620px 220px at 8% 100%, rgba(197, 168, 128, .12), transparent 72%),
+            linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%) !important;
+    }
+
+    body.kandaga-home-page .home-section-contributors::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, rgba(197, 168, 128, .65), transparent);
+    }
 
     /* Tombol Cari */
     .btn-search-huge { 
