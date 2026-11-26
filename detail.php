@@ -189,7 +189,7 @@ $seoImage = $display_image_url;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= htmlspecialchars($row['judul'] ?? 'Detail Naskah') ?> - Detail Naskah</title>
     <?php $seoType = 'manuscript'; include __DIR__ . '/includes/seo-meta.php'; ?>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/viewer.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-detail-naskah.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
@@ -455,7 +455,7 @@ $seoImage = $display_image_url;
 <?php include 'includes/footer.php'; ?>
 
 <script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
-<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 <script src="<?= BASE_URL ?>/assets/js/viewer.min.js"></script>
 <script>
     $(document).ready(function() {

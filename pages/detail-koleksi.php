@@ -78,7 +78,7 @@ $src_user = (!empty($data_lokasi['foto_kurator']) && file_exists(__DIR__ . '/../
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= htmlspecialchars((string)($data_lokasi['nama_tempat'] ?? 'Detail Koleksi')) ?> - Kandaga</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <style>
         body { background-color: #f8fafc; color: #334155; font-family: 'Inter', sans-serif; }
@@ -206,6 +206,6 @@ $src_user = (!empty($data_lokasi['foto_kurator']) && file_exists(__DIR__ . '/../
     <?php include __DIR__ . '/../includes/footer.php'; ?>
 
 <script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
-<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

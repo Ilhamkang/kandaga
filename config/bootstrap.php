@@ -1,6 +1,7 @@
 <?php
 // Shared URL and session setup; does not open a database connection.
 if (!defined('ROOT_PATH')) define('ROOT_PATH', dirname(__DIR__));
+require_once ROOT_PATH . '/includes/version.php';
 require_once ROOT_PATH . '/includes/image-resolver.php';
 
 /**

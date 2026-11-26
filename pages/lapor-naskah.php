@@ -60,7 +60,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 <!doctype html><html lang="id"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lapor / Beri Masukan Naskah - KANDAGA</title>
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 <style>body{background:#f8fafc}.feedback-card{background:#fff;border-radius:16px;padding:2rem;box-shadow:0 4px 16px #00000008}.feedback-summary{background:#f1f5f9;border-radius:12px;padding:1rem;overflow-wrap:anywhere}.feedback-card textarea{min-height:180px}@media(max-width:575px){.feedback-card{padding:1.2rem}}</style>
@@ -87,6 +87,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 <noscript><div class="container alert alert-success">Terima kasih! Masukan Anda sudah diterima. <a href="<?= kandagaFeedbackEscape($detailUrl) ?>">Lanjutkan penjelajahan</a>.</div></noscript>
 <?php endif; ?>
 <?php include __DIR__ . '/../includes/footer.php'; ?>
-<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script><script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script><script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 <script>document.getElementById('feedback-captcha-refresh')?.addEventListener('click',function(){document.getElementById('feedback-captcha-image').src=<?= json_encode(BASE_URL . '/modules/captcha.php?', JSON_HEX_TAG | JSON_HEX_AMP) ?>+Date.now();});<?php if ($showThanks): ?>bootstrap.Modal.getOrCreateInstance(document.getElementById('feedbackThanks')).show();<?php endif; ?></script>
 </body></html>

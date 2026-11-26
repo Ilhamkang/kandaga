@@ -61,7 +61,7 @@ $string_alas_tulis = getNamaRelasi($conn, 'tb_alas_tulis', 'naskah_alas_tulis', 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= htmlspecialchars($row['judul'] ?? 'Detail Naskah') ?> - KANDAGA</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <style>
         body { background-color: #f8fafc; color: #334155; }
@@ -152,6 +152,6 @@ $string_alas_tulis = getNamaRelasi($conn, 'tb_alas_tulis', 'naskah_alas_tulis', 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
 
 <script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
-<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

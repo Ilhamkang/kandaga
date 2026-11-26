@@ -39,7 +39,7 @@ if ($catalogId) {
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $catalog ? $esc($catalog['judul']) . ' — Katalog KANDAGA' : 'Katalog Sumber — KANDAGA' ?></title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-bibliografi.css">
     <style>.catalog-heading{border-left:4px solid #2563eb;padding-left:1rem}.catalog-card{height:100%;border:1px solid #e5eaf2;border-radius:16px;background:#fff;padding:1.25rem;transition:transform .2s,box-shadow .2s}.catalog-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,61,117,.12)}.catalog-card h3{font-size:1.05rem;line-height:1.45}.catalog-count{color:#2563eb;font-weight:700}.catalog-cover{width:100%;height:180px;object-fit:contain;background:#f8fafc;border-radius:10px}.catalog-detail-cover{width:150px;height:210px;object-fit:contain;background:#f8fafc;border-radius:10px;display:block}.manuscript-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}.manuscript-source-card{border:1px solid #e5eaf2;border-radius:14px;overflow:hidden;background:#fff;height:100%}.manuscript-source-card img{display:block;width:100%;height:180px;object-fit:cover;background:#f1f5f9}.manuscript-source-card .body{padding:1rem}.catalog-apsa{background:#eff6ff;border-left:4px solid #2563eb;border-radius:10px;padding:1rem;color:#1e3a68}</style>
@@ -80,5 +80,5 @@ if ($catalogId) {
 <?php endif; ?>
 <?php if ($totalPages > 1): ?><nav aria-label="Navigasi katalog"><ul class="pagination justify-content-center flex-wrap"><?php for($i=1;$i<=$totalPages;$i++): ?><li class="page-item <?= $i===$page?'active':'' ?>"><a class="page-link" href="?<?= $catalogId?'id='.(int)$catalogId.'&':'' ?><?= $search?'search='.urlencode($search).'&':'' ?>p=<?= $i ?>"><?= $i ?></a></li><?php endfor; ?></ul></nav><?php endif; ?>
 </main>
-<?php include __DIR__ . '/../includes/footer.php'; ?><script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script><script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<?php include __DIR__ . '/../includes/footer.php'; ?><script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script><script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body></html>

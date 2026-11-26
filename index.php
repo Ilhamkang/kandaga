@@ -20,7 +20,7 @@ if (isset($_GET['p']) && is_string($_GET['p']) && $_GET['p'] !== 'home') {
     <title>Katalog Naskah Sunda - Kairaga</title>
     <?php $seoType = 'website'; $seoTitle = 'KANDAGA — Katalog Naskah Sunda'; $seoDescription = 'Katalog digital manuskrip Sunda, metadata pernaskahan, koleksi, dan sumber digital.'; $seoUrl = BASE_URL . '/'; include __DIR__ . '/includes/seo-meta.php'; ?>
 
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>/assets/images/favicon.png">
     <link rel="shortcut icon" type="image/png" href="<?= BASE_URL ?>/assets/images/favicon.png">
@@ -63,7 +63,7 @@ include __DIR__ . '/includes/navbar.php';
 <?php include __DIR__ . '/includes/footer.php'; ?>
 
 <script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
-<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 <script src="<?= BASE_URL ?>/assets/js/fade-in.js"></script>
 
 </body>

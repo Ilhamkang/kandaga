@@ -37,7 +37,7 @@ $resultIndeks = mysqli_query($conn, $sqlIndeks);
     <title>Indeks Judul - KANDAGA</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-indeks-judul.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-footer.css">
@@ -135,7 +135,7 @@ $resultIndeks = mysqli_query($conn, $sqlIndeks);
 
 
 <script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
-<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 
 </body>
 </html>

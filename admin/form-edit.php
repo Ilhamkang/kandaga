@@ -81,7 +81,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 <head>
 <meta charset="UTF-8">
 <title>Form Edit Naskah</title>
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
 <style>
 /* ================= PAGE TITLE ================= */

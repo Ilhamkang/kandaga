@@ -131,7 +131,7 @@ function tampilkanPilihanFilterMobile($conn, $sql, $param, $label, $selected) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="noindex,follow">
     <?php $seoType = 'search'; $seoTitle = 'Pencarian Naskah — KANDAGA'; $seoDescription = 'Telusuri katalog manuskrip Sunda berdasarkan judul, bahasa, aksara, lokasi, dan metadata lainnya.'; $seoUrl = BASE_URL . '/search'; include __DIR__ . '/includes/seo-meta.php'; ?>
-    <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/css/style-search.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <style>.card-img-top { height: 180px; object-fit: cover; }</style>
@@ -356,6 +356,6 @@ function tampilkanPilihanFilterMobile($conn, $sql, $param, $label, $selected) {
     </div>
     <?php include __DIR__ . '/includes/footer.php'; ?>
     <script src="<?= BASE_URL; ?>/assets/js/jquery-3.6.0.min.js"></script>
-    <script src="<?= BASE_URL; ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= BASE_URL; ?>/assets/bootstrap/js/bootstrap.bundle.min.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>
