@@ -13,6 +13,7 @@
 - Mengonversi seluruh markup dan skrip aplikasi ke Bootstrap 5: `data-*` → `data-bs-*`, `mr/ml/pr/pl` → `me/ms/pe/ps`, `font-weight-*` → `fw-*`, `form-group/form-row` → `mb-3`/`row g-2`, `form-control` pada `<select>` → `form-select`, wrapper `input-group-append/prepend` → anak langsung `input-group`, `btn-block` → `w-100`, `form-inline` → utilitas flex, badge → `badge bg-*`, `close` → `btn-close`, serta plugin jQuery `.modal()`/`.tab()`/`.tooltip()` → API Bootstrap 5. Semua halaman kini memuat `bootstrap.bundle.min.js`.
 - Menyamakan jQuery ke satu build penuh `3.6.0` dan menghapus salinan slim serta berkas `admin/assets/js/jquery-3.6.0.min.js` yang berukuran 0 byte; shim kelas Bootstrap 5 di `module-fonts.css` dicabut karena sudah disediakan framework.
 - Memulihkan kontras badge pada latar terang (`text-dark` untuk `bg-light`, `bg-info`, dan `bg-warning`), termasuk angka jumlah item di sidebar pencarian dan angka bookmark di navbar, serta melengkapi `form-select-sm` dengan kelas dasar `form-select`.
+- Memperbaiki `tools/build-release.php` agar manifest tidak mencantumkan `update-manifest.json` dengan checksum baseline; paket v3.1.67 dipublikasikan ulang agar verifikasi akhir Update Center lolos.
 - Menghapus `assets/js/dompdf/` beserta 317 berkasnya karena tidak dipanggil aplikasi; daftar `delete` pada manifest memastikan berkas lama ikut dibersihkan saat pembaruan.
 
 ### KRIR — ruang lingkup dan dampak

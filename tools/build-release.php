@@ -45,7 +45,7 @@ function kdProtected(string $path): bool {
 
 function kdExcluded(string $path): bool {
     if (kdProtected($path)) return true;
-    if (in_array($path, ['dist', '.github', '.gitignore', 'cek-localhost.php'], true)) return true;
+    if (in_array($path, ['dist', '.github', '.gitignore', 'cek-localhost.php', 'update-manifest.json'], true)) return true;
     if (str_starts_with($path, 'dist/') || str_starts_with($path, '.github/')) return true;
     if (str_starts_with($path, 'config/') && str_ends_with($path, '.local.php')) return true;
     return false;
@@ -185,6 +185,8 @@ $verify = new ZipArchive();
 if ($verify->open($zipPath) !== true) kdFail('ZIP hasil build tidak dapat dibaca.');
 $built = json_decode((string)$verify->getFromName('update-manifest.json'), true);
 if (!is_array($built) || ($built['version'] ?? '') !== $version) kdFail('Manifest dalam ZIP tidak valid.');
+if (isset($built['files']['update-manifest.json'])) kdFail('Manifest tidak boleh mencantumkan dirinya sendiri dalam files.');
+if ($verify->locateName('update-manifest.json') === false) kdFail('Manifest baru tidak masuk ZIP.');
 foreach ($built['files'] as $name => $hash) {
     if ($verify->locateName($name) === false) kdFail('Berkas manifest hilang dari ZIP: ' . $name);
 }

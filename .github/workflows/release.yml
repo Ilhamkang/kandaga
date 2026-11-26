@@ -46,3 +46,4 @@ jobs:
           files: dist/kandaga-*.zip
           body_path: RELEASE.md
           generate_release_notes: false
+          overwrite_files: true
