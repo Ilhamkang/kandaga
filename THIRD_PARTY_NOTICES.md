@@ -5,13 +5,9 @@ Lisensi **AGPL-3.0** pada file `LICENSE` berlaku untuk kode asli KANDAGA. Kompon
 | Komponen | Lokasi | Lisensi |
 |---|---|---|
 | Bootstrap v4.6.2 | `assets/bootstrap/`, `assets/css/bootstrap*` | MIT |
-| jQuery v3.5.1 / v3.6.0 | `assets/js/jquery-*`, `admin/assets/js/jquery-*` | MIT |
-| Font Awesome Free | `assets/fontawesome/` | Font Awesome Free License — ikon CC BY 4.0, font SIL OFL 1.1, kode MIT |
-| TinyMCE | `assets/js/tinymce/`, `admin/assets/js/tinymce/` | GPL-2.0-or-later |
-| dompdf | `assets/js/dompdf/vendor/dompdf/dompdf/` | LGPL-2.1-or-later |
-| php-font-lib | `assets/js/dompdf/vendor/dompdf/php-font-lib/` | LGPL-2.1-or-later |
-| masterminds/html5 | `assets/js/dompdf/vendor/masterminds/html5/` | MIT |
-| sabberworm/php-css-parser | `assets/js/dompdf/vendor/sabberworm/php-css-parser/` | MIT |
+| jQuery v3.6.0 | `assets/js/jquery-*`, `admin/assets/js/jquery-*` | MIT |
+| Font Awesome Free 7.2.0 | `assets/fontawesome/` | Font Awesome Free License — ikon CC BY 4.0, font SIL OFL 1.1, kode MIT |
+| TinyMCE 7.7.2 | `assets/js/tinymce/`, `admin/assets/js/tinymce/` | GPL-2.0-or-later |
 | Chart.js v4.5.1 | `assets/js/chart.js` | MIT |
 | SweetAlert2 v11 | `admin/assets/js/sweetalert2.min.js`, `assets/js/sweetalert2.min.js` | MIT |
 | Select2 4.1.0-rc.0 | `assets/js/select2*.js`, `admin/assets/js/select2*.js` | MIT |
@@ -21,8 +17,9 @@ Lisensi **AGPL-3.0** pada file `LICENSE` berlaku untuk kode asli KANDAGA. Kompon
 Teks lisensi lengkap untuk setiap komponen dapat ditemukan di direktori komponen tersebut, misalnya:
 
 - `assets/js/tinymce/license.md`
-- `assets/js/dompdf/LICENSE.LGPL`
 - `assets/fontawesome/LICENSE.txt`
+
+`dompdf` beserta paket turunannya telah dikeluarkan dari repositori dan paket rilis karena tidak digunakan oleh aplikasi. Riwayat versi dan alasannya tercatat di [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
 ## Catatan tentang data
 

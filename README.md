@@ -59,6 +59,8 @@ Repositori ini menyimpan source KANDAGA sekaligus menjadi kanal rilis untuk **Up
 - Kanal rilis: branch `gh-pages`
 - Metadata rilis: `https://raw.githubusercontent.com/Ilhamkang/kandaga/gh-pages/version.json`
 - Rilis dibuat otomatis oleh GitHub Actions saat tag `v*` di-push.
+- Kebijakan dan pelaporan kerentanan: [`SECURITY.md`](SECURITY.md)
+- Inventaris serta status dependensi: [`DEPENDENCIES.md`](DEPENDENCIES.md)
 
 Untuk membuat rilis baru:
 
