@@ -19,58 +19,93 @@ while ($row = mysqli_fetch_assoc($q_kontributor)) {
     $kontributor_list[] = $row;
 }
 $total_kontributor = count($kontributor_list);
+$kontributor_chunks = array_chunk($kontributor_list, 4);
+$kontributor_pages = count($kontributor_chunks);
 ?>
 
-<link rel="stylesheet" href="assets/css/style-kontributor.css">
+<link rel="stylesheet" href="assets/css/style-kontributor.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 
 <div class="embedded-module embedded-kontributor" style="max-width: 960px;">
     <div class="kontributor-section position-relative">
-        <div class="text-center mb-5">
-            <h4 class="fw-bold" style="color: var(--kandaga-dark-blue);">Kontributor Data</h4>
+        <div class="kontributor-header d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+            <div>
+                <h4 class="fw-bold mb-1" style="color: var(--kandaga-dark-blue);">Kontributor Data</h4>
+                <p class="text-muted small mb-0">Mereka yang merawat dan memperkaya data naskah KANDAGA.</p>
+            </div>
+
+            <?php if ($kontributor_pages > 1): ?>
+                <div class="kontributor-pager" role="group" aria-label="Navigasi halaman kontributor">
+                    <button type="button" class="kontributor-pager-btn" data-kontributor-prev aria-label="Kontributor sebelumnya">
+                        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <span class="kontributor-pager-indicator" data-kontributor-indicator aria-live="polite">1 / <?= $kontributor_pages ?></span>
+                    <button type="button" class="kontributor-pager-btn" data-kontributor-next aria-label="Kontributor berikutnya">
+                        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+            <?php endif; ?>
         </div>
 
         <?php if ($total_kontributor > 0): ?>
-            <div id="carouselKontributor" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <?php
-                    $chunks = array_chunk($kontributor_list, 3);
-                    foreach ($chunks as $index => $slide_items):
-                    ?>
-                        <div class="carousel-item <?= ($index === 0) ? 'active' : ''; ?>">
-                            <div class="row row-cols-2 justify-content-center">
-                                <?php foreach ($slide_items as $item): ?>
-                                    <div class="col-md-4 col-sm-6 mb-4">
-                                        <!-- ID sekarang sudah tersedia di $item['id'] -->
-                                        <a href="detail-kontributor.php?id=<?= (int)$item['id']; ?>" class="text-decoration-none text-dark">
-                                            <div class="kontributor-card p-4 text-center">
-                                                <div class="avatar-kontributor-wrapper">
-                                                    <img src="<?= $item['foto_clean']; ?>" class="avatar-kontributor-img">
-                                                </div>
-                                                <div class="nama-kontributor"><?= htmlspecialchars($item['nama']); ?></div>
-                                                <small class="text-uppercase" style="color:var(--kandaga-gold); font-weight:700;">Kontributor</small>
-                                                <p class="deskripsi-kontributor mt-3">
-                                                    <?= !empty($item['deskripsi']) ? htmlspecialchars(substr($item['deskripsi'], 0, 80)) . '...' : 'Kontributor aktif Kandaga.'; ?>
-                                                </p>
+            <div id="kontributorGrid" class="kontributor-grid">
+                <?php foreach ($kontributor_chunks as $index => $slide_items): ?>
+                    <div class="kontributor-page <?= ($index === 0) ? '' : 'd-none' ?>"
+                         data-kontributor-page="<?= $index + 1 ?>"
+                         <?= ($index === 0) ? '' : 'aria-hidden="true"' ?>>
+                        <div class="row row-cols-2 row-cols-md-4 g-3">
+                            <?php foreach ($slide_items as $item): ?>
+                                <div class="col">
+                                    <a href="detail-kontributor.php?id=<?= (int)$item['id']; ?>" class="kontributor-card-link text-decoration-none text-dark">
+                                        <div class="kontributor-card p-3 text-center h-100">
+                                            <div class="avatar-kontributor-wrapper">
+                                                <img src="<?= $item['foto_clean']; ?>" class="avatar-kontributor-img" alt="<?= htmlspecialchars($item['nama'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
                                             </div>
-                                        </a>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
+                                            <div class="nama-kontributor"><?= htmlspecialchars($item['nama'], ENT_QUOTES, 'UTF-8'); ?></div>
+                                            <small class="kontributor-role">Kontributor</small>
+                                            <p class="deskripsi-kontributor mt-2">
+                                                <?= !empty($item['deskripsi']) ? htmlspecialchars(substr($item['deskripsi'], 0, 80), ENT_QUOTES, 'UTF-8') . '...' : 'Kontributor aktif KANDAGA.'; ?>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-
-                <?php if ($total_kontributor > 3): ?>
-                    <a class="carousel-control-prev-kandaga" href="#carouselKontributor" role="button" data-slide="prev">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
-                    <a class="carousel-control-next-kandaga" href="#carouselKontributor" role="button" data-slide="next">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
         <?php else: ?>
             <p class="text-center text-muted">Belum ada kontributor.</p>
         <?php endif; ?>
     </div>
 </div>
+
+<script>
+(function () {
+    const root = document.getElementById('kontributorGrid');
+    if (!root) return;
+
+    const pages = Array.from(root.querySelectorAll('.kontributor-page'));
+    if (pages.length < 2) return;
+
+    const pager = root.closest('.kontributor-section').querySelector('.kontributor-pager');
+    const prev = root.closest('.kontributor-section').querySelector('[data-kontributor-prev]');
+    const next = root.closest('.kontributor-section').querySelector('[data-kontributor-next]');
+    const indicator = root.closest('.kontributor-section').querySelector('[data-kontributor-indicator]');
+    let active = 0;
+
+    function show(index) {
+        active = (index + pages.length) % pages.length;
+        pages.forEach((page, i) => {
+            const visible = i === active;
+            page.classList.toggle('d-none', !visible);
+            page.setAttribute('aria-hidden', visible ? 'false' : 'true');
+        });
+        if (indicator) indicator.textContent = (active + 1) + ' / ' + pages.length;
+    }
+
+    if (prev) prev.addEventListener('click', () => show(active - 1));
+    if (next) next.addEventListener('click', () => show(active + 1));
+    if (pager) pager.hidden = false;
+    show(0);
+})();
+</script>
