@@ -318,7 +318,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
                 <select name="katalog[]" class="form-select select-ajax-bib" data-kategori="katalog">
                     <option value="<?= $bib['id'] ?>" selected><?= "[{$bib['tahun_terbit']}] {$bib['penyusun']} - {$bib['judul']}" ?></option>
                 </select>
-                <?php if ($index > 0): ?><button type="button" class="btn btn-danger btn-remove-row">×</button><?php endif; ?>
+                <button type="button" class="btn btn-danger btn-remove-row" title="Hapus bibliografi ini">×</button>
             </div>
             <?php endforeach; else: ?>
             <div class="dynamic-row">
@@ -337,7 +337,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
                 <select name="pub_primer[]" class="form-select select-ajax-bib" data-kategori="referensi primer">
                     <option value="<?= $bib['id'] ?>" selected><?= "[{$bib['tahun_terbit']}] {$bib['penyusun']} - {$bib['judul']}" ?></option>
                 </select>
-                <?php if ($index > 0): ?><button type="button" class="btn btn-danger btn-remove-row">×</button><?php endif; ?>
+                <button type="button" class="btn btn-danger btn-remove-row" title="Hapus bibliografi ini">×</button>
             </div>
             <?php endforeach; else: ?>
             <div class="dynamic-row">
@@ -356,7 +356,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
                 <select name="pub_sekunder[]" class="form-select select-ajax-bib" data-kategori="referensi sekunder">
                     <option value="<?= $bib['id'] ?>" selected><?= "[{$bib['tahun_terbit']}] {$bib['penyusun']} - {$bib['judul']}" ?></option>
                 </select>
-                <?php if ($index > 0): ?><button type="button" class="btn btn-danger btn-remove-row">×</button><?php endif; ?>
+                <button type="button" class="btn btn-danger btn-remove-row" title="Hapus bibliografi ini">×</button>
             </div>
             <?php endforeach; else: ?>
             <div class="dynamic-row">

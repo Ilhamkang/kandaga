@@ -13,6 +13,7 @@
 - Menambahkan modal “Format kutipan” yang sebelumnya tidak ada: tab APA/APSA/Chicago dan tombol salin dengan fallback untuk browser tanpa akses clipboard.
 - Menyeragamkan tinggi modal agar tidak dipaksa `min-height` penuh layar oleh Bootstrap 5 pada layar kecil.
 - Menambahkan pengecekan duplikat pada form bibliografi admin: indikator langsung saat mengisi serta penolakan simpan apabila judul, penyusun, tahun, dan kategori identik setelah normalisasi spasi dan huruf besar/kecil.
+- Memperbaiki form edit naskah: tombol hapus kini tersedia pada semua baris bibliografi, termasuk satu-satunya entri yang tersedia, sehingga relasi katalog/primer/sekunder benar-benar bisa dilepas.
 
 Rilis ini code-only. Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan skema.
 
