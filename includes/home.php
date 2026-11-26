@@ -10,8 +10,8 @@ $total_lembaga = $conn->query("SELECT COUNT(*) as total FROM tb_lokasi")->fetch_
 $total_negara = $conn->query("SELECT COUNT(DISTINCT negara) as total FROM tb_lokasi WHERE negara != '' AND negara IS NOT NULL")->fetch_assoc()['total'];
 ?>
 
-<link rel="stylesheet" href="assets/css/style-home.css">
-<link rel="stylesheet" href="assets/css/style-naskah-baru.css">
+<link rel="stylesheet" href="assets/css/style-home.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+<link rel="stylesheet" href="assets/css/style-naskah-baru.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 
 
 <div class="home-container">

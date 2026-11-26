@@ -7,7 +7,10 @@ Perbaikan menu navbar pada layar mobile dan penyederhanaan laporan rilis. Riwaya
 - Menyederhanakan `RELEASE.md` agar hanya memuat catatan rilis versi terbaru; arsip perubahan tetap berada di `CHANGELOG.md` dan GitHub Release.
 - Menghapus bagian laporan hasil uji dan daftar pemeriksaan deployment dari catatan rilis serta changelog.
 - Memperketat `tools/build-release.php`: `RELEASE.md` wajib memuat tepat satu judul versi, `version.json.version` harus sinkron dengan judul dan tag, serta format laporan rilis divalidasi.
-- Melanjutkan penyesuaian pada modul katalog/detail, admin, dan modul pendukung terkait; rinciannya akan dimasukkan sebelum tag rilis dibuat.
+- Memperbaiki kontras judul pada header pencarian mobile menjadi putih sehingga “Eksplorasi Katalog Naskah” terbaca jelas di atas latar gelap.
+- Menata ulang tipografi hero beranda pada layar kecil: judul `1.85rem`, paragraf dan tombol `0.95rem`, serta angka dan label statistik yang proporsional.
+- Memperbaiki kartu monograf publik di mobile: sitasi tidak lagi terjepit menjadi kolom 56px ketika sampul tidak tersedia, tinggi kartu turun drastis, dan pagination tidak lagi meluap.
+- Menambahkan cache-buster versi pada stylesheet beranda agar perbaikan tipografi langsung diterima browser.
 
 Rilis ini code-only. Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan skema.
 

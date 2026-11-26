@@ -233,7 +233,18 @@
     }
 
     .bibliography-page .bib-citation {
+        grid-column: 2;
         padding-right: 0 !important;
+    }
+
+    .bibliography-page .pagination {
+        flex-wrap: wrap;
+        row-gap: .35rem;
+    }
+
+    .bibliography-page .pagination .page-link {
+        padding: .35rem .55rem;
+        font-size: .82rem;
     }
 
     .bibliography-page .bibliography-related-modal-header {

@@ -1,5 +1,6 @@
         body { background-color: #f8fafc; font-family: 'Inter', sans-serif; color: #334155; }
         .search-hero { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 50px 0; margin-bottom: 40px; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.1); }
+        body.kandaga-search .search-hero h4 { color: #fff; }
         .search-box-wrapper { background: white; padding: 8px; border-radius: 50px; display: flex; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .search-input-modern { border: none; padding: 10px 25px; flex-grow: 1; border-radius: 50px; outline: none; font-size: 1.1rem; }
         .search-btn-modern { border-radius: 50px; padding: 10px 30px; font-weight: 600; background: #2563eb; border: none; color: white; transition: 0.3s; }

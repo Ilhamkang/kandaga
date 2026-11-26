@@ -30,3 +30,26 @@
         box-shadow: 0 4px 15px rgba(15, 32, 66, 0.3);
     }
     .btn-search-huge:hover { background: #c5a880; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(197, 168, 128, 0.4); }
+
+/* Mobile hero typography: restore hierarchy over the shared module-font scale. */
+@media (max-width: 575.98px) {
+    body.kandaga-public .hero-section { padding-top: 2.25rem; padding-bottom: 2.25rem; }
+    body.kandaga-public .hero-section h2 {
+        font-size: 1.85rem;
+        line-height: 1.15;
+        letter-spacing: -.02em;
+    }
+    body.kandaga-public .hero-section .lead {
+        font-size: .95rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+    body.kandaga-public .hero-section .btn {
+        font-size: .95rem;
+        padding: .55rem 1.1rem;
+    }
+    .home-container .stat-card { padding: .75rem !important; }
+    .home-container .stat-card i { font-size: 1.1rem !important; margin-bottom: .5rem; }
+    .home-container .stat-number { font-size: 1.25rem; line-height: 1.1; }
+    .home-container .stat-label { font-size: .72rem; letter-spacing: .04em; margin-top: .35rem; }
+}
