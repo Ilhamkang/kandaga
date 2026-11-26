@@ -1,5 +1,6 @@
-# v3.1.67 — Kerapian tampilan Tentang dan pengerasan keamanan rilis
+# v3.1.67 — Kerapian halaman Tentang & Disclaimer dan pengerasan keamanan rilis
 
+- Merapikan redaksi Ketentuan Penggunaan & Penafian: pernyataan persetujuan aktif disederhanakan, klaim hak cipta sepihak dirumuskan ulang, dan keterbukaan kode dideklarasikan eksplisit (repo GitHub publik AGPL-3.0, data CC BY-NC-SA 4.0, kanal pelaporan kerentanan).
 - Merapikan grid logo dukungan, foto profil, badge versi, roadmap, dan kotak dukungan pada halaman Tentang.
 - Menambahkan `SECURITY.md` untuk pelaporan kerentanan privat, versi yang didukung, timeline respons, dan proses rilis keamanan.
 - Menambahkan `DEPENDENCIES.md` dan menyelaraskan `THIRD_PARTY_NOTICES.md` sebagai inventaris pustaka pihak ketiga.

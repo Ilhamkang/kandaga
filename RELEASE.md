@@ -1,7 +1,8 @@
 # Kandaga v3.1.67
 
-## v3.1.67 — Kerapian tampilan Tentang dan pengerasan keamanan rilis
+## v3.1.67 — Kerapian halaman Tentang & Disclaimer dan pengerasan keamanan rilis
 
+- Merapikan redaksi halaman “Ketentuan Penggunaan & Penafian”: pernyataan "express consent" disederhanakan, larangan klaim hak cipta sepihak dirumuskan ulang, serta keterbukaan kode dideklarasikan eksplisit—repo GitHub publik ber-AGPL-3.0, batas lisensi data CC BY-NC-SA 4.0, pustaka pihak ketiga, dan kanal pelaporan kerentanan.
 - Merapikan halaman “Tentang”: logo dukungan kini memakai grid seragam dengan `object-fit: contain`, kartu latar putih, border halus, dan tinggi tetap sehingga tidak ada logo yang mendominasi.
 - Menyesuaikan foto profil pengembang menjadi avatar lingkaran 148px dengan `object-fit: cover` dan bayangan lembut; badge versi kini berbentuk pill.
 - Menata roadmap pengembangan sebagai timeline vertikal dengan tahun yang sejajar, serta menyamakan jarak antar divider dan heading kartu.
@@ -12,20 +13,21 @@
 
 ### KRIR — ruang lingkup dan dampak
 
-- **File berubah:** `pages/tentang.php`, `assets/css/style-tentang.css`, `SECURITY.md`, `DEPENDENCIES.md`, `THIRD_PARTY_NOTICES.md`, `README.md`, `update-manifest.json`, `version.json`, `CHANGELOG.md`, dan `RELEASE.md`. Perubahan keamanan dari commit lokal `3ce4e72` juga termasuk dalam rilis ini.
+- **File berubah:** `pages/tentang.php`, `pages/disclaimer.php`, `assets/css/style-tentang.css`, `SECURITY.md`, `DEPENDENCIES.md`, `THIRD_PARTY_NOTICES.md`, `README.md`, `update-manifest.json`, `version.json`, `CHANGELOG.md`, dan `RELEASE.md`. Perubahan keamanan dari commit lokal `3ce4e72` juga termasuk dalam rilis ini.
 - **SQL/database:** tidak ada migrasi, perubahan tabel, query skema, atau backup database. Paket tetap code-only dengan backup kode saja.
 - **Fitur dipertahankan:** katalog, detail naskah, pencarian, bookmark, bibliografi, importer, SMTP/korespondensi, statistik, SEO, Zotero, dan seluruh alur Update Center termasuk rollback.
-- **Dampak yang mungkin terlihat:** halaman “Tentang” tampil lebih rapi di desktop dan ponsel; logo dan foto tidak lagi memakai ukuran asli. Saat pembaruan diinstal, 317 berkas dompdf lama akan dihapus dari direktori `assets/js/dompdf/`.
+- **Dampak yang mungkin terlihat:** halaman “Tentang” tampil lebih rapi di desktop dan ponsel; logo dan foto tidak lagi memakai ukuran asli. Redaksi “Ketentuan Penggunaan & Penafian” kini menyatakan keterbukaan kode secara eksplisit. Saat pembaruan diinstal, 317 berkas dompdf lama akan dihapus dari direktori `assets/js/dompdf/`.
 - **Kompatibilitas:** PHP >= 8.1, MySQL >= 8.0, MariaDB >= 10.11, ekstensi sebelumnya, dan Bootstrap 4. Tidak ada dependency frontend baru.
 - **Rollback:** pulihkan kode ke v3.1.66. Jika penghapusan dompdf perlu dibatalkan, berkas dapat dipulihkan dari ZIP rilis v3.1.66 atau tag `v3.1.66`. Tidak ada data database yang perlu dibatalkan.
 
 ### Pemeriksaan KRIR sebelum deployment
 
 1. Buka `/tentang` di desktop dan ponsel; pastikan empat logo inisiasi sejajar, logo akses koleksi tidak terlalu besar, foto profil berbentuk lingkaran, dan roadmap mudah dibaca.
-2. Pastikan tidak ada inline style tersisa pada kotak dukungan dan sidebar tidak menempel saat di-scroll di layar kecil.
-3. Cek Update Center menampilkan `min_from: 3.1.66`, jumlah `delete: 317`, dan tidak ada `assets/js/dompdf/` dalam ZIP.
-4. Verifikasi `SECURITY.md`, `DEPENDENCIES.md`, dan `THIRD_PARTY_NOTICES.md` ikut terpaket.
-5. Uji backup kode, install, verifikasi checksum, penghapusan dompdf, dan rollback pada lingkungan uji.
+2. Buka `/disclaimer`; pastikan tidak ada lagi pernyataan kode "akan dirilis kemudian", larangan kloning, atau "express consent", dan tautan AGPL-3.0, `SECURITY.md`, serta `THIRD_PARTY_NOTICES.md` dapat dibuka.
+3. Pastikan tidak ada inline style tersisa pada kotak dukungan dan sidebar tidak menempel saat di-scroll di layar kecil.
+4. Cek Update Center menampilkan `min_from: 3.1.66`, jumlah `delete: 317`, dan tidak ada `assets/js/dompdf/` dalam ZIP.
+5. Verifikasi `SECURITY.md`, `DEPENDENCIES.md`, dan `THIRD_PARTY_NOTICES.md` ikut terpaket.
+6. Uji backup kode, install, verifikasi checksum, penghapusan dompdf, dan rollback pada lingkungan uji.
 
 # Kandaga v3.1.66
 
