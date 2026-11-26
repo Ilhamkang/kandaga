@@ -16,6 +16,7 @@
 - Memperbaiki form edit naskah: tombol hapus kini tersedia pada semua baris bibliografi, termasuk satu-satunya entri yang tersedia, sehingga relasi katalog/primer/sekunder benar-benar bisa dilepas.
 - Menyesuaikan tombol hapus baris di form edit menjadi kotak 34×34px yang sejajar dengan tinggi `form-select`, tidak lagi tampak kebesar.
 - Memperbaiki ekspor XML HSP-KOD dan HSP-DESC: atribut `type` tidak lagi memuat backslash literal dan teks relasi seperti “Arab & Pegon” kini dieskap sebagai `&amp;`. Semua format XML (MODS, MARC21, TEI, HSP) ikut diamankan.
+- Menyederhanakan halaman detail naskah pada layar kecil: judul dan aksi tampil sebelum sampul, sampul dibatasi `34vh`, kartu memakai satu gutter, field metadata pendek dirapatkan dua kolom, serta tabel Akses Digital dan Lokasi Koleksi di-stack tanpa scroll horizontal. Lebar area baca naik dari 318px menjadi 342px dan tinggi halaman turun sekitar 800px.
 
 Rilis ini code-only. Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan skema.
 

@@ -207,9 +207,9 @@ $seoImage = $display_image_url;
         </a>
     </div>
 
-    <div class="row">
+    <div class="row detail-lead-row">
         <?php if (!empty($display_image_url)): ?>
-        <div class="col-lg-12 mb-4">
+        <div class="col-lg-12 mb-4 detail-lead-col">
             <div class="image-viewer-container">
                 <div class="image-viewer-box" id="imageGallery">
                     <img src="<?= htmlspecialchars($display_image_url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" alt="Naskah" class="naskah-img-fit" onerror="this.onerror=null;var box=this.closest('.image-viewer-container');if(box){box.remove();}">
@@ -218,25 +218,25 @@ $seoImage = $display_image_url;
         </div>
         <?php endif; ?>
 
-        <div class="col-lg-12">
-            <div class="bg-white p-4 rounded-lg shadow-sm border-0">
-                <div class="mb-3 d-flex flex-wrap align-items-center" style="gap: .5rem">
+        <div class="col-lg-12 detail-main-col">
+            <div class="bg-white p-4 rounded-lg shadow-sm border-0 detail-main-card">
+                <div class="mb-3 d-flex flex-wrap align-items-center detail-actions" style="gap: .5rem">
                     <?= kandagaBookmarkButton($id, $row['judul'] ?? '') ?>
                     <a class="btn btn-sm btn-outline-warning bookmark-style-action" href="<?= BASE_URL ?>/pages/lapor-naskah.php?id=<?= (int)$id ?>"><i class="fa-solid fa-comment-dots me-1"></i>Lapor / Beri Masukan</a>
                 </div>
-                <h2 class="detail-title mb-4"><?= htmlspecialchars($row['judul'] ?? '-') ?></h2>
-                <div class="table-responsive">
+                <h2 class="detail-title mb-4 detail-heading"><?= htmlspecialchars($row['judul'] ?? '-') ?></h2>
+                <div class="table-responsive detail-table-wrap">
                     <table class="table table-detail detail-metadata">
-                        <tr><td class="label-col">Tempat Penyimpan</td><td class="value-col"><?= htmlspecialchars($row['nama_tempat'] ?? '-') ?></td></tr>
-                        <tr><td class="label-col">Kode Inventaris</td><td class="value-col"><?= htmlspecialchars($row['kode_inventaris'] ?? '-') ?></td></tr>
-                        <tr><td class="label-col">Riwayat Naskah</td><td class="value-col prose-value"><?= !empty($row['riwayat_naskah']) ? htmlspecialchars_decode($row['riwayat_naskah']) : "<span class='text-muted fst-italic'>Informasi belum tersedia</span>" ?></td></tr>
-                        <tr><td class="label-col">Aksara</td><td class="value-col"><?= htmlspecialchars($string_aksara) ?></td></tr>
-                        <tr><td class="label-col">Bahasa</td><td class="value-col"><?= htmlspecialchars($string_bahasa) ?></td></tr>
-                        <tr><td class="label-col">Alas Tulis</td><td class="value-col"><?= htmlspecialchars($string_alas_tulis) ?></td></tr>
-                        <tr><td class="label-col">Deskripsi Fisik</td><td class="value-col prose-value"><?= !empty($row['deskripsi_fisik']) ? htmlspecialchars_decode($row['deskripsi_fisik']) : '-' ?></td></tr>
-                        <tr><td class="label-col">Deskripsi Isi</td><td class="value-col prose-value"><?= !empty($row['deskripsi_isi']) ? htmlspecialchars_decode($row['deskripsi_isi']) : "<span class='text-muted fst-italic'>Informasi belum tersedia</span>" ?></td></tr>
+                        <tr class="detail-row-compact"><td class="label-col">Tempat Penyimpan</td><td class="value-col"><?= htmlspecialchars($row['nama_tempat'] ?? '-') ?></td></tr>
+                        <tr class="detail-row-compact"><td class="label-col">Kode Inventaris</td><td class="value-col"><?= htmlspecialchars($row['kode_inventaris'] ?? '-') ?></td></tr>
+                        <tr class="detail-row-stack"><td class="label-col">Riwayat Naskah</td><td class="value-col prose-value"><?= !empty($row['riwayat_naskah']) ? htmlspecialchars_decode($row['riwayat_naskah']) : "<span class='text-muted fst-italic'>Informasi belum tersedia</span>" ?></td></tr>
+                        <tr class="detail-row-compact"><td class="label-col">Aksara</td><td class="value-col"><?= htmlspecialchars($string_aksara) ?></td></tr>
+                        <tr class="detail-row-compact"><td class="label-col">Bahasa</td><td class="value-col"><?= htmlspecialchars($string_bahasa) ?></td></tr>
+                        <tr class="detail-row-compact"><td class="label-col">Alas Tulis</td><td class="value-col"><?= htmlspecialchars($string_alas_tulis) ?></td></tr>
+                        <tr class="detail-row-stack"><td class="label-col">Deskripsi Fisik</td><td class="value-col prose-value"><?= !empty($row['deskripsi_fisik']) ? htmlspecialchars_decode($row['deskripsi_fisik']) : '-' ?></td></tr>
+                        <tr class="detail-row-stack"><td class="label-col">Deskripsi Isi</td><td class="value-col prose-value"><?= !empty($row['deskripsi_isi']) ? htmlspecialchars_decode($row['deskripsi_isi']) : "<span class='text-muted fst-italic'>Informasi belum tersedia</span>" ?></td></tr>
 
-                        <tr>
+                        <tr class="detail-row-stack">
                             <td class="label-col">Referensi Katalog</td>
                             <td class="value-col">
                                 <?php if (!empty($biblio_katalog)): ?>
@@ -256,7 +256,7 @@ $seoImage = $display_image_url;
                             </td>
                         </tr>
 
-                        <tr>
+                        <tr class="detail-row-stack">
                             <td class="label-col">Referensi Primer</td>
                             <td class="value-col">
                                 <?php if (!empty($biblio_primer)): ?>
@@ -276,7 +276,7 @@ $seoImage = $display_image_url;
                             </td>
                         </tr>
 
-                        <tr>
+                        <tr class="detail-row-stack">
                             <td class="label-col">Referensi Sekunder</td>
                             <td class="value-col">
                                 <?php if (!empty($biblio_sekunder)): ?>
@@ -295,14 +295,14 @@ $seoImage = $display_image_url;
                                 <?php endif; ?>
                             </td>
                         </tr>
-                         <tr>
+                         <tr class="detail-row-stack">
                             <td class="label-col">
                                 <span class="text-muted fw-bold">
                                     Ekspor Obyek <i class="fa-solid fa-file-export me-1"></i>
                                 </span>
                             </td>
                             <td class="value-col">
-                                <div class="d-flex flex-wrap align-items-center" style="gap: 20px;">
+                                <div class="d-flex flex-wrap align-items-center detail-export-links" style="gap: 20px;">
                                     <a class="btn-export-link" href="<?= BASE_URL ?>/export.php?id=<?= $row['id']; ?>&format=csv">
                                         <i class="fa-solid fa-file-csv text-success me-1"></i> CSV
                                     </a>
