@@ -14,6 +14,7 @@ Perbaikan menu navbar pada layar mobile dan penyederhanaan laporan rilis. Riwaya
 - Memperbaiki modal “Lihat naskah terkait” pada monograf: warna sitasi header diubah menjadi terang (kontras ~15:1), judul ganda dihapus karena sudah tercantum dalam format APSA, dan tinggi popup kini mengikuti isi (377px untuk 1 naskah, bukan 828px penuh layar).
 - Menambahkan modal “Format kutipan” yang sebelumnya tidak ada: tab APA/APSA/Chicago dan tombol salin dengan fallback untuk browser tanpa akses clipboard.
 - Menyeragamkan tinggi modal agar tidak dipaksa `min-height` penuh layar oleh Bootstrap 5 pada layar kecil.
+- Menambahkan pengecekan duplikat pada form bibliografi admin: indikator langsung saat mengisi serta penolakan simpan apabila judul, penyusun, tahun, dan kategori identik setelah normalisasi spasi dan huruf besar/kecil.
 
 Rilis ini code-only. Tidak ada migrasi SQL, perubahan tabel, backup database, atau perubahan skema.
 

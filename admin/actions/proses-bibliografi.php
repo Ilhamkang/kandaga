@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/request.php';
 require_once __DIR__ . '/../includes/upload.php';
+require_once __DIR__ . '/../../includes/bibliography.php';
 kandagaPost(false);
 try {
     global $conn;
@@ -11,6 +12,18 @@ try {
     if ($v['judul'] === '' || $v['penyusun'] === '') throw new InvalidArgumentException('Judul dan penyusun wajib diisi.');
     if (!in_array($v['tipe_item'], ['buku','jurnal'], true)) $v['tipe_item'] = 'buku';
     if (!in_array($v['kategori'], ['katalog','referensi primer','referensi sekunder'], true)) $v['kategori'] = 'referensi sekunder';
+
+    $duplicate = kandagaBibliographyDuplicate($conn, $v, $id);
+    if (!empty($_POST['check_only'])) {
+        kandagaJson(true, $duplicate ? 'Entri dengan metadata yang sama sudah ada.' : 'Tidak ada entri duplikat.', ['duplicate' => $duplicate]);
+    }
+    if ($duplicate) {
+        $label = trim((string)($duplicate['judul'] ?? ''));
+        $subjudul = trim((string)($duplicate['subjudul'] ?? ''));
+        if ($subjudul !== '') $label .= ': ' . $subjudul;
+        throw new InvalidArgumentException('Bibliografi dengan judul, penyusun, tahun, dan kategori yang sama sudah ada (ID ' . (int)$duplicate['id'] . ($label !== '' ? ' — ' . $label : '') . '). Gunakan entri tersebut atau ubah datanya.');
+    }
+
     $oldCover = null;
     if ($id) {
         $q = $conn->prepare('SELECT cover_filename FROM tb_bibliografi_media WHERE id_bibliografi=?'); $q->bind_param('i',$id); $q->execute(); $oldCover = $q->get_result()->fetch_assoc()['cover_filename'] ?? null; $q->close();

@@ -63,3 +63,50 @@ if (!function_exists('kandagaBibliographyCitation')) {
         return null;
     }
 }
+
+if (!function_exists('kandagaBibliographyNormalized')) {
+    function kandagaBibliographyNormalized($value): string
+    {
+        $value = preg_replace('/\s+/u', ' ', trim((string)$value));
+        $value = is_string($value) ? $value : '';
+        return function_exists('mb_strtolower') ? mb_strtolower($value, 'UTF-8') : strtolower($value);
+    }
+}
+
+if (!function_exists('kandagaBibliographyDuplicate')) {
+    /**
+     * Find an existing bibliography entry with the same normalized identity.
+     * Used by the admin form to prevent duplicate records such as two copies
+     * of the same book where only one has a cover.
+     */
+    function kandagaBibliographyDuplicate($conn, array $values, int $excludeId = 0): ?array
+    {
+        if (!($conn instanceof mysqli)) return null;
+        $judul = kandagaBibliographyNormalized($values['judul'] ?? '');
+        $penyusun = kandagaBibliographyNormalized($values['penyusun'] ?? '');
+        $tahun = kandagaBibliographyNormalized($values['tahun_terbit'] ?? '');
+        $kategori = kandagaBibliographyNormalized($values['kategori'] ?? '');
+        if ($judul === '' || $penyusun === '') return null;
+
+        $signature = implode("\0", [$judul, $penyusun, $tahun, $kategori]);
+        $stmt = $conn->prepare('SELECT id,judul,subjudul,penyusun,tahun_terbit,kategori FROM tb_bibliografi WHERE id<>? ORDER BY id');
+        if (!$stmt) return null;
+        $stmt->bind_param('i', $excludeId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $candidate = implode("\0", [
+                kandagaBibliographyNormalized($row['judul'] ?? ''),
+                kandagaBibliographyNormalized($row['penyusun'] ?? ''),
+                kandagaBibliographyNormalized($row['tahun_terbit'] ?? ''),
+                kandagaBibliographyNormalized($row['kategori'] ?? ''),
+            ]);
+            if ($candidate === $signature) {
+                $stmt->close();
+                return $row;
+            }
+        }
+        $stmt->close();
+        return null;
+    }
+}
