@@ -37,20 +37,20 @@ require_once __DIR__ . '/../includes/version.php';
                 <p>Inisiasi perancangan dimulai tahun 2023 atas dukungan program <b>Fellowship Lingling Wiyadharma</b> dari Scaliger Institut di Universitas Leiden, Belanda dan Masyarakat Pernaskahan Nusantara (Manassa). Tahap awal pengumpulan informasi melibatkan koleksi naskah Sunda dari Perpustakaan Universitas Leiden, yang kemudian dikembangkan dengan data dari berbagai katalog institusi lainnya secara bertahap.</p>
 
                 <p>Dalam tahap awal pengembangan platform, kode disusun secara menyeluruh (<i>fullstack</i>) oleh Ilham Nurwansah. Entri katalog dan informasi metadata didukung oleh para <a href="<?= BASE_URL ?>/kontributor">kontributor</a> yang berdedikasi menyediakan informasi pernaskahan untuk kepentingan publik. </p>
-                <hr/>
-                Dukungan Inisiasi:
-                <figure>
-                    <img src="<?= BASE_URL ?>/assets/images/supporter_01.png" class="supporter-img shadow-sm" alt="Supporter 1"> 
-                    <img src="<?= BASE_URL ?>/assets/images/supporter_02.png" class="supporter-img shadow-sm" alt="Supporter 2">
-                    <img src="<?= BASE_URL ?>/assets/images/supporter_03.png" class="supporter-img shadow-sm" alt="Supporter 3">
-                    <img src="<?= BASE_URL ?>/assets/images/supporter_07.png" class="supporter-img shadow-sm" alt="Supporter 7">
-                </figure>
-                
-                <hr/>
-                Dukungan Akses Koleksi:
-                <figure>
-                    <img src="<?= BASE_URL ?>/assets/images/supporter_04.png" class="supporter-img shadow-sm" alt="Supporter 4">
-                </figure>
+                <hr>
+                <h6 class="support-title">Dukungan Inisiasi</h6>
+                <div class="supporter-grid">
+                    <div class="supporter-logo"><img src="<?= BASE_URL ?>/assets/images/supporter_01.png" class="supporter-img" alt="Logo pendukung inisiasi 1" loading="lazy"></div>
+                    <div class="supporter-logo"><img src="<?= BASE_URL ?>/assets/images/supporter_02.png" class="supporter-img" alt="Logo pendukung inisiasi 2" loading="lazy"></div>
+                    <div class="supporter-logo"><img src="<?= BASE_URL ?>/assets/images/supporter_03.png" class="supporter-img" alt="Logo pendukung inisiasi 3" loading="lazy"></div>
+                    <div class="supporter-logo"><img src="<?= BASE_URL ?>/assets/images/supporter_07.png" class="supporter-img" alt="Logo pendukung inisiasi 4" loading="lazy"></div>
+                </div>
+
+                <hr>
+                <h6 class="support-title">Dukungan Akses Koleksi</h6>
+                <div class="supporter-grid supporter-grid-single">
+                    <div class="supporter-logo"><img src="<?= BASE_URL ?>/assets/images/supporter_04.png" class="supporter-img" alt="Logo pendukung akses koleksi" loading="lazy"></div>
+                </div>
 
                 <hr>
 
@@ -79,7 +79,7 @@ require_once __DIR__ . '/../includes/version.php';
         <div class="col-lg-4">
             <div class="content-card sticky-top" style="top: 20px;">
                 <h4>Kontak & Pengembang</h4>
-                <img src="<?= BASE_URL ?>/assets/images/ilham-leiden.png" class="profile-img shadow-sm" alt="Ilham Nurwansah">
+                <img src="<?= BASE_URL ?>/assets/images/ilham-leiden.png" class="profile-img" alt="Ilham Nurwansah di Leiden" loading="lazy">
                 <div class="contact-info mb-4">
                     <p class="mb-2"><strong><i class="fa-solid fa-id-badge mr-2 text-primary"></i> Ilham Nurwansah</strong></p>
                     <p class="mb-0 text-muted small"><i class="fa-solid fa-envelope mr-2"></i> info@kairaga.com</p>
@@ -102,14 +102,14 @@ require_once __DIR__ . '/../includes/version.php';
                     Data naskah, metadata koleksi, dan pustaka pihak ketiga tidak termasuk dalam lisensi kode ini.
                 </p>
                 
-                <div style="background: #fffbeb; border: 1px dashed #f59e0b; border-radius: 15px; padding: 20px;">
-                    <p class="small mb-3" style="color: #92400e; line-height: 1.5;">
-                        <i class="fa-solid fa-mug-hot mr-1"></i> 
-                        Proyek ini dirawat dengan semangat pelestarian dan (tentu saja) ribuan cangkir kafein. 
+                <div class="support-note">
+                    <p class="small support-note-text mb-3">
+                        <i class="fa-solid fa-mug-hot mr-1"></i>
+                        Proyek ini dirawat dengan semangat pelestarian dan (tentu saja) ribuan cangkir kafein.
                         <br><br>
                         Jika <strong>KANDAGA</strong> bermanfaat bagi Anda, dukung kami agar tetap "melek" untuk terus mengembangkan fitur-fitur selanjutnya.
                     </p>
-                    
+
                     <div class="text-center mt-3">
                         <script type='text/javascript' src='https://edge-cdn.trakteer.id/js/embed/trbtn.min.js?v=14-05-2025'></script>
                         <script type='text/javascript'>
@@ -118,7 +118,7 @@ require_once __DIR__ . '/../includes/version.php';
                                 trbtn.draw(trbtnId);
                             })();
                         </script>
-                        <p class="text-muted mt-2" style="font-size: 0.7rem;"><i>Klik tombol di atas untuk berdonasi</i></p>
+                        <p class="text-muted support-note-caption mt-2 mb-0"><i>Klik tombol di atas untuk berdonasi</i></p>
                     </div>
                 </div>
             </div>
