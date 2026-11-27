@@ -212,6 +212,7 @@ function dsApprove($input) {
         }
         if ($resolved['judul'] === '') throw new InvalidArgumentException('Judul wajib diisi.');
         $locationList = ['lokasi' => ['tb_lokasi', 'id_lokasi'], 'bahasa' => ['tb_bahasa', 'id_bahasa'], 'aksara' => ['tb_aksara', 'id_aksara'], 'alas_tulis' => ['tb_alas_tulis', 'id_alas_tulis']];
+        $relationList = ['bahasa' => ['naskah_bahasa', 'id_bahasa'], 'aksara' => ['naskah_aksara', 'id_aksara'], 'alas_tulis' => ['naskah_alas_tulis', 'id_alas_tulis']];
         $location = dsValidId($input['id_lokasi'] ?? null, 'tb_lokasi', 'id_lokasi');
         if (($input['location_confirmed'] ?? false) !== true) throw new InvalidArgumentException('Konfirmasikan lokasi penyimpanan saat ini; koleksi historis tidak otomatis menjadi lokasi sekarang.');
         if (($input['metadata_confirmed'] ?? false) !== true) throw new InvalidArgumentException('Periksa dan konfirmasikan padanan metadata sebelum menyimpan keputusan.');
@@ -245,7 +246,7 @@ function dsApprove($input) {
             kiQuery('UPDATE katalog SET judul=?,id_lokasi=?,kode_inventaris=?,deskripsi_fisik=?,deskripsi_isi=?,riwayat_naskah=?,kata_kunci=?,penyedia_akses=?,url_web=?,url_repositori=?,iiif_manifest=?,url_pdf=?,url_gambar_eksternal=?,penyunting_terakhir=?,tanggal_update=NOW() WHERE id=?', [$resolved['judul'], $location, $resolved['kode_inventaris'], $resolved['deskripsi_fisik'], $resolved['deskripsi_isi'], $resolved['riwayat_naskah'], $resolved['kata_kunci'], $resolved['penyedia_akses'], $resolved['url_web'], $resolved['url_repositori'], $resolved['iiif_manifest'], $resolved['url_pdf'], $resolved['url_gambar_eksternal'], $_SESSION['username'], $target]);
         }
         foreach ($finalRelations as $group => $ids) {
-            [$table, $column] = $locationList[$group];
+            [$table, $column] = $relationList[$group];
             kiQuery("DELETE FROM $table WHERE id_naskah=?", [$target]);
             foreach ($ids as $value) kiQuery("INSERT INTO $table(id_naskah,$column) VALUES(?,?)", [$target, $value]);
         }
