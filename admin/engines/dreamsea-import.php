@@ -1,177 +1,76 @@
 <?php
 require_once __DIR__ . '/../includes/request.php';
-require_once __DIR__ . '/../includes/csv.php';
 kandagaAuthorize(true);
-if (in_array($_GET['action'] ?? '', ['upload', 'confirm'], true) || $_SERVER['REQUEST_METHOD'] === 'POST') kandagaPost(true);
-
-require_once __DIR__ . '/../../config/bootstrap.php';
-/**
- * File: admin/engine/dreamsea-import.php
- * Keterangan: Engine untuk impor metadata naskah Dreamsea dengan validasi dan relasi otomatis.
- */
-
-// 1. Pathing & Koneksi
-require_once dirname(__DIR__, 2) . '/config/database.php';
-
-// 2. Keamanan Sesi
-if (session_status() === PHP_SESSION_NONE) if (session_status() === PHP_SESSION_NONE) session_start();
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    die("<div class='alert alert-danger'>Akses ditolak. Silakan login sebagai admin.</div>");
-}
-
-// 3. Fungsi Helper
-function clean_string($val) {
-    return trim((string)$val);
-}
-
-function get_or_create_id($conn, $table, $id_col, $name_col, $value) {
-    $val = clean_string($value);
-    if (empty($val)) return null;
-
-    $stmt = $conn->prepare("SELECT $id_col FROM $table WHERE $name_col = ?");
-    $stmt->bind_param("s", $val);
-    $stmt->execute();
-    $res = $stmt->get_result()->fetch_assoc();
-    if ($res) return $res[$id_col];
-
-    $stmt = $conn->prepare("INSERT INTO $table ($name_col) VALUES (?)");
-    $stmt->bind_param("s", $val);
-    $stmt->execute();
-    return $conn->insert_id;
-}
-
-// 4. Routing Action
-$action = $_GET['action'] ?? 'form';
-
-// --- A. TAMPILAN FORMULIR ---
-if ($action == 'form') {
-    echo '<h5><i class="fa-solid fa-file-csv"></i> Dreamsea Metadata Importer</h5><hr>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label class="form-label">Pilih file CSV DREAMSEA:</label>
-            <input type="file" name="csv_file" class="form-control" accept=".csv" required>
-        </div>
-        <button type="button" id="btnUpload" class="btn btn-primary">Upload & Preview</button>
-    </form>';
-}
-
-// --- B. PROSES UPLOAD & PREVIEW ---
-elseif ($action == 'upload' && $_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] == 0) {
-        $rows = kandagaCsvRows($_FILES['csv_file']['tmp_name']);
-        $_SESSION['import_data'] = $rows;
-        
-        echo '<h6>Pratinjau Data (5 Baris Pertama)</h6>
-              <div class="table-responsive"><table class="table table-bordered table-sm small">
-              <thead><tr>';
-        foreach ($rows[0] as $h) echo "<th>" . htmlspecialchars($h) . "</th>";
-        echo '</tr></thead><tbody>';
-        foreach (array_slice($rows, 1, 5) as $row) {
-            echo '<tr>'; foreach ($row as $c) echo "<td>" . htmlspecialchars($c) . "</td>"; echo '</tr>';
-        }
-        echo '</tbody></table></div>
-              <div class="mt-3">
-                <button id="btnConfirm" class="btn btn-success">Konfirmasi & Import Semua</button>
-                <button class="btn btn-secondary" onclick="location.reload()">Batal</button>
-              </div>';
-    } else {
-        echo '<div class="alert alert-danger">Gagal mengunggah file.</div>';
-    }
-}
-
-// --- C. KONFIRMASI & INSERT KE DATABASE ---
-elseif ($action == 'confirm') {
-    if (!isset($_SESSION['import_data'])) die("<div class='alert alert-danger'>Sesi kadaluwarsa. Silakan upload ulang.</div>");
-
-    $rows = $_SESSION['import_data'];
-    $headers = array_shift($rows); 
-    
-    set_time_limit(300);
-
-    $conn->begin_transaction();
-    try {
-        $count = 0;
-        foreach ($rows as $row_data) {
-            if (count($headers) !== count($row_data)) throw new InvalidArgumentException('Jumlah kolom CSV tidak sesuai header.');
-            $row = array_combine($headers, $row_data);
-            if (empty($row['Judul'])) continue;
-
-            // 1. Resolve ID (Bahasa, Aksara, Alas Tulis, Lokasi)
-            $bahasa_ids = array_filter(array_map(fn($b) => get_or_create_id($conn, 'tb_bahasa', 'id_bahasa', 'nama_bahasa', $b), explode(',', $row['Bahasa_List'] ?? '')));
-            $aksara_ids = array_filter(array_map(fn($a) => get_or_create_id($conn, 'tb_aksara', 'id_aksara', 'nama_aksara', $a), explode(',', $row['Aksara_List'] ?? '')));
-            $alas_ids   = array_filter(array_map(fn($l) => get_or_create_id($conn, 'tb_alas_tulis', 'id_alas_tulis', 'nama_alas_tulis', $l), explode(',', $row['Alas_Tulis_List'] ?? '')));
-            $id_lokasi  = get_or_create_id($conn, 'tb_lokasi', 'id_lokasi', 'nama_tempat', $row['Lokasi_Target'] ?? '');
-
-            // 2. Insert Katalog
-            $sql = "INSERT INTO katalog (tanggal_input, judul, id_lokasi, kode_inventaris, deskripsi_fisik, deskripsi_isi, riwayat_naskah, penyedia_akses, url_repositori, iiif_manifest, url_gambar_eksternal, gambar, url_web, url_pdf) 
-                    VALUES (NOW(), ?, ?, ?, ?, ?, ?, 'DREAMSEA', ?, ?, ?, '', '', '')";
-            
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sisssssss", 
-                $row['Judul'], 
-                $id_lokasi, 
-                $row['Kode_Inventaris'], 
-                $row['Deskripsi_Fisik_Clean'], 
-                $row['Deskripsi_Isi'], 
-                $row['Riwayat_Naskah'], 
-                $row['URL_Repositori'], 
-                $row['IIIF_Manifest'], 
-                $row['url_gambar_eksternal']
-            );
-            $stmt->execute();
-            $id_naskah = $conn->insert_id;
-
-            // 3. Insert Pivot
-            $stmt_b = $conn->prepare("INSERT INTO naskah_bahasa (id_naskah, id_bahasa) VALUES (?, ?)");
-            foreach($bahasa_ids as $bid) { $stmt_b->bind_param("ii", $id_naskah, $bid); $stmt_b->execute(); }
-            
-            $stmt_a = $conn->prepare("INSERT INTO naskah_aksara (id_naskah, id_aksara) VALUES (?, ?)");
-            foreach($aksara_ids as $aid) { $stmt_a->bind_param("ii", $id_naskah, $aid); $stmt_a->execute(); }
-            
-            $stmt_l = $conn->prepare("INSERT INTO naskah_alas_tulis (id_naskah, id_alas_tulis) VALUES (?, ?)");
-            foreach($alas_ids as $lid) { $stmt_l->bind_param("ii", $id_naskah, $lid); $stmt_l->execute(); }
-
-            $count++;
-        }
-        
-        $conn->commit();
-        echo "<div class='alert alert-success'>Sukses! <strong>$count</strong> naskah berhasil diimpor.</div>";
-        unset($_SESSION['import_data']);
-        
-    } catch (Throwable $e) {
-        $conn->rollback();
-        echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
-    }
+if (!defined('KANDAGA_GOAH_PANEL')) {
+    header('Location: ' . BASE_URL . '/admin/index.php?page=metadata-importer&engine=dreamsea');
+    exit;
 }
 ?>
-
-<script>
-$(document).ready(function() {
-    // Gunakan .on() agar event tetap terikat meskipun elemen dimuat secara dinamis via AJAX
-    
-    // Handle Upload
-    $(document).off('click', '#btnUpload').on('click', '#btnUpload', function() {
-        var formData = new FormData($('#uploadForm')[0]);
-        $('#engine-container').html('<div class="spinner-border"></div> Memproses...');
-        
-        $.ajax({
-            url: 'engines/dreamsea-import.php?action=upload',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(res) { 
-                $('#engine-container').html(res); 
-            }
-        });
-    });
-
-    // Handle Konfirmasi
-    $(document).off('click', '#btnConfirm').on('click', '#btnConfirm', function() {
-        $('#engine-container').html('<div class="spinner-border"></div> Menyimpan ke database...');
-        $.post('engines/dreamsea-import.php?action=confirm', function(res) {
-            $('#engine-container').html(res);
-        });
-    });
-});
-</script>
+<section id="dreamsea-importer" data-endpoint="<?= htmlspecialchars(BASE_URL, ENT_QUOTES) ?>/admin/actions/dreamsea-import.php" data-base="<?= htmlspecialchars(BASE_URL, ENT_QUOTES) ?>" data-csrf="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES) ?>">
+  <div class="card"><div class="card-header"><h4 class="mb-0"><i class="fa-solid fa-cloud-arrow-down me-2"></i>Importer DREAMSEA (terstruktur)</h4></div><div class="card-body">
+    <p>Unggah CSV UTF-8 hasil ekstraksi DREAMSEA, periksa pratinjau, lalu moderasi setiap entri. Unggah hanya menambah antrean; data katalog berubah setelah keputusan Buat baru atau Merge.</p>
+    <nav class="ds-steps mb-3" aria-label="Tahapan impor DREAMSEA">
+      <button class="ds-step is-active" type="button" data-step="upload" aria-current="step"><span>1</span><strong>Unggah CSV</strong><small>Berkas &amp; identitas</small></button>
+      <button class="ds-step" type="button" data-step="preview" disabled><span>2</span><strong>Pratinjau</strong><small>Validasi awal</small></button>
+      <button class="ds-step" type="button" data-step="moderation"><span>3</span><strong>Moderasi</strong><small>Duplikat &amp; master</small></button>
+    </nav>
+    <div id="ds-busy" hidden role="status" class="mb-2 text-primary"><i class="fa-solid fa-spinner fa-spin me-1"></i>Memuat data…</div>
+    <div id="ds-message" role="status" aria-live="polite"></div>
+    <div id="ds-setup" class="alert alert-warning" hidden>Jalankan <code>migrations/005_catalog_import.sql</code> dan <code>migrations/013_catalog_structure_stage1.sql</code> pada database aplikasi, lalu muat ulang.</div>
+    <div id="ds-work" hidden>
+      <div data-step-panel="upload">
+        <h5 class="mb-3">1. Pilih CSV DREAMSEA</h5>
+        <div class="row g-2">
+          <div class="mb-3 col-md-7"><label for="ds-file">CSV (koma, UTF-8; maksimal 10 MB / 5.000 entri)</label><div id="ds-dropzone" class="ds-dropzone"><i class="fa-solid fa-cloud-arrow-up mb-2"></i><p class="mb-2">Tarik CSV ke sini atau pilih berkas</p><input id="ds-file" class="form-control" type="file" accept=".csv,text/csv" required><small id="ds-file-info" class="d-block mt-2 text-muted">Belum ada berkas dipilih.</small></div></div>
+          <div class="mb-3 col-md-5"><label for="ds-label">Nama sumber/batch</label><input id="ds-label" class="form-control" maxlength="255" value="DREAMSEA — Indramayu (Jawa Barat)"><small class="form-text text-muted">Gunakan nama kota/proyek agar batch mudah dikenali.</small></div>
+        </div>
+        <button id="ds-inspect" type="button" class="btn btn-outline-primary"><i class="fa-solid fa-magnifying-glass me-1"></i>Baca CSV</button>
+        <a class="btn btn-outline-secondary" href="<?= BASE_URL ?>/import-examples/dreamsea-normalized-template.csv" download><i class="fa-solid fa-download me-1"></i>Template CSV</a>
+      </div>
+      <div data-step-panel="preview" hidden>
+        <div class="d-flex flex-wrap justify-content-between align-items-center mt-3"><h5>2. Pratinjau validasi</h5><span id="ds-preview-status" class="badge bg-secondary"></span></div>
+        <p class="text-muted small">Tiga entri pertama dari CSV. Error di sini harus diperbaiki sebelum masuk antrean.</p>
+        <div id="ds-preview" class="table-responsive mb-3"></div>
+        <button id="ds-stage" type="button" class="btn btn-primary"><i class="fa-solid fa-upload me-1"></i>Simpan ke antrean</button>
+        <button type="button" class="btn btn-outline-secondary" data-step="upload"><i class="fa-solid fa-arrow-left me-1"></i>Kembali ke berkas</button>
+      </div>
+      <div data-step-panel="moderation" hidden>
+        <h5 class="mb-3">3. Moderasi antrean</h5>
+        <div id="ds-summary" class="ds-summary mb-3"></div>
+        <div class="ds-progress mb-3"><div class="d-flex justify-content-between small mb-1"><span>Keputusan final dalam batch</span><span id="ds-progress-text">0%</span></div><div class="progress"><div id="ds-progress-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:0%"></div></div></div>
+        <div class="row g-2 align-items-end"><div class="mb-3 col-md-8"><label for="ds-batch">Batch impor</label><select id="ds-batch" class="form-select"></select></div><div class="mb-3 col-md-4"><label for="ds-filter">Status</label><select id="ds-filter" class="form-select"><option value="all">Semua</option><option value="pending">Menunggu</option><option value="deferred">Ditunda</option><option value="created">Dibuat</option><option value="merged">Digabung</option><option value="rejected">Dilewati</option></select></div></div>
+        <button id="ds-refresh" type="button" class="btn btn-sm btn-outline-secondary mb-3"><i class="fa-solid fa-rotate me-1"></i>Muat ulang antrean</button>
+        <div id="ds-counts" class="mb-2 small"></div>
+        <div id="ds-queue" class="table-responsive"></div>
+        <div id="ds-pagination" class="d-flex justify-content-between align-items-center"></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="modal fade" id="ds-modal" tabindex="-1" role="dialog" aria-labelledby="ds-modal-title" aria-hidden="true"><div class="modal-dialog modal-xl" role="document"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title" id="ds-modal-title">Moderasi entri DREAMSEA</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+    <div class="modal-body" id="ds-review"></div>
+    <div class="modal-footer"><span id="ds-review-message" class="me-auto" role="status" aria-live="polite"></span><button type="button" id="ds-save" class="btn btn-primary"><i class="fa-solid fa-check me-1"></i>Simpan keputusan</button></div>
+  </div></div></div>
+</section>
+<style>
+#dreamsea-importer .ds-source{white-space:pre-wrap;overflow-wrap:anywhere;max-height:220px;overflow:auto;background:#f8fafc;padding:12px;border:1px solid #e2e8f0}
+#dreamsea-importer .ds-old{white-space:pre-wrap;overflow-wrap:anywhere;max-height:150px;overflow:auto;background:#f1f5f9;padding:8px;font-size:.9rem}
+#dreamsea-importer #ds-review-message{max-width:75%;overflow-wrap:anywhere}
+#ds-modal{z-index:1070}body.modal-open:has(#ds-modal.show) .modal-backdrop{z-index:1060}
+#ds-modal .modal-content{background:#fff;color:#334155}
+#ds-modal .modal-body{max-height:calc(100vh - 200px);max-height:calc(100dvh - 200px);overflow-y:auto}
+#dreamsea-importer #ds-queue table{min-width:760px}
+#dreamsea-importer #ds-pagination{gap:8px;flex-wrap:wrap}
+#dreamsea-importer .ds-dropzone{padding:18px;border:2px dashed #cbd5e1;background:#f8fafc;border-radius:10px;text-align:center}#dreamsea-importer .ds-dropzone>i{font-size:1.8rem;color:#2563eb}#dreamsea-importer .ds-dropzone.is-dragging{border-color:#2563eb;background:#eff6ff}
+#dreamsea-importer .ds-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#dreamsea-importer .ds-step{position:relative;text-align:left;padding:12px 12px 12px 48px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;color:#64748b}
+#dreamsea-importer .ds-step span{position:absolute;left:12px;top:15px;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#e2e8f0;color:#475569}
+#dreamsea-importer .ds-step strong,#dreamsea-importer .ds-step small{display:block}
+#dreamsea-importer .ds-step.is-active{border-color:#2563eb;background:#eff6ff;color:#1d4ed8}#dreamsea-importer .ds-step.is-active span{background:#2563eb;color:#fff}
+#dreamsea-importer .ds-step:disabled{opacity:.55;cursor:not-allowed}
+#dreamsea-importer .ds-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#dreamsea-importer .ds-summary button{padding:14px;text-align:left;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;color:#334155}#dreamsea-importer .ds-summary strong{display:block;font-size:1.5rem;color:#1d4ed8}
+#dreamsea-importer .ds-summary button.is-active{background:#eff6ff;border-color:#2563eb}
+@media(max-width:767.98px){#dreamsea-importer .ds-step{padding:8px 4px;text-align:center}#dreamsea-importer .ds-step span{position:static;margin:0 auto 5px}#dreamsea-importer .ds-step small{display:none}#dreamsea-importer .ds-step strong{font-size:.75rem}#dreamsea-importer .ds-summary{grid-template-columns:repeat(2,minmax(0,1fr))}#ds-modal .modal-dialog{margin:8px}}
+</style>
+<script src="<?= BASE_URL ?>/admin/assets/js/dreamsea-importer.js?v=3.1.70"></script>

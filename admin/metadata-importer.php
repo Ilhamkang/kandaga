@@ -18,7 +18,7 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
    <i class="fa-solid fa-file-csv metadata-engine-icon"></i><span><strong>Importer Katalog Cetak</strong><small>CSV · pemetaan metadata · antrean moderasi · merge</small></span><i class="fa-solid <?= $engine==='catalog'?'fa-circle-check':'fa-arrow-right' ?> ms-auto"></i>
   </a></div>
   <div class="col-md-6 mb-2"><a href="<?= BASE_URL ?>/admin/index.php?page=metadata-importer&amp;engine=dreamsea" class="metadata-engine <?= $engine==='dreamsea'?'is-active':'' ?>" <?= $engine==='dreamsea'?'aria-current="page"':'' ?>>
-   <i class="fa-solid fa-cloud-arrow-down metadata-engine-icon"></i><span><strong>Dreamsea Importer</strong><small>CSV DREAMSEA · pratinjau · impor langsung</small></span><i class="fa-solid <?= $engine==='dreamsea'?'fa-circle-check':'fa-arrow-right' ?> ms-auto"></i>
+   <i class="fa-solid fa-cloud-arrow-down metadata-engine-icon"></i><span><strong>Dreamsea Importer (terstruktur)</strong><small>CSV DREAMSEA · dedup msid/DS · antrean moderasi</small></span><i class="fa-solid <?= $engine==='dreamsea'?'fa-circle-check':'fa-arrow-right' ?> ms-auto"></i>
   </a></div>
  </div>
 </section>
@@ -31,6 +31,6 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 <?php if($engine==='catalog'): ?>
  <?php require __DIR__.'/catalog-importer.php'; ?>
 <?php else: ?>
- <div class="alert alert-warning"><i class="fa-solid fa-circle-info me-1"></i>Engine DREAMSEA menggunakan impor langsung setelah konfirmasi. Untuk pemeriksaan duplikat dan merge katalog cetak, pilih Importer Katalog Cetak.</div>
+ <div class="alert alert-info"><i class="fa-solid fa-circle-info me-1"></i>Engine DREAMSEA kini memakai antrean dan moderasi per entri. Identitas <code>msid</code>/<code>DS</code> dipakai untuk deduplikasi; master Kandaga tidak dibuat otomatis. Lihat <code>docs/dreamsea-normalized-import.md</code> untuk format CSV dan gaya terjemahan.</div>
  <div id="engine-container" class="card p-4 shadow-sm"><?php require __DIR__.'/engines/dreamsea-import.php'; ?></div>
 <?php endif; ?>

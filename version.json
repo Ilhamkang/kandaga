@@ -1,4 +1,4 @@
 {
-    "version": "3.1.69",
-    "description": "Kontrak layout modul dirapikan: stylesheet dipindah ke head, padding dan wrapper ganda dihapus, grid kartu diseragamkan, gutter mobile disatukan, dan modul admin tidak lagi menggandakan dokumen HTML atau container-fluid saat di-include."
+    "version": "3.1.70",
+    "description": "Menggabungkan perapian nesting layout dengan engine DREAMSEA terstruktur: unggah ke antrean, dedup msid/DS, moderasi per entri, audit, dan penulisan field katalog baru tanpa auto-create master."
 }
