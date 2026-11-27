@@ -1,8 +1,8 @@
 {
     "format": 1,
     "product": "kandaga",
-    "version": "3.1.66",
-    "min_from": "3.1.64",
+    "version": "3.1.70",
+    "min_from": "3.1.70",
     "requires": {
         "php": ">=8.1",
         "mysql": ">=8.0",
@@ -16,10 +16,10 @@
         ]
     },
     "backup": {
-        "default": "code",
-        "allow_code_only": true,
-        "database": "never",
-        "note": "Rilis code-only tanpa migrasi SQL; backup database dinonaktifkan."
+        "default": "full",
+        "allow_code_only": false,
+        "database": "auto",
+        "note": "Paket menyertakan migrasi SQL; backup database wajib."
     },
     "files": {
         ".htaccess": "1a2cac7ac26d2e1d7500e325b0119987dfac2972844038c030011a1657843413",
@@ -326,6 +326,7 @@
         "migrations\/015_analytics_consistency.sql": "245a961bb6cf983b27b6523153c1e877c6461651e11ff0aafbeab92a8da3e92b",
         "migrations\/016_presence_maintenance.sql": "ad4598eddea7570f24c05f3f6b80755ac3db4dee0a9cd0839442d822fe897daa",
         "migrations\/017_statistics_performance.sql": "6cadd8dae73c8c6057ae99e9f9145d10742574cb192151db2bcff48a2bfa100a",
+        "migrations\/018_web_import_batch_separation.sql": "30118a3bf44532616b3d1030ac2ba1cf990bbd211635e7456bdb1f505efc7032",
         "modules\/bookmark-data.php": "1380bf8e621b83a3850ed5cade58c5df50530bc7bafabaa6f15b3cf52bde994c",
         "modules\/captcha.php": "87d059e70b57dc3cf488b6c81f13f7dee30867bad6f026b49e955c11c9c821df",
         "modules\/contribution-data.php": "949f9bdb736efceb6577cd02f215e1f3b432379496ed97395478937f33f49c07",
@@ -360,10 +361,71 @@
         "version.json": "a622ce57f71c1bb44efd4d2b25ac5d323a2640dfa0fb65df1e97af0647590cd6",
         "assets\/.htaccess": "ebfe44eda4d873648ead1c7af0b81de0a9fde06f558a25d2cb1e98e90b53acfb"
     },
-    "migrations": [],
+    "migrations": [
+        {
+            "id": "005_catalog_import",
+            "path": "migrations/005_catalog_import.sql",
+            "sha256": "9d1d4e74db5a988f90e9b867ac590c34963c78930aa1e1329b47d8280fe91749",
+            "idempotent": true,
+            "backward_compatible": true,
+            "checks": [
+                {
+                    "table": "katalog_import_batches",
+                    "columns": ["id", "filename", "file_hash", "source_label", "bibliography_id", "mapping_json", "created_by", "created_at"]
+                },
+                {
+                    "table": "katalog_import_rows",
+                    "columns": ["id", "batch_id", "source_row", "source_key", "raw_json", "draft_json", "status", "target_id", "reviewed_by", "reviewed_at", "note"],
+                    "unique": [["batch_id", "source_row"]]
+                },
+                {
+                    "table": "katalog_import_sources",
+                    "columns": ["source_key", "katalog_id", "import_row_id", "linked_at"]
+                },
+                {
+                    "table": "katalog_import_audit",
+                    "columns": ["id", "import_row_id", "action", "katalog_id", "before_json", "after_json", "decision_json", "username", "created_at"]
+                }
+            ]
+        },
+        {
+            "id": "013_catalog_structure_stage1",
+            "path": "migrations/013_catalog_structure_stage1.sql",
+            "sha256": "6037902394b52667e59d310182a53d1de4be1216a9447e0f92f23078be457a27",
+            "idempotent": true,
+            "backward_compatible": true,
+            "checks": [
+                {
+                    "table": "katalog_structure",
+                    "columns": ["id_naskah", "parent_id", "record_type", "unit_label", "unit_order", "notes"]
+                },
+                {
+                    "table": "katalog_identifiers",
+                    "columns": ["id", "id_naskah", "scheme", "identifier_value", "source_label", "is_primary"],
+                    "unique": [["id_naskah", "scheme", "identifier_value"]]
+                },
+                {
+                    "table": "katalog_location_history",
+                    "columns": ["id", "id_naskah", "location_kind", "place_name", "district", "province", "country", "period_label", "certainty", "source_text", "sort_order"]
+                }
+            ]
+        },
+        {
+            "id": "018_web_import_batch_separation",
+            "path": "migrations/018_web_import_batch_separation.sql",
+            "sha256": "30118a3bf44532616b3d1030ac2ba1cf990bbd211635e7456bdb1f505efc7032",
+            "idempotent": true,
+            "backward_compatible": true,
+            "checks": [
+                {
+                    "table": "katalog_import_batches",
+                    "columns": ["engine"],
+                    "unique": [["engine", "file_hash"]]
+                }
+            ]
+        }
+    ],
     "delete": [
-        "admin\/assets\/js\/jquery-3.5.1.slim.min.js",
-        "admin\/assets\/js\/jquery-3.6.0.min.js",
         "assets\/js\/dompdf\/AUTHORS.md",
         "assets\/js\/dompdf\/LICENSE.LGPL",
         "assets\/js\/dompdf\/README.md",

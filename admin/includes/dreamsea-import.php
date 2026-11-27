@@ -4,10 +4,14 @@ require_once __DIR__ . '/catalog-import.php';
 require_once __DIR__ . '/upload.php';
 
 function dsReady() {
-    $names = ['katalog_import_batches','katalog_import_rows','katalog_import_sources','katalog_import_audit','katalog_structure','katalog_identifiers','katalog_location_history'];
-    $r = kiQuery('SELECT table_name FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN (?,?,?,?,?,?,?)', $names)->get_result();
+    if (!kiReady()) return false;
+    $names = ['katalog_structure','katalog_identifiers','katalog_location_history'];
+    $r = kiQuery('SELECT table_name FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN (?,?,?)', $names)->get_result();
     return $r->num_rows === count($names);
 }
+function dsBatches() { return kiBatches(KI_ENGINE_WEB); }
+function dsFindBatch($hash) { return kiFindBatch($hash, KI_ENGINE_WEB); }
+function dsInsertBatch($filename, $hash, $label, $mappingJson) { return kiInsertBatch(KI_ENGINE_WEB, $filename, $hash, $label, null, $mappingJson); }
 function dsFields() {
     return [
         'msid', 'ds_id', 'record_type', 'parent_msid', 'unit_label', 'unit_order', 'structure_notes',
@@ -19,16 +23,7 @@ function dsFields() {
         'Location_Country', 'Location_Period', 'Location_Certainty', 'Location_Source', 'Bibliografi_ID'
     ];
 }
-function dsTermAliases() {
-    return [
-        'javanese' => 'Jawa', 'sundanese' => 'Sunda', 'sanskrit' => 'Sansakerta',
-        'malay' => 'Melayu', 'arabic' => 'Arab', 'dutch' => 'Belanda', 'chinese' => 'Mandarin',
-        'latin' => 'Latin', 'java' => 'Jawa', 'sunda' => 'Sunda', 'kawi' => 'Kawi', 'pegon' => 'Pegon',
-        'cacarakan' => 'Cacarakan', 'palm-leaf' => 'Lontar', 'palm leaf' => 'Lontar',
-        'paper' => 'Kertas', 'european paper' => 'Kertas Eropa', 'daluang' => 'Daluang',
-        'gebang' => 'Gebang', 'bamboo' => 'Bambu', 'wood' => 'Kayu', 'bone' => 'Tulang'
-    ];
-}
+function dsTermAliases() { return kiTermAliases(); }
 function dsNormalTerm($value) {
     $term = trim((string)$value);
     if ($term === '') return '';
@@ -37,7 +32,7 @@ function dsNormalTerm($value) {
 }
 function dsSplit($value) {
     $out = [];
-    foreach (preg_split('/[;|]/u', (string)$value) as $part) {
+    foreach (preg_split('/[;,|]/u', (string)$value) as $part) {
         $part = dsNormalTerm($part);
         if ($part !== '' && !in_array($part, $out, true)) $out[] = $part;
     }
@@ -46,17 +41,83 @@ function dsSplit($value) {
 function dsCode($value) {
     return strtoupper(preg_replace('/[^0-9A-Za-z]+/', '', (string)$value));
 }
+// DREAMSEA "City (Province)" often arrives as "Indramayu (Jawa Barat)".
+// Keep that legacy shape readable, but write kabupaten/kota and provinsi to separate columns.
+function dsCityProvince($value) {
+    $value = trim((string)$value);
+    if ($value === '') return ['district' => '', 'province' => '', 'combined' => false];
+    if (preg_match('/^(.+?)\s*\(([^()]+)\)\s*$/u', $value, $m)) {
+        return ['district' => trim($m[1]), 'province' => trim($m[2]), 'combined' => true];
+    }
+    return ['district' => '', 'province' => $value, 'combined' => false];
+}
+function dsAppendPlace($place, $part) {
+    $place = trim((string)$place);
+    $part = trim((string)$part);
+    if ($part === '' || $place === '') return $place !== '' ? $place : $part;
+    if (mb_stripos($place, $part, 0, 'UTF-8') !== false) return $place;
+    return $place . ', ' . $part;
+}
+// Normalize the four location markers used by katalog_location_history:
+// place_name (desa/kecamatan/koleksi), district (kabupaten/kota), province, country.
+function dsLocationParts($raw) {
+    $place = trim((string)($raw['Location_Place'] ?? ''));
+    $district = trim((string)($raw['Location_District'] ?? ''));
+    $province = trim((string)($raw['Location_Province'] ?? ''));
+    $country = trim((string)($raw['Location_Country'] ?? ''));
+    $city = dsCityProvince($province);
+    if ($city['combined']) {
+        // An old CSV may have put kecamatan in Location_District; keep it with the village.
+        $place = dsAppendPlace($place, $district);
+        $district = $city['district'];
+        $province = $city['province'];
+    } else {
+        $legacy = dsCityProvince($district);
+        if ($legacy['combined']) {
+            $district = $legacy['district'];
+            $province = $legacy['province'] !== '' ? $legacy['province'] : $province;
+        }
+    }
+    if ($district !== '' && $place !== '') {
+        $parts = preg_split('/\s*,\s*/u', $place);
+        $last = end($parts);
+        if (kiNorm($last) === kiNorm($district)) array_pop($parts);
+        $place = implode(', ', $parts);
+        $place = preg_replace('/[\s\-–—]*' . preg_quote($district, '/') . '\s*$/iu', '', $place);
+        $place = trim($place, " \t\n\r\0\x0B,-–—");
+    }
+    return ['place' => $place, 'district' => $district, 'province' => $province, 'country' => $country];
+}
 function dsIdentity($raw) {
     $msid = trim((string)($raw['msid'] ?? ''));
     $ds = trim((string)($raw['ds_id'] ?? ''));
-    if ($msid === '' && $ds === '') throw new InvalidArgumentException('Baris harus memiliki msid atau ds_id.');
+    if ($msid === '' && $ds === '') {
+        // Importer Web juga menerima CSV scraping lain yang memakai pasangan
+        // Identifier_Scheme/Identifier_Value sebagai identitas utama.
+        $scheme = trim((string)($raw['Identifier_Scheme'] ?? ''));
+        $value = trim((string)($raw['Identifier_Value'] ?? ''));
+        if ($scheme === '' || $value === '') throw new InvalidArgumentException('Baris harus memiliki msid, ds_id, atau Identifier_Scheme/Identifier_Value.');
+        $primary = ['scheme' => mb_substr($scheme, 0, 64), 'value' => mb_substr($value, 0, 255)];
+        $key = hash('sha256', $primary['scheme'] . '|' . kiNorm($primary['value']));
+        return ['msid' => '', 'ds_id' => '', 'ds_scheme' => '', 'source_key' => $key, 'primary' => $primary];
+    }
     if (preg_match('/^\d{1,6}$/', $msid)) $msid = 'MS' . str_pad($msid, 6, '0', STR_PAD_LEFT);
-    if ($ds !== '' && !preg_match('/^DS\s*\d{4}\s*\d{5}$/i', $ds)) throw new InvalidArgumentException('ds_id harus berbentuk DS 0000 00000.');
-    if ($ds === '' && preg_match('/\b(DS\s*\d{4}\s*\d{5})\b/i', (string)($raw['Kode_Inventaris'] ?? ''), $m)) $ds = $m[1];
-    if ($ds === '' && preg_match('/\b(DS\s*\d{4}\s*\d{5})\b/i', (string)($raw['URL_Repositori'] ?? ''), $m)) $ds = $m[1];
-    $primary = $msid !== '' ? ['scheme' => 'dreamsea-msid', 'value' => $msid] : ['scheme' => 'dreamsea-ds', 'value' => kiNorm($ds)];
+    $dsScheme = '';
+    if ($ds !== '' && preg_match('/^DS\s*\d{4}\s*\d{5}$/i', $ds)) $dsScheme = 'dreamsea-ds';
+    elseif ($ds !== '') {
+        if (mb_strlen($ds) > 255) throw new InvalidArgumentException('ds_id maksimal 255 karakter.');
+        $dsScheme = 'web-source';
+    }
+    if ($ds === '' && preg_match('/\b(DS\s*\d{4}\s*\d{5})\b/i', (string)($raw['Kode_Inventaris'] ?? ''), $m)) { $ds = $m[1]; $dsScheme = 'dreamsea-ds'; }
+    if ($ds === '' && preg_match('/\b(DS\s*\d{4}\s*\d{5})\b/i', (string)($raw['URL_Repositori'] ?? ''), $m)) { $ds = $m[1]; $dsScheme = 'dreamsea-ds'; }
+    $primary = $msid !== ''
+        ? ['scheme' => 'dreamsea-msid', 'value' => $msid]
+        : ['scheme' => $dsScheme, 'value' => kiNorm($ds)];
     $key = hash('sha256', $primary['scheme'] . '|' . kiNorm($primary['value']));
-    return ['msid' => $msid, 'ds_id' => $ds, 'source_key' => $key, 'primary' => $primary];
+    return ['msid' => $msid, 'ds_id' => $ds, 'ds_scheme' => $dsScheme, 'source_key' => $key, 'primary' => $primary];
+}
+function dsSourceLabel($raw) {
+    return trim((string)($raw['Penyedia_Akses'] ?? '')) ?: 'Web';
 }
 function dsDraft($raw) {
     foreach (dsFields() as $field) if (!array_key_exists($field, $raw)) $raw[$field] = '';
@@ -64,6 +125,7 @@ function dsDraft($raw) {
     if ($title === '') throw new InvalidArgumentException('Judul wajib diisi.');
     if (mb_strlen($title) > 255) throw new InvalidArgumentException('Judul maksimal 255 karakter.');
     $identity = dsIdentity($raw);
+    $sourceLabel = dsSourceLabel($raw);
     $inventory = trim((string)$raw['Kode_Inventaris']);
     if (mb_strlen($inventory) > 255) throw new InvalidArgumentException('Kode inventaris maksimal 255 karakter.');
     $certainty = trim((string)$raw['Location_Certainty']);
@@ -79,7 +141,7 @@ function dsDraft($raw) {
         'deskripsi_isi' => trim((string)$raw['Deskripsi_Isi']),
         'riwayat_naskah' => trim((string)$raw['Riwayat_Naskah']),
         'kata_kunci' => trim((string)$raw['Kata_Kunci']),
-        'penyedia_akses' => trim((string)$raw['Penyedia_Akses']) ?: 'DREAMSEA',
+        'penyedia_akses' => $sourceLabel,
         'url_web' => trim((string)$raw['URL_Web']), 'url_repositori' => trim((string)$raw['URL_Repositori']),
         'iiif_manifest' => trim((string)$raw['IIIF_Manifest']), 'url_pdf' => trim((string)$raw['URL_PDF']),
         'url_gambar_eksternal' => trim((string)$raw['url_gambar_eksternal'])
@@ -90,32 +152,36 @@ function dsDraft($raw) {
     $identifiers = [];
     $extraScheme = trim((string)$raw['Identifier_Scheme']);
     $extraValue = trim((string)$raw['Identifier_Value']);
-    if ($extraScheme !== '' && $extraValue !== '') {
-        $identifiers[] = ['scheme' => mb_substr($extraScheme, 0, 64), 'value' => mb_substr($extraValue, 0, 255), 'source' => mb_substr((string)$raw['Identifier_Source'], 0, 255), 'primary' => false];
+    $extraIsPrimary = kiNorm($identity['primary']['scheme']) === kiNorm($extraScheme) && kiNorm($identity['primary']['value']) === kiNorm($extraValue);
+    if ($extraScheme !== '' && $extraValue !== '' && !$extraIsPrimary) {
+        $identifiers[] = ['scheme' => mb_substr($extraScheme, 0, 64), 'value' => mb_substr($extraValue, 0, 255), 'source' => mb_substr((string)$raw['Identifier_Source'] ?: $sourceLabel, 0, 255), 'primary' => false];
     }
-    foreach ([$identity['primary'], ['scheme' => 'dreamsea-ds', 'value' => kiNorm($identity['ds_id'])]] as $candidate) {
+    $candidates = [$identity['primary']];
+    if ($identity['ds_scheme'] === 'dreamsea-ds' && $identity['primary']['scheme'] !== 'dreamsea-ds') $candidates[] = ['scheme' => 'dreamsea-ds', 'value' => kiNorm($identity['ds_id'])];
+    foreach ($candidates as $candidate) {
         if ($candidate['value'] === '') continue;
-        $identifiers[] = ['scheme' => $candidate['scheme'], 'value' => $candidate['value'], 'source' => 'DREAMSEA', 'primary' => $candidate['scheme'] === $identity['primary']['scheme']];
+        $identifiers[] = ['scheme' => $candidate['scheme'], 'value' => $candidate['value'], 'source' => $sourceLabel, 'primary' => $candidate === $identity['primary']];
     }
     $shelfmark = '';
     if (strpos($inventory, ';') !== false) $shelfmark = trim(substr($inventory, strpos($inventory, ';') + 1));
-    if ($shelfmark !== '') $identifiers[] = ['scheme' => 'shelfmark', 'value' => mb_substr($shelfmark, 0, 255), 'source' => 'DREAMSEA', 'primary' => false];
+    if ($shelfmark !== '') $identifiers[] = ['scheme' => 'shelfmark', 'value' => mb_substr($shelfmark, 0, 255), 'source' => $sourceLabel, 'primary' => false];
     $bib = [];
     foreach (preg_split('/[,;|]/u', (string)$raw['Bibliografi_ID']) as $value) {
         $value = filter_var(trim($value), FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
         if ($value) $bib[] = $value;
     }
+    $location = dsLocationParts($raw);
     $locationHistory = [];
-    if (trim((string)$raw['Location_Place']) !== '' || trim((string)$raw['Lokasi_Target']) !== '') {
+    if ($location['place'] !== '' || trim((string)$raw['Lokasi_Target']) !== '') {
         $locationHistory[] = [
-            'kind' => $kind, 'place' => mb_substr(trim((string)$raw['Location_Place']) ?: (string)$raw['Lokasi_Target'], 0, 255),
-            'district' => mb_substr((string)$raw['Location_District'], 0, 150), 'province' => mb_substr((string)$raw['Location_Province'], 0, 150),
-            'country' => mb_substr((string)$raw['Location_Country'], 0, 150), 'period' => mb_substr((string)$raw['Location_Period'], 0, 150),
-            'certainty' => $certainty ?: 'belum_diketahui', 'source' => (string)$raw['Location_Source'], 'sort_order' => 1
+            'kind' => $kind, 'place' => mb_substr($location['place'] ?: (string)$raw['Lokasi_Target'], 0, 255),
+            'district' => mb_substr($location['district'], 0, 150), 'province' => mb_substr($location['province'], 0, 150),
+            'country' => mb_substr($location['country'], 0, 150), 'period' => mb_substr((string)$raw['Location_Period'], 0, 150),
+            'certainty' => $certainty ?: 'belum_diketahui', 'source' => trim((string)$raw['Location_Source']) ?: $sourceLabel, 'sort_order' => 1
         ];
     }
     return [
-        'source' => array_merge($raw, $identity),
+        'source' => array_merge($raw, $identity, ['location' => $location]),
         'fields' => $fields,
         'relations' => ['bahasa' => dsSplit($raw['Bahasa_List']), 'aksara' => dsSplit($raw['Aksara_List']), 'alas_tulis' => dsSplit($raw['Alas_Tulis_List'])],
         'structure' => ['record_type' => $recordType, 'parent_msid' => trim((string)$raw['parent_msid']), 'unit_label' => mb_substr((string)$raw['unit_label'], 0, 100), 'unit_order' => $order ?: null, 'notes' => (string)$raw['structure_notes']],
@@ -140,7 +206,11 @@ function dsSuggestions($draft, $masters) {
 function dsCandidates($draft) {
     $out = [];
     $identity = $draft['source'];
-    $schemes = ['dreamsea-msid' => [$identity['msid']], 'dreamsea-ds' => [kiNorm($identity['ds_id'])]];
+    $schemes = [
+        $identity['primary']['scheme'] => [$identity['primary']['value']],
+        'dreamsea-msid' => [$identity['msid']],
+        $identity['ds_scheme'] => [kiNorm($identity['ds_id'])]
+    ];
     foreach ($schemes as $scheme => $values) {
         foreach ($values as $value) {
             if ($value === '') continue;
@@ -187,10 +257,10 @@ function dsApprove($input) {
     $action = (string)($input['action'] ?? '');
     if (!$id || !in_array($action, ['created', 'merged', 'rejected', 'deferred'], true)) throw new InvalidArgumentException('Keputusan moderasi tidak valid.');
     if (!is_string($input['note'] ?? '') || mb_strlen($input['note']) > 4000) throw new InvalidArgumentException('Catatan maksimal 4.000 karakter.');
-    if (!dsReady()) throw new InvalidArgumentException('Jalankan migrations/005_catalog_import.sql dan migrations/013_catalog_structure_stage1.sql pada database aplikasi dahulu.');
+    if (!dsReady()) throw new InvalidArgumentException('Jalankan migrations/005_catalog_import.sql, migrations/013_catalog_structure_stage1.sql, dan migrations/018_web_import_batch_separation.sql pada database aplikasi dahulu.');
     $conn->begin_transaction();
     try {
-        $row = kiRow($id, true);
+        $row = kiRow($id, true, KI_ENGINE_WEB);
         if (!in_array($row['status'], ['pending', 'deferred'], true)) throw new InvalidArgumentException('Baris ini sudah diputuskan. Muat ulang antrean.');
         if (in_array($action, ['rejected', 'deferred'], true)) {
             kiAudit($row, $action, null, null, null, $input);
@@ -226,9 +296,9 @@ function dsApprove($input) {
         }
         $bibliografi = [];
         foreach ((array)($input['bibliografi'] ?? []) as $value) $bibliografi[] = dsValidId($value, 'tb_bibliografi', 'id');
-        if (kiLinked($row['source_key'])) throw new InvalidArgumentException('Identitas DREAMSEA ini sudah ditautkan ke entri Kandaga. Gunakan entri tersebut untuk pemeriksaan, bukan membuat entri baru.');
+        if (kiLinked($row['source_key'])) throw new InvalidArgumentException('Identitas sumber ini sudah ditautkan ke entri Kandaga. Gunakan entri tersebut untuk pemeriksaan, bukan membuat entri baru.');
         $duplicate = kiQuery('SELECT i.id_naskah FROM katalog_identifiers i WHERE i.scheme=? AND i.identifier_value=? LIMIT 1', [$row['draft']['source']['primary']['scheme'], $row['draft']['source']['primary']['value']])->get_result()->fetch_assoc();
-        if ($duplicate && $action === 'created' && ($input['duplicate_confirmed'] ?? false) !== true) throw new InvalidArgumentException('Identitas DREAMSEA ini sudah tersimpan pada entri #' . (int)$duplicate['id_naskah'] . '. Periksa dan konfirmasikan bila ini memang naskah berbeda.');
+        if ($duplicate && $action === 'created' && ($input['duplicate_confirmed'] ?? false) !== true) throw new InvalidArgumentException('Identitas sumber ini sudah tersimpan pada entri #' . (int)$duplicate['id_naskah'] . '. Periksa dan konfirmasikan bila ini memang naskah berbeda.');
         $target = null;
         $before = null;
         if ($action === 'merged') {
@@ -265,11 +335,14 @@ function dsApprove($input) {
             kiQuery('UPDATE katalog_structure SET parent_id=?,record_type=?,unit_label=?,unit_order=?,notes=? WHERE id_naskah=?', [$parent, $structure['record_type'], $structure['unit_label'], $structure['unit_order'], $structure['notes'], $target]);
         }
         foreach ($row['draft']['identifiers'] as $item) kiQuery('INSERT IGNORE INTO katalog_identifiers(id_naskah,scheme,identifier_value,source_label,is_primary) VALUES(?,?,?,?,?)', [$target, $item['scheme'], $item['value'], $item['source'], $item['primary'] ? 1 : 0]);
-        if ($action === 'created') foreach ($row['draft']['location_history'] as $item) kiQuery('INSERT INTO katalog_location_history(id_naskah,location_kind,place_name,district,province,country,period_label,certainty,source_text,sort_order) VALUES(?,?,?,?,?,?,?,?,?,?)', [$target, $item['kind'], $item['place'], $item['district'], $item['province'], $item['country'], $item['period'], $item['certainty'], $item['source'], $item['sort_order']]);
+        // Riwayat lokasi dari sumber ditulis saat entri baru dibuat. Pada merge,
+        // hanya ditambahkan bila entri tujuan belum punya riwayat lokasi sama sekali.
+        $writeHistory = $action === 'created' || !kiQuery('SELECT id_naskah FROM katalog_location_history WHERE id_naskah=?', [$target])->get_result()->fetch_assoc();
+        if ($writeHistory) foreach ($row['draft']['location_history'] as $item) kiQuery('INSERT INTO katalog_location_history(id_naskah,location_kind,place_name,district,province,country,period_label,certainty,source_text,sort_order) VALUES(?,?,?,?,?,?,?,?,?,?)', [$target, $item['kind'], $item['place'], $item['district'], $item['province'], $item['country'], $item['period'], $item['certainty'], $item['source'], $item['sort_order']]);
         if (!kiQuery('SELECT source_key FROM katalog_import_sources WHERE source_key=?', [$row['source_key']])->get_result()->fetch_assoc()) kiQuery('INSERT INTO katalog_import_sources(source_key,katalog_id,import_row_id) VALUES(?,?,?)', [$row['source_key'], $target, $row['id']]);
         $after = dsSnapshot($target)['data'];
         kiAudit($row, $action, $target, $before, $after, $input);
-        logAktivitas($conn, $action === 'created' ? 'input' : 'edit', ($action === 'created' ? 'Input naskah DREAMSEA: ' : 'Edit naskah DREAMSEA: ') . $resolved['judul'], $target);
+        logAktivitas($conn, $action === 'created' ? 'input' : 'edit', ($action === 'created' ? 'Input naskah dari web: ' : 'Edit naskah dari web: ') . $resolved['judul'], $target);
         $conn->commit();
         return ['id' => $target, 'action' => $action];
     } catch (Throwable $e) {

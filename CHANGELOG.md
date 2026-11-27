@@ -1,3 +1,13 @@
+# v3.1.71 — Penyelarasan metadata katalog dan migrasi otomatis
+
+- Menyelaraskan field metadata katalog dengan struktur form input dan database saat ini.
+- Menambahkan dukungan metadata akses digital, struktur rekaman, identitas alternatif, riwayat lokasi, dan tautan bibliografi ganda.
+- Mempertahankan kesesuaian dengan struktur lama agar data yang sudah ada tetap dapat dibaca.
+- Memisahkan lokasi historis dari lokasi penyimpanan sekarang yang tetap diverifikasi manual.
+- Merapikan alur tinjauan dan pencatatan perubahan agar jejak keputusan tetap lengkap.
+- Memperbarui contoh data dan panduan kolom pendukung.
+- Mendaftarkan tiga migrasi SQL skema katalog pada manifest Update Center; migrasi dijalankan otomatis setelah pemasangan paket dan backup database penuh diwajibkan.
+
 # v3.1.70 — Perapian layout dan engine DREAMSEA terstruktur
 
 - Menggabungkan seluruh perubahan v3.1.69 ke dalam satu rilis dengan engine DREAMSEA baru.

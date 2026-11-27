@@ -16,7 +16,7 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
   </nav>
   <div id="ki-busy" hidden role="status" class="mb-2 text-primary"><i class="fa-solid fa-spinner fa-spin me-1"></i>Memuat data…</div>
   <div id="ki-message" role="status" aria-live="polite"></div>
-  <div id="ki-setup" class="alert alert-warning" hidden>Jalankan <code>migrations/005_catalog_import.sql</code> pada database aplikasi melalui phpMyAdmin, lalu muat ulang. Tabel katalog lama tidak diubah oleh migrasi ini.</div>
+  <div id="ki-setup" class="alert alert-warning" hidden>Jalankan <code>migrations/005_catalog_import.sql</code>, <code>migrations/013_catalog_structure_stage1.sql</code>, dan <code>migrations/018_web_import_batch_separation.sql</code> pada database aplikasi melalui phpMyAdmin, lalu muat ulang. Tabel katalog lama tidak diubah oleh migrasi ini.</div>
   <div id="ki-work" hidden>
    <div id="ki-upload-section">
    <form id="ki-upload">
@@ -30,7 +30,8 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
     </div>
     <button id="ki-inspect" type="button" class="btn btn-outline-primary"><i class="fa-solid fa-magnifying-glass me-1"></i>Baca CSV</button>
     <a class="btn btn-outline-secondary" href="<?= BASE_URL ?>/import-examples/template-katalog-cetak.csv" download><i class="fa-solid fa-download me-1"></i>Template</a>
-    <a class="btn btn-outline-secondary" href="<?= BASE_URL ?>/import-examples/ekadjati-1988-sampel.csv" download><i class="fa-solid fa-download me-1"></i>CSV contoh 8 entri</a>
+    <a class="btn btn-outline-secondary" href="<?= BASE_URL ?>/import-examples/ekadjati-1988-sampel.csv" download><i class="fa-solid fa-download me-1"></i>CSV contoh</a>
+    <a class="btn btn-outline-secondary" href="<?= BASE_URL ?>/docs/katalog-cetak-import.md" target="_blank" rel="noopener"><i class="fa-solid fa-book me-1"></i>Panduan kolom</a>
    </div>
    <div data-step-panel="mapping" hidden>
     <div class="d-flex flex-wrap justify-content-between align-items-center mt-3"><h5>2. Pemetaan kolom &amp; pratinjau</h5><span id="ki-mapping-status" class="badge bg-secondary"></span></div>
@@ -47,6 +48,7 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
    <div class="ki-progress mb-3"><div class="d-flex justify-content-between small mb-1"><span>Keputusan final dalam batch</span><span id="ki-progress-text">0%</span></div><div class="progress"><div id="ki-progress-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:0%"></div></div></div>
    <div class="row g-2 align-items-end"><div class="mb-3 col-md-8"><label for="ki-batch">Batch impor</label><select id="ki-batch" class="form-select"></select></div><div class="mb-3 col-md-4"><label for="ki-filter">Status moderasi</label><select id="ki-filter" class="form-select"><option value="all">Semua</option><option value="pending">Menunggu</option><option value="deferred">Ditunda</option><option value="created">Dibuat</option><option value="merged">Digabung</option><option value="rejected">Dilewati</option></select></div></div>
    <button id="ki-refresh" type="button" class="btn btn-sm btn-outline-secondary mb-3"><i class="fa-solid fa-rotate me-1"></i>Muat ulang antrean</button>
+    <button id="ki-delete-batch" type="button" class="btn btn-sm btn-outline-danger mb-3"><i class="fa-solid fa-trash me-1"></i>Hapus batch belum diproses</button>
    <div id="ki-counts" class="mb-2 small"></div><div id="ki-queue" class="table-responsive"></div><div id="ki-pagination" class="d-flex justify-content-between align-items-center"></div>
    </div>
   </div>
@@ -82,4 +84,4 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #ki-modal .ki-review-toolbar{display:flex;gap:8px;flex-wrap:wrap;background:#f8fafc}
 @media(max-width:767.98px){#catalog-importer .ki-step{padding:8px 4px;text-align:center}#catalog-importer .ki-step span{position:static;margin:0 auto 5px}#catalog-importer .ki-step small{display:none}#catalog-importer .ki-step strong{font-size:.75rem;overflow-wrap:normal;word-break:normal}#catalog-importer .ki-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
-<script src="<?= BASE_URL ?>/admin/assets/js/catalog-importer.js?v=3.1.7"></script>
+<script src="<?= BASE_URL ?>/admin/assets/js/catalog-importer.js?v=3.1.71-catalog"></script>

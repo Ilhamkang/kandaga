@@ -3,13 +3,13 @@ require_once __DIR__.'/../includes/catalog-import.php';
 kandagaAuthorize(true);
 $action=$_GET['action']??'init';
 if(!is_string($action))kandagaJson(false,'Aksi tidak valid.',[],400);
-$mutating=in_array($action,['inspect','upload','review'],true);
+$mutating=in_array($action,['inspect','upload','review','delete_batch'],true);
 if($mutating)kandagaPost(true);
 try {
     if($action==='init') {
-        kandagaJson(true,'Konfigurasi importer.',['ready'=>kiReady(),'fields'=>kiFields(),'masters'=>kiMasters(),'batches'=>kiReady()?kiQuery('SELECT id,filename,source_label,mapping_json,created_at FROM katalog_import_batches ORDER BY id DESC LIMIT 50')->get_result()->fetch_all(MYSQLI_ASSOC):[]]);
+        kandagaJson(true,'Konfigurasi importer.',['ready'=>kiReady(),'fields'=>kiFields(),'masters'=>kiMasters(),'batches'=>kiReady()?kiBatches(KI_ENGINE_CATALOG):[]]);
     }
-    if(!kiReady())throw new InvalidArgumentException('Jalankan migrations/005_catalog_import.sql pada database Kandaga dahulu.');
+    if(!kiReady())throw new InvalidArgumentException('Jalankan migrations/005_catalog_import.sql, migrations/013_catalog_structure_stage1.sql, dan migrations/018_web_import_batch_separation.sql pada database Kandaga dahulu.');
     if(in_array($action,['inspect','upload'],true)) {
         [$headers,$rows]=kiCsv($_FILES['csv_file']??[]);
         if($action==='inspect')kandagaJson(true,'CSV terbaca.',['headers'=>$headers,'count'=>count($rows),'preview'=>array_slice($rows,0,3)]);
@@ -21,13 +21,13 @@ try {
         $bib=filter_var($_POST['bibliography_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]]);
         if(!$bib||!kiQuery('SELECT id FROM tb_bibliografi WHERE id=?',[$bib])->get_result()->fetch_assoc())throw new InvalidArgumentException('Pilih bibliografi katalog. Tambahkan dahulu melalui Daftar Pustaka jika belum tersedia.');
         $hash=hash_file('sha256',$_FILES['csv_file']['tmp_name']);
-        $existing=kiQuery('SELECT id FROM katalog_import_batches WHERE file_hash=?',[$hash])->get_result()->fetch_assoc();
+        $existing=kiFindBatch($hash,KI_ENGINE_CATALOG);
         if($existing)kandagaJson(true,'Berkas yang sama sudah ada; membuka batch sebelumnya.',['batch_id'=>(int)$existing['id'],'reused'=>true]);
         $drafts=[];$seen=[];
         foreach($rows as $n=>$raw){$draft=kiDraft($raw,$mapping);$key=kiKey($draft['source']);if(isset($seen[$key]))throw new InvalidArgumentException('Identitas sumber berulang pada baris '.($n+1).'. Tambahkan pembeda pada Nomor_Entri.');$seen[$key]=true;$drafts[]=[$raw,$draft,$key];}
         $conn->begin_transaction();
         try{
-            kiQuery('INSERT INTO katalog_import_batches(filename,file_hash,source_label,bibliography_id,mapping_json,created_by) VALUES(?,?,?,?,?,?)',[mb_substr(basename($_FILES['csv_file']['name']),0,255),$hash,trim($label),$bib,kiJson($mapping),$_SESSION['username']]);$batch=$conn->insert_id;
+            $batch=kiInsertBatch(KI_ENGINE_CATALOG,mb_substr(basename($_FILES['csv_file']['name']),0,255),$hash,trim($label),$bib,kiJson($mapping));
             foreach($drafts as $n=>[$raw,$draft,$key])kiQuery('INSERT INTO katalog_import_rows(batch_id,source_row,source_key,raw_json,draft_json) VALUES(?,?,?,?,?)',[$batch,$n+1,$key,kiJson($raw),kiJson($draft)]);
             $conn->commit();
         }catch(Throwable $e){$conn->rollback();throw $e;}
@@ -38,18 +38,15 @@ try {
         $page=filter_var($_GET['page']??1,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]]);
         $status=$_GET['status']??'all';
         if(!$batch||!$page||!is_string($status)||!in_array($status,['all','pending','deferred','created','merged','rejected'],true))throw new InvalidArgumentException('Filter antrean tidak valid.');
-        $where='r.batch_id=?';$args=[$batch];if($status!=='all'){$where.=' AND r.status=?';$args[]=$status;}
-        $total=(int)kiQuery('SELECT COUNT(*) AS n FROM katalog_import_rows r WHERE '.$where,$args)->get_result()->fetch_assoc()['n'];
-        $page=min($page,max(1,(int)ceil($total/15)));$offset=($page-1)*15;
-        $list=kiQuery('SELECT r.id,r.source_row,r.status,r.target_id,r.note,r.draft_json,s.katalog_id AS linked_id FROM katalog_import_rows r LEFT JOIN katalog_import_sources s ON s.source_key=r.source_key WHERE '.$where.' ORDER BY r.id LIMIT 15 OFFSET '.$offset,$args)->get_result()->fetch_all(MYSQLI_ASSOC);
+        $queue=kiQueueData($batch,KI_ENGINE_CATALOG,$page,$status);
+        $list=$queue['rows'];
         foreach($list as &$r){$d=json_decode($r['draft_json'],true);$r['title']=$d['fields']['judul'];$r['inventory']=$d['fields']['kode_inventaris'];$r['source']=$d['source'];unset($r['draft_json']);}unset($r);
-        $counts=kiQuery('SELECT status,COUNT(*) AS n FROM katalog_import_rows WHERE batch_id=? GROUP BY status',[$batch])->get_result()->fetch_all(MYSQLI_ASSOC);
-        kandagaJson(true,'Antrean.',['rows'=>$list,'total'=>$total,'page'=>$page,'pages'=>max(1,(int)ceil($total/15)),'counts'=>$counts]);
+        kandagaJson(true,'Antrean.',['rows'=>$list,'total'=>$queue['total'],'page'=>$queue['page'],'pages'=>$queue['pages'],'counts'=>$queue['counts']]);
     }
     if($action==='row') {
         $id=filter_var($_GET['row_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]]);
         if(!$id)throw new InvalidArgumentException('ID baris tidak valid.');
-        $row=kiRow($id);$masters=kiMasters();$suggestions=kiSuggestions($row['draft']['source'],$masters);
+        $row=kiRow($id,false,KI_ENGINE_CATALOG);$masters=kiMasters();$suggestions=kiSuggestions($row['draft']['source'],$masters);
         $location=filter_var($_GET['location']??0,FILTER_VALIDATE_INT);
         if($location===false)throw new InvalidArgumentException('Lokasi tidak valid.');
         $candidates=kiCandidates($row['draft'],(int)$location,($_GET['historical']??'0')==='1');
@@ -64,6 +61,12 @@ try {
         $input=json_decode($_POST['payload']??'',true,512,JSON_THROW_ON_ERROR);
         if(!is_array($input))throw new InvalidArgumentException('Payload tidak valid.');
         $result=kiApprove($input);kandagaJson(true,'Keputusan tersimpan.',$result);
+    }
+    if($action==='delete_batch') {
+        $batch=filter_var($_POST['batch_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]]);
+        if(!$batch)throw new InvalidArgumentException('ID batch tidak valid.');
+        $result=kiDeleteBatch($batch,KI_ENGINE_CATALOG);
+        kandagaJson(true,'Batch katalog cetak dihapus; '.$result['rows'].' baris antrean dibersihkan.',$result);
     }
     kandagaJson(false,'Aksi tidak dikenal.',[],404);
 }catch(JsonException $e){kandagaJson(false,'Format JSON tidak valid.',[],422);}catch(Throwable $e){kandagaFailure($e);}

@@ -43,7 +43,7 @@
   }
   async function stage(){
     if(!preview)throw new Error('Baca CSV terlebih dahulu.');
-    const fd=new FormData();fd.set('csv_file',$id('ds-file').files[0]);fd.set('source_label',$id('ds-label').value.trim()||'DREAMSEA');
+    const fd=new FormData();fd.set('csv_file',$id('ds-file').files[0]);fd.set('source_label',$id('ds-label').value.trim()||'Web');
     const result=await api('upload',{},fd);preview=null;page=1;await init(result.batch_id);message(result.message);
   }
   async function queue(){
@@ -66,12 +66,15 @@
     let html=`<p><strong>${esc(row.source_label)}</strong> · ${esc(src.msid||'')} ${esc(src.ds_id||'')} · baris ${Number(row.source_row)}.</p>`;
     if(linked)html+=`<div class="alert alert-info">Identitas sumber sudah ditautkan ke entri #${Number(linked.katalog_id)}. Impor ulang ditahan.</div>`;
     if(suggestions.unresolved.length)html+='<div class="alert alert-warning">Istilah belum cocok dengan daftar Kandaga: '+suggestions.unresolved.map(v=>`${esc(v.group)}: ${esc(v.term)}`).join('; ')+'. Pilih padanan yang tersedia; tidak ada master baru yang dibuat otomatis.</div>';
+    const loc=row.draft.location||{place:src.Location_Place,district:src.Location_District,province:src.Location_Province,country:src.Location_Country};
+    const locLabels=[['Desa/kecamatan',loc.place],['Kabupaten/kota',loc.district],['Provinsi',loc.province],['Negara',loc.country]];
+    html+='<div class="alert alert-secondary py-2"><strong>Lokasi historis dari sumber web:</strong> '+locLabels.filter(v=>v[1]).map(v=>`${esc(v[0])}: ${esc(v[1])}`).join(' · ')+'<br><small>Ditulis ke riwayat lokasi saat <em>Buat entri baru</em>, atau saat merge bila entri tujuan belum punya riwayat lokasi; lokasi penyimpanan saat ini tetap dipilih manual.</small></div>';
     if(candidates.length)html+='<div class="table-responsive"><table class="table table-sm"><thead><tr><th>Kandidat</th><th>Alasan</th><th>Aksi</th></tr></thead><tbody>'+candidates.map(c=>`<tr><td>#${Number(c.id)} · ${esc(c.judul)}</td><td>${esc(c.reason)}</td><td><button class="btn btn-sm btn-outline-primary ds-target" data-id="${Number(c.id)}"><i class="fa-solid fa-code-merge me-1"></i>Bandingkan</button> <a class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener" href="${esc(root.dataset.base)}/detail.php?id=${Number(c.id)}"><i class="fa-solid fa-eye"></i></a></td></tr>`).join('')+'</tbody></table></div>';
-    else html+='<p class="text-muted">Belum ada kandidat otomatis. Tetap periksa identitas DREAMSEA sebelum membuat entri baru.</p>';
+    else html+='<p class="text-muted">Belum ada kandidat otomatis. Tetap periksa identitas sumber sebelum membuat entri baru.</p>';
     html+='<div class="row g-2"><div class="mb-3 col-md-6"><label for="ds-target-manual">Bandingkan ID entri lain</label><div class="input-group"><input id="ds-target-manual" type="number" min="1" class="form-control" placeholder="ID katalog"><button id="ds-load-target" class="btn btn-outline-primary"><i class="fa-solid fa-code-merge me-1"></i>Bandingkan</button></div></div>';
     html+='<div class="mb-3 col-md-6"><label for="ds-decision">Keputusan</label><select id="ds-decision" class="form-select"><option value="created">Buat entri baru</option>'+(old?'<option value="merged" selected>Merge ke #'+Number(old.fields.id)+'</option>':'')+'<option value="deferred">Tunda</option><option value="rejected">Lewati</option></select></div></div>';
     if(old)html+=`<div class="alert alert-info">Membandingkan dengan #${Number(old.fields.id)} · ${esc(old.fields.judul)}. Periksa field sebelum mengganti data lama.</div>`;
-    html+='<details class="mb-3"><summary>Metadata asli DREAMSEA</summary><div class="ds-source">'+esc(JSON.stringify(row.raw,null,2))+'</div></details>';
+    html+='<details class="mb-3"><summary>Metadata asli sumber web</summary><div class="ds-source">'+esc(JSON.stringify(row.raw,null,2))+'</div></details>';
     html+='<div id="ds-edit-fields"><div class="row g-2"><div class="mb-3 col-md-6"><label for="ds-id-lokasi">Lokasi penyimpanan saat ini</label><select id="ds-id-lokasi" class="form-select">'+masterOptions('lokasi',suggestions.lokasi?[suggestions.lokasi]:[])+'</select><label class="small mt-2"><input id="ds-location-confirmed" type="checkbox"> Saya sudah memeriksa lokasi ini; koleksi historis tidak dipindahkan otomatis.</label></div>';
     ['bahasa','aksara','alas_tulis'].forEach(k=>{const chosen=suggestions[k]||[];html+=`<div class="mb-3 col-md-6"><label for="ds-rel-${k}">${esc(k)} (pilih yang tersedia)</label><select id="ds-rel-${k}" class="form-select" multiple size="4">${masterOptions(k,chosen,false)}</select></div>`;});
     html+='</div><div class="row g-2">';
@@ -91,11 +94,18 @@
     const fd=new FormData();fd.set('payload',JSON.stringify(payload));$id('ds-save').disabled=true;
     try{const result=await api('review',{},fd);bootstrap.Modal.getOrCreateInstance(document.getElementById('ds-modal')).hide();message(result.message+(result.id?' Entri #'+result.id+'.':''));await queue();}catch(e){$id('ds-review-message').textContent=e.message;}finally{$id('ds-save').disabled=false;}
   }
+  async function deleteBatch(){
+    const id=Number($id('ds-batch').value);if(!id)throw new Error('Pilih batch Importer Web terlebih dahulu.');
+    if(!window.confirm('Hapus batch Importer Web #'+id+' beserta seluruh baris antreannya? Baris yang sudah diputuskan, identitas tertaut, dan catatan audit membuat penghapusan ditolak.'))return;
+    const fd=new FormData();fd.set('batch_id',id);
+    const result=await api('delete_batch',{},fd);current=null;preview=null;page=1;await init();message(result.message);
+  }
   async function safely(fn,review=false){if(loading)return;loading=true;$id('ds-busy').hidden=false;root.setAttribute('aria-busy','true');try{await fn();}catch(e){if(review)$id('ds-review-message').textContent=e.message;else message(e.message,true);}finally{loading=false;$id('ds-busy').hidden=true;root.setAttribute('aria-busy','false');}}
   $id('ds-file').addEventListener('change',fileInfo);
   $id('ds-inspect').addEventListener('click',()=>safely(inspect));
   $id('ds-stage').addEventListener('click',()=>safely(stage));
   $id('ds-refresh').addEventListener('click',()=>safely(queue));
+  $id('ds-delete-batch').addEventListener('click',()=>safely(deleteBatch));
   $id('ds-batch').addEventListener('change',()=>{page=1;safely(queue);});
   $id('ds-filter').addEventListener('change',()=>{page=1;safely(queue);});
   root.addEventListener('click',e=>{
