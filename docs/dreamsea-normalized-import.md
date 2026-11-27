@@ -35,6 +35,24 @@ Aturan penting:
 - `Location_Certainty`: `pasti`, `kemungkinan`, `dugaan`, atau `belum_diketahui`.
 - Kolom teks `katalog` masih `latin1`; engine melakukan preflight charset. Karakter yang tidak didukung ditolak sebelum penulisan, bukan diganti diam-diam.
 
+### URL gambar dari IIIF VHMML
+
+`url_gambar_eksternal` diisi dengan URL gambar statis, bukan hasil unduhan saat impor. Pola yang dipakai:
+
+```text
+https://www.vhmml.org/image/READING_ROOM/DS/{DS%20xxxx%20xxxxx}/{DS_xxxx_xxxxx_001r.JPG}/full/,700/0/default.jpg
+```
+
+Bagian dalam kurung kurawal pertama adalah kode proyek DREAMSEA dengan spasi dikodekan `%20`. Nama berkas pada bagian kedua diambil dari **label kanvas pertama** manifest IIIF (`sequences[0].canvases[0].label`), sehingga akhirnya bisa berupa `_001r.JPG`, `_001.JPG`, atau `_fp.JPG` sesuai data sumber. Contoh nyata:
+
+```text
+https://www.vhmml.org/image/READING_ROOM/DS/DS%200018%2000002//DS_0018_00002_001r.JPG/full/,700/0/default.jpg
+```
+
+Kandaga hanya menyimpan dan menampilkan URL ini (`kandagaRealImageUrl()` / `kandagaImageUrl()`); tidak ada permintaan HTTP ke VHMML saat CSV diunggah atau disetujui. Dengan demikian masalah sertifikat SSL di host VHMML tidak memblokir impor. Jika gambar tidak tampil di browser, itu masalah sertifikat sisi klien dan tidak mengubah data katalog.
+
+Untuk menyiapkan CSV, manifest dapat diambil sekali saat kurasi dengan verifikasi SSL dinonaktifkan (`curl -k`), lalu URL hasilnya ditulis ke sheet. Berkas manifest tidak perlu ikut diimpor.
+
 ## Gaya terjemahan Kandaga
 
 - Judul naskah tetap memakai judul asli (Sunda/Jawa), bukan diterjemahkan.
