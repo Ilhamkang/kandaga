@@ -1,3 +1,12 @@
+# v3.1.72 — Antrean impor yang dapat dibersihkan
+
+- Batch yang sudah diproses kini dapat dihapus setelah konfirmasi.
+- Entri katalog yang sudah disetujui tidak ikut terhapus bersama berkas antrean.
+- Tautan identitas dan catatan keputusan moderasi tetap tersimpan walau baris antrean asal sudah dihapus.
+- Jejak yang menunjuk ke entri yang dihapus manual ikut dibersihkan saat batch dihapus.
+- Menambahkan migrasi additif `019_import_detachable_audit.sql` pada manifest Update Center; tanpa migrasi tersebut, penghapusan batch yang sudah diproses tetap ditolak seperti versi sebelumnya.
+- Menyelaraskan teks konfirmasi dan panduan impor dengan perilaku baru.
+
 # v3.1.71 — Penyelarasan metadata katalog dan migrasi otomatis
 
 - Menyelaraskan field metadata katalog dengan struktur form input dan database saat ini.
