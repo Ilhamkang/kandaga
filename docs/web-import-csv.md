@@ -1,6 +1,6 @@
 # Importer Web: format CSV
 
-Panduan ini mulai dari **unggah CSV** di Goah → Metadata Importer → **Importer Web**. Formatnya dipakai untuk CSV dari sumber web mana pun, bukan hanya satu proyek; contoh di bawah mencakup data bertema DREAMSEA/VHMML dan Lektur Kemenag. Antrean Importer Web terpisah dari Importer Katalog Cetak.
+Panduan ini mulai dari **unggah CSV** di Goah → Metadata Importer → **Importer Web**. Formatnya dipakai untuk CSV dari sumber web mana pun, bukan hanya satu proyek. Yang dijelaskan di sini adalah data CSV yang sudah jadi dan alur di aplikasi. Antrean Importer Web terpisah dari Importer Katalog Cetak.
 
 ## Alur di aplikasi
 
@@ -33,39 +33,13 @@ Wajib: identitas sumber (`msid`, `ds_id`, atau pasangan `Identifier_Scheme`/`Ide
 Aturan penting:
 
 - Tidak ada master yang dibuat otomatis. Istilah yang belum ada di `tb_bahasa`, `tb_aksara`, `tb_alas_tulis`, atau `tb_lokasi` ditandai dan dipilih manual saat moderasi.
-- `Lokasi_Target` adalah **lokasi penyimpanan sekarang** dan harus memakai master yang ada. Lokasi historis tidak otomatis menjadi `Lokasi_Target`.
-- Untuk data DREAMSEA, `City (Province)` seperti `Indramayu (Jawa Barat)` ditulis sebagai `Location_District=Indramayu` dan `Location_Province=Jawa Barat`. `Place of copying` masuk `Location_Place`; nama kabupaten di akhir Place of copying dihapus agar tidak dobel. Engine juga menerima bentuk lama `Location_Province=Indramayu (Jawa Barat)` dan memecahnya saat membaca CSV.
-- Untuk data Lektur Kemenag, keterangan lokasi biasanya tertanam dalam narasi deskripsi. Pindahkan ke `Location_Place` / `Location_District` / `Location_Province` / `Location_Country` dan tetapkan `Lokasi_Target` secara manual saat moderasi.
+- `Lokasi_Target` adalah **lokasi penyimpanan sekarang** dan harus memakai master yang ada. Kolom `Location_*` mengisi riwayat lokasi historis; keduanya tidak saling menggantikan.
+- `Deskripsi_Isi` dan `Riwayat_Naskah` memakai bahasa Indonesia deskriptif; judul asli tetap dipertahankan.
 - `Location_Certainty`: `pasti`, `kemungkinan`, `dugaan`, atau `belum_diketahui`.
 - Kolom teks `katalog` masih `latin1`. Engine melakukan preflight charset dan menolak karakter yang tidak didukung, bukan menggantinya diam-diam.
 - Riwayat lokasi kini **selalu tersedia sebagai field** di panel moderasi Importer Web maupun Katalog Cetak. Perubahan pada keputusan **Tunda/Lewati** disimpan ke draf antrean dan audit; hanya **Buat entri baru/Merge** yang menulisnya ke `katalog_location_history`. Saat **Merge**, riwayat lama tidak ditimpa.
-
-## URL gambar eksternal
-
-`url_gambar_eksternal` berisi URL gambar statis yang sudah valid, bukan hasil unduhan saat impor. Kandaga hanya menyimpan dan menampilkan URL ini; tidak ada permintaan HTTP ke host gambar ketika CSV dibaca atau disetujui. Panel moderasi menampilkan pratinjau dengan `referrerpolicy="no-referrer"` dan menyediakan tautan langsung bila host memblokir hotlink.
-
-Pola yang umum ditemukan:
-
-```text
-# VHMML / DREAMSEA (IIIF image service)
-https://www.vhmml.org/image/READING_ROOM/DS/DS%200018%2000002//DS_0018_00002_001r.JPG/full/,700/0/default.jpg
-
-# Lektur Kemenag (galeri berkas statis)
-https://lektur.kemenag.go.id/manuskrip/swi-upload/700px/LKK_CRB2017_BNP01_001.jpg
-https://lektur.kemenag.go.id/manuskrip/swi-upload/myThumbs/LKK_CMS2013_ALF_18_001.jpg
-```
-
-Perhatikan bahwa nama berkas tidak selalu sama dengan kode entri, dan polanya berubah antar tahun/koleksi:
-
-```text
-LKK_CIAMIS2013_MLM01 → LKK_CMS2013_ALF_18_001.jpg
-LKK_CRB2017_BNP001   → LKK_CRB2017_BNP01_001.jpg
-LKK_BANTEN2016_KHD001 → LKK_BANTEN2016_01_001.jpg
-LKK_CIREBON2015_AMB01 → LKK_Cirebon2015_AMB01_001.jpg
-LKK_CRB2014_BMB001   → LKK_CRB2014_BMB001_002.jpg
-```
-
-Salin URL yang memang tercantum pada galeri halaman tersebut; jangan merangkai URL dari kode inventaris atau mengira halaman pertama selalu bernomor `001`. Beberapa halaman tidak memuat galeri gambar sama sekali; pada kasus itu biarkan `url_gambar_eksternal` kosong dan catat keterangannya di `Riwayat_Naskah`/catatan moderasi. Folder `700px` dipakai untuk ukuran penuh, `myThumbs` untuk thumbnail; keduanya diterima selama absolut `http(s)`.
+- `url_gambar_eksternal` hanya disimpan dan ditampilkan. Pratinjau di moderasi memakai `referrerpolicy="no-referrer"` dengan tautan langsung sebagai fallback bila host memblokir gambar.
+- Teks asli sumber tetap tersimpan di `raw_json` antrean untuk perbandingan saat moderasi.
 
 ## Contoh CSV ringkas
 
@@ -78,12 +52,3 @@ msid,ds_id,Identifier_Scheme,Identifier_Value,Judul,Kode_Inventaris,Lokasi_Targe
 ```
 
 Baris pertama memakai `msid`/`ds_id`; baris kedua memakai `Identifier_Scheme`/`Identifier_Value`. Keduanya menghasilkan `source_key` unik untuk deduplikasi.
-
-## Gaya terjemahan Kandaga
-
-- Judul naskah tetap memakai judul asli (Sunda/Jawa/Arab), bukan diterjemahkan.
-- `Deskripsi_Isi` diawali pola **“Naskah ini berisi …”**; `Riwayat_Naskah` memakai pola **“Riwayat akuisisi: …”** bila sumbernya berisi riwayat akuisisi.
-- Istilah seragam: `manuscript` → naskah, `copyist` → penyalin, `place of copying` → tempat penyalinan, `writing support` → alas tulis, `palm-leaf` → lontar, `paper` → kertas, `Javanese` → Jawa, `Sundanese` → Sunda, `script` → aksara.
-- Angka dan ukuran memakai koma desimal Indonesia, mis. `23,5 x 2,5 cm`.
-- Kalimat deskriptif ringkas, informatif, tanpa menambah fakta yang tidak ada di sumber.
-- Teks asli sumber tetap tersimpan di `raw_json` antrean untuk perbandingan saat moderasi.
