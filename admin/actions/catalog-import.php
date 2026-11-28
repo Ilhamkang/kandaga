@@ -55,7 +55,8 @@ try {
         $snapshot=$target?kiSnapshot($target):null;
         $audit=kiQuery('SELECT action,katalog_id,username,created_at,decision_json FROM katalog_import_audit WHERE import_row_id=? ORDER BY id DESC',[$id])->get_result()->fetch_all(MYSQLI_ASSOC);
         foreach($audit as &$item){$d=json_decode($item['decision_json'],true);$item['note']=$d['note']??'';unset($item['decision_json']);}unset($item);
-        kandagaJson(true,'Pratinjau.',['row'=>$row,'suggestions'=>$suggestions,'candidates'=>$candidates,'linked'=>kiLinked($row['source_key']),'snapshot'=>$snapshot,'audit'=>$audit]);
+        $duplicate=kiCandidates($row['draft'],$location,true);
+        kandagaJson(true,'Pratinjau.',['row'=>$row,'suggestions'=>$suggestions,'candidates'=>$candidates,'duplicate'=>count($duplicate)>0,'linked'=>kiLinked($row['source_key']),'snapshot'=>$snapshot,'audit'=>$audit]);
     }
     if($action==='review') {
         $input=json_decode($_POST['payload']??'',true,512,JSON_THROW_ON_ERROR);

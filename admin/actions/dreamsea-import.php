@@ -88,7 +88,8 @@ try {
             unset($item['decision_json']);
         }
         unset($item);
-        kandagaJson(true, 'Pratinjau.', ['row' => $row, 'suggestions' => $suggestions, 'candidates' => dsCandidates($row['draft']), 'linked' => kiLinked($row['source_key']), 'snapshot' => $snapshot, 'audit' => $audit]);
+        $duplicate = kiQuery('SELECT i.id_naskah FROM katalog_identifiers i WHERE i.scheme=? AND i.identifier_value=? LIMIT 1', [$row['draft']['source']['primary']['scheme'], $row['draft']['source']['primary']['value']])->get_result()->fetch_assoc();
+        kandagaJson(true, 'Pratinjau.', ['row' => $row, 'suggestions' => $suggestions, 'candidates' => dsCandidates($row['draft']), 'duplicate' => (int)($duplicate['id_naskah'] ?? 0), 'linked' => kiLinked($row['source_key']), 'snapshot' => $snapshot, 'audit' => $audit]);
     }
     if ($action === 'review') {
         $input = json_decode($_POST['payload'] ?? '', true, 512, JSON_THROW_ON_ERROR);

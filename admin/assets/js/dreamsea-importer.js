@@ -60,7 +60,7 @@
     current=await api('row',{row_id:id,target_id:target});render();bootstrap.Modal.getOrCreateInstance(document.getElementById('ds-modal')).show();
   }
   function render(){
-    const {row,suggestions,candidates,snapshot,linked,audit}=current,src=row.draft.source,fields=row.draft.fields,old=snapshot?.data;
+    const {row,suggestions,candidates,duplicate,snapshot,linked,audit}=current,src=row.draft.source,fields=row.draft.fields,old=snapshot?.data;
     const done=!['pending','deferred'].includes(row.status);
     $id('ds-save').disabled=done;$id('ds-review-message').textContent='';
     let html=`<p><strong>${esc(row.source_label)}</strong> · ${esc(src.msid||'')} ${esc(src.ds_id||'')} · baris ${Number(row.source_row)}.</p>`;
@@ -78,21 +78,55 @@
     html+='<div id="ds-edit-fields"><div class="row g-2"><div class="mb-3 col-md-6"><label for="ds-id-lokasi">Lokasi penyimpanan saat ini</label><select id="ds-id-lokasi" class="form-select">'+masterOptions('lokasi',suggestions.lokasi?[suggestions.lokasi]:[])+'</select><label class="small mt-2"><input id="ds-location-confirmed" type="checkbox"> Saya sudah memeriksa lokasi ini; koleksi historis tidak dipindahkan otomatis.</label></div>';
     ['bahasa','aksara','alas_tulis'].forEach(k=>{const chosen=suggestions[k]||[];html+=`<div class="mb-3 col-md-6"><label for="ds-rel-${k}">${esc(k)} (pilih yang tersedia)</label><select id="ds-rel-${k}" class="form-select" multiple size="4">${masterOptions(k,chosen,false)}</select></div>`;});
     html+='</div><div class="row g-2">';
-    Object.entries(fields).forEach(([f,value])=>{if(f==='id_lokasi')return;const text=['deskripsi_fisik','deskripsi_isi','riwayat_naskah'].includes(f);html+=`<div class="mb-3 col-md-6"><label for="ds-field-${f}">${esc(labels[f]||f)}</label>${text?`<textarea id="ds-field-${f}" class="form-control" rows="4">${esc(value)}</textarea>`:`<input id="ds-field-${f}" class="form-control" maxlength="${f==='judul'||f==='kode_inventaris'||f==='kata_kunci'||f==='penyedia_akses'?255:2048}" value="${esc(value)}">`}${old?`<div class="ds-old mt-1">Sekarang: ${esc(plain(old.fields[f]||''))}</div>`:''}</div>`;});
+    Object.entries(fields).forEach(([f,value])=>{if(f==='id_lokasi')return;const text=['deskripsi_fisik','deskripsi_isi','riwayat_naskah'].includes(f);const preview=f==='url_gambar_eksternal'?'<div id="ds-image-preview" class="ds-image-preview mt-2"><span class="small text-muted">Belum ada pratinjau gambar eksternal.</span></div>':'';html+=`<div class="mb-3 col-md-6"><label for="ds-field-${f}">${esc(labels[f]||f)}</label>${text?`<textarea id="ds-field-${f}" class="form-control" rows="4">${esc(value)}</textarea>`:`<input id="ds-field-${f}" class="form-control" maxlength="${f==='judul'||f==='kode_inventaris'||f==='kata_kunci'||f==='penyedia_akses'?255:2048}" value="${esc(value)}">`}${old?`<div class="ds-old mt-1">Sekarang: ${esc(plain(old.fields[f]||''))}</div>`:''}${preview}</div>`;});
     html+='</div><label class="mt-3"><input id="ds-metadata-confirmed" type="checkbox"> Saya sudah memeriksa padanan bahasa, aksara, alas tulis, dan lokasi.</label><br><label class="mt-2"><input id="ds-duplicate-confirmed" type="checkbox"> Jika ada kandidat duplikat, saya sudah memeriksa bahwa entri ini berbeda.</label>';
+    html+='<div id="ds-requirements" class="ds-requirements mt-3" aria-live="polite"></div>';
     const bib=row.draft.bibliografi||[];html+='<div class="mb-3 mt-3"><label for="ds-bibliografi">Bibliografi terkait (opsional, dapat lebih dari satu)</label><select id="ds-bibliografi" class="form-select" multiple size="4">'+masterOptions('bibliografi',bib,false)+'</select></div>';
     html+='</div><div class="mb-3 mt-3"><label for="ds-note">Catatan keputusan</label><textarea id="ds-note" class="form-control" rows="2" maxlength="4000">'+esc(row.note||'')+'</textarea></div>';
     html+='<details><summary>Riwayat moderasi</summary>'+audit.map(a=>`<p>${esc(a.created_at)} · ${esc(a.username)} · ${esc(statuses[a.action]||a.action)} · ${esc(a.note)}</p>`).join('')+'</details>';
-    $id('ds-review').innerHTML=html;$id('ds-decision').disabled=done;toggleFields();
+    $id('ds-review').innerHTML=html;$id('ds-decision').disabled=done;toggleFields();refreshRequirements();refreshImagePreview();
   }
   function toggleFields(){const decision=$id('ds-decision')?.value;$id('ds-edit-fields').hidden=!['created','merged'].includes(decision);}
+  const checkable=id=>({id,label:id==='ds-location-confirmed'?'konfirmasi lokasi penyimpanan':id==='ds-metadata-confirmed'?'konfirmasi padanan metadata':'konfirmasi kandidat duplikat',checked:!!$id(id)?.checked});
+  function requirementList(){
+    const decision=$id('ds-decision')?.value;
+    if(!['created','merged'].includes(decision))return [];
+    const list=[checkable('ds-location-confirmed'),checkable('ds-metadata-confirmed')];
+    if(decision==='created'&&Number(current?.duplicate||0)>0)list.push(checkable('ds-duplicate-confirmed'));
+    return list;
+  }
+  function refreshRequirements(show=false){
+    const box=$id('ds-requirements');if(!box)return [];
+    const list=requirementList(),missing=list.filter(v=>!v.checked);
+    box.innerHTML='';
+    if(!list.length){const span=document.createElement('span');span.className='small text-muted';span.textContent='Tidak ada konfirmasi wajib untuk keputusan ini.';box.append(span);return [];}
+    const badge=document.createElement('span');badge.className='badge '+(missing.length?'bg-warning text-dark':'bg-success');badge.textContent=`Konfirmasi wajib ${list.length-missing.length}/${list.length}`;box.append(badge);
+    list.forEach(v=>$id(v.id)?.closest('label')?.classList.toggle('is-required-missing',!v.checked));
+    if(missing.length){const ul=document.createElement('ul');ul.className='small text-danger mb-0 mt-1';missing.forEach(v=>{const li=document.createElement('li');li.textContent='Belum dicentang: '+v.label;ul.append(li);});box.append(ul);}
+    if(show&&missing.length){$id(missing[0].id)?.focus();$id(missing[0].id)?.scrollIntoView({block:'center',behavior:'smooth'});}
+    return missing;
+  }
+  function refreshImagePreview(){
+    const input=$id('ds-field-url_gambar_eksternal'),box=$id('ds-image-preview');if(!input||!box)return;
+    const raw=input.value.trim();let url='';
+    if(/^https?:\/\//i.test(raw)){try{const parsed=new URL(raw);if(['http:','https:'].includes(parsed.protocol)&&!parsed.username&&!parsed.password)url=parsed.href;}catch(e){}}
+    box.innerHTML='';
+    if(!url){const span=document.createElement('span');span.className='small text-muted';span.textContent='Belum ada URL gambar eksternal yang dapat ditampilkan.';box.append(span);return;}
+    const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener noreferrer';
+    const img=document.createElement('img');img.src=url;img.alt='Pratinjau gambar eksternal';img.loading='lazy';img.decoding='async';img.referrerPolicy='no-referrer';img.className='img-thumbnail';
+    img.addEventListener('error',()=>{const warn=document.createElement('div');warn.className='small text-danger';warn.textContent='Thumbnail tidak dapat dimuat. Periksa URL atau buka gambar langsung.';link.textContent='Buka URL gambar';box.replaceChildren(warn,link);});
+    link.append(img);box.append(link);
+    const note=document.createElement('div');note.className='small text-muted mt-1';note.textContent='Klik gambar untuk membuka URL penuh.';box.append(note);
+  }
   async function save(){
+    const missing=refreshRequirements(true);
+    if(missing.length)throw new Error('Centang konfirmasi wajib: '+missing.map(v=>v.label).join(', ')+'.');
     const action=$id('ds-decision').value,fields={},relations={};
     Object.keys(current.row.draft.fields).forEach(f=>{const el=$id('ds-field-'+f);if(el)fields[f]=el.value;});
     ['bahasa','aksara','alas_tulis'].forEach(k=>relations[k]=Array.from($id('ds-rel-'+k).selectedOptions).map(o=>Number(o.value)));
     const payload={row_id:Number(current.row.id),action,fields,relations,id_lokasi:$id('ds-id-lokasi').value,bibliografi:Array.from($id('ds-bibliografi').selectedOptions).map(o=>Number(o.value)),target_id:Number(current.snapshot?.data.fields.id||0),revision:current.snapshot?.revision||'',location_confirmed:$id('ds-location-confirmed').checked,metadata_confirmed:$id('ds-metadata-confirmed').checked,duplicate_confirmed:$id('ds-duplicate-confirmed').checked,note:$id('ds-note').value};
     const fd=new FormData();fd.set('payload',JSON.stringify(payload));$id('ds-save').disabled=true;
-    try{const result=await api('review',{},fd);bootstrap.Modal.getOrCreateInstance(document.getElementById('ds-modal')).hide();message(result.message+(result.id?' Entri #'+result.id+'.':''));await queue();}catch(e){$id('ds-review-message').textContent=e.message;}finally{$id('ds-save').disabled=false;}
+    try{const result=await api('review',{},fd);bootstrap.Modal.getOrCreateInstance(document.getElementById('ds-modal')).hide();message(result.message+(result.id?' Entri #'+result.id+'.':''));await queue();}catch(e){if(/duplikat|identitas sumber/i.test(e.message)){const el=$id('ds-duplicate-confirmed');el?.closest('label')?.classList.add('is-required-missing');el?.focus();}$id('ds-review-message').textContent=e.message;}finally{$id('ds-save').disabled=false;}
   }
   async function deleteBatch(){
     const id=Number($id('ds-batch').value);if(!id)throw new Error('Pilih batch Importer Web terlebih dahulu.');
@@ -116,7 +150,8 @@
     if(e.target.closest('#ds-load-target'))safely(async()=>{const id=Number($id('ds-target-manual').value);if(!Number.isInteger(id)||id<1)throw new Error('Masukkan ID entri tujuan.');await open(Number(current.row.id),id);},true);
     if(e.target.closest('#ds-prev')){page--;safely(queue);}if(e.target.closest('#ds-next')){page++;safely(queue);}
   });
-  root.addEventListener('change',e=>{if(e.target.id==='ds-decision')toggleFields();});
+  root.addEventListener('change',e=>{if(e.target.id==='ds-decision'){toggleFields();refreshRequirements();}if(e.target.id&&e.target.id.endsWith('-confirmed'))refreshRequirements();});
+  root.addEventListener('input',e=>{if(e.target.id==='ds-field-url_gambar_eksternal')refreshImagePreview();});
   $id('ds-save').addEventListener('click',()=>safely(save,true));
   safely(()=>init());
 })();

@@ -74,7 +74,7 @@
   current=await api('row',{row_id:id,target_id:target,location:locationId,historical:historical?'1':'0'});render(locationId,historical);bootstrap.Modal.getOrCreateInstance(document.getElementById('ki-modal')).show();
  }
  function render(locationId,historical){
-  const {row,suggestions,candidates,snapshot,linked,audit}=current,src=row.draft.source,fields={...fieldDefaults,...row.draft.fields},old=snapshot?.data;
+  const {row,suggestions,candidates,duplicate,snapshot,linked,audit}=current,src=row.draft.source,fields={...fieldDefaults,...row.draft.fields},old=snapshot?.data;
   const done=!['pending','deferred'].includes(row.status),blocked=done;
   $id('ki-save').disabled=blocked;$id('ki-review-message').textContent='';
   let html=`<p><strong>${esc(row.source_label)}</strong> · ${esc(src.Bagian_Sumber)}, entri ${esc(src.Nomor_Entri)}, hlm. ${esc(src.Halaman_Cetak)} (PDF ${esc(src.Halaman_PDF)}).</p>`;
@@ -94,7 +94,8 @@
   html+='<div id="ki-edit-fields">';
   Object.entries(fields).forEach(([f,value])=>{
    const text=['deskripsi_fisik','deskripsi_isi','riwayat_naskah'].includes(f);
-   html+=`<div class="row ki-field-row"><div class="col-md-5"><label>${esc(names[f])} — data sekarang</label><div class="ki-old">${esc(old?plain(old.fields[f]):'Belum ada entri tujuan')}</div></div><div class="col-md-7"><label for="ki-field-${f}">Draf sumber / hasil edit</label>${text?`<textarea id="ki-field-${f}" class="form-control" rows="4">${esc(value)}</textarea>`:`<input id="ki-field-${f}" class="form-control" maxlength="255" value="${esc(value)}">`}${old?`<select class="form-select form-select-sm mt-2 ki-choice" data-field="${f}"><option value="keep">Pertahankan data sekarang</option><option value="use">Gunakan draf yang diedit</option>${text?'<option value="append">Tambahkan draf dengan atribusi sumber</option>':''}</select>`:''}</div></div>`;
+   const preview=f==='url_gambar_eksternal'?'<div id="ki-image-preview" class="ki-image-preview mt-2"><span class="small text-muted">Belum ada pratinjau gambar eksternal.</span></div>':'';
+   html+=`<div class="row ki-field-row"><div class="col-md-5"><label>${esc(names[f])} — data sekarang</label><div class="ki-old">${esc(old?plain(old.fields[f]):'Belum ada entri tujuan')}</div></div><div class="col-md-7"><label for="ki-field-${f}">Draf sumber / hasil edit</label>${text?`<textarea id="ki-field-${f}" class="form-control" rows="4">${esc(value)}</textarea>`:`<input id="ki-field-${f}" class="form-control" maxlength="255" value="${esc(value)}">`}${old?`<select class="form-select form-select-sm mt-2 ki-choice" data-field="${f}"><option value="keep">Pertahankan data sekarang</option><option value="use">Gunakan draf yang diedit</option>${text?'<option value="append">Tambahkan draf dengan atribusi sumber</option>':''}</select>`:''}${preview}</div></div>`;
   });
   html+=`<div class="row ki-field-row"><div class="col-md-5"><label>Lokasi sekarang</label><div class="ki-old">${esc(old?(config.masters.lokasi.find(v=>Number(v.id)===Number(old.fields.id_lokasi))?.name||old.fields.id_lokasi):'Belum ada entri tujuan')}</div></div><div class="col-md-7"><label for="ki-field-id_lokasi">Lokasi penyimpanan yang telah diperiksa</label><select id="ki-field-id_lokasi" class="form-select">${masterOptions('lokasi',suggestions.lokasi?[suggestions.lokasi]:[])}</select>${old?'<select class="form-select form-select-sm mt-2 ki-choice" data-field="id_lokasi"><option value="keep">Pertahankan lokasi sekarang</option><option value="use">Gunakan lokasi pilihan</option></select>':''}<label class="mt-2 small"><input id="ki-location-confirmed" type="checkbox"> Saya sudah memeriksa lokasi penyimpanan; ini bukan pemindahan otomatis dari lokasi tahun 1988.</label></div></div>`;
   ['bahasa','aksara','alas_tulis'].forEach(k=>{
@@ -108,13 +109,54 @@
   const bibSelected=[...new Set([...(row.draft.bibliografi||[]),Number(row.bibliography_id||0)].filter(Boolean))];
   html+=`<div class="row ki-field-row"><div class="col-md-5"><label>Bibliografi terkait</label><div class="ki-old">Bibliografi batch tetap dipertahankan.</div></div><div class="col-md-7"><select id="ki-bibliografi" class="form-select" multiple size="4">${masterOptions('bibliografi',bibSelected,false)}</select></div></div>`;
   html+='<label class="mt-3"><input id="ki-metadata-confirmed" type="checkbox"> Saya sudah memeriksa padanan bahasa, aksara, alas tulis, lokasi saat ini, struktur, identitas, dan bibliografi; informasi yang belum tersedia tidak saya tebak.</label><br>';
-  html+='<label class="mt-3"><input id="ki-duplicate-confirmed" type="checkbox"> Jika ada kandidat duplikat, saya sudah memeriksa bahwa entri baru ini merupakan naskah/salinan berbeda.</label></div>';
+  html+='<label class="mt-3"><input id="ki-duplicate-confirmed" type="checkbox"> Jika ada kandidat duplikat, saya sudah memeriksa bahwa entri baru ini merupakan naskah/salinan berbeda.</label><div id="ki-requirements" class="ki-requirements mt-3" aria-live="polite"></div></div>';
   html+='<div class="mb-3 mt-3"><label for="ki-note">Catatan keputusan</label><textarea id="ki-note" class="form-control" rows="2" maxlength="4000">'+esc(row.note||'')+'</textarea></div>';
   html+='<details><summary>Riwayat moderasi</summary>'+audit.map(a=>`<p>${esc(a.created_at)} · ${esc(a.username)} · ${esc(statuses[a.action]||a.action)} · ${esc(a.note)}</p>`).join('')+'</details>';
-  $id('ki-review').innerHTML=html;$id('ki-decision').disabled=blocked;toggleFields();
+  $id('ki-review').innerHTML=html;$id('ki-decision').disabled=blocked;toggleFields();refreshRequirements();refreshImagePreview();
  }
  function toggleFields(){const decision=$id('ki-decision')?.value;$id('ki-edit-fields').hidden=!['created','merged'].includes(decision);root.querySelectorAll('.ki-choice').forEach(s=>s.disabled=decision!=='merged');}
+ function effectiveImageUrl(){
+  const input=$id('ki-field-url_gambar_eksternal');if(!input)return {url:'',old:false};
+  if($id('ki-decision')?.value==='merged'&&root.querySelector('.ki-choice[data-field="url_gambar_eksternal"]')?.value==='keep')return {url:String(current?.snapshot?.data?.fields?.url_gambar_eksternal||''),old:true};
+  return {url:input.value,old:false};
+ }
+ const checkable=id=>({id,label:id==='ki-location-confirmed'?'konfirmasi lokasi penyimpanan':id==='ki-metadata-confirmed'?'konfirmasi padanan metadata':'konfirmasi kandidat duplikat',checked:!!$id(id)?.checked});
+ function requirementList(){
+  const decision=$id('ki-decision')?.value;
+  if(!['created','merged'].includes(decision))return [];
+  const list=[];
+  const locationChoice=decision==='created'?'use':(root.querySelector('.ki-choice[data-field="id_lokasi"]')?.value||'keep');
+  if(locationChoice==='use')list.push(checkable('ki-location-confirmed'));
+  list.push(checkable('ki-metadata-confirmed'));
+  if(decision==='created'&&Boolean(current?.duplicate))list.push(checkable('ki-duplicate-confirmed'));
+  return list;
+ }
+ function refreshRequirements(show=false){
+  const box=$id('ki-requirements');if(!box)return [];
+  const list=requirementList(),missing=list.filter(v=>!v.checked);
+  box.innerHTML='';
+  if(!list.length){const span=document.createElement('span');span.className='small text-muted';span.textContent='Tidak ada konfirmasi wajib untuk keputusan ini.';box.append(span);return [];}
+  const badge=document.createElement('span');badge.className='badge '+(missing.length?'bg-warning text-dark':'bg-success');badge.textContent=`Konfirmasi wajib ${list.length-missing.length}/${list.length}`;box.append(badge);
+  list.forEach(v=>$id(v.id)?.closest('label')?.classList.toggle('is-required-missing',!v.checked));
+  if(missing.length){const ul=document.createElement('ul');ul.className='small text-danger mb-0 mt-1';missing.forEach(v=>{const li=document.createElement('li');li.textContent='Belum dicentang: '+v.label;ul.append(li);});box.append(ul);}
+  if(show&&missing.length){$id(missing[0].id)?.focus();$id(missing[0].id)?.scrollIntoView({block:'center',behavior:'smooth'});}
+  return missing;
+ }
+ function refreshImagePreview(){
+  const input=$id('ki-field-url_gambar_eksternal'),box=$id('ki-image-preview');if(!input||!box)return;
+  const {url:raw,old}=effectiveImageUrl();let url='';
+  if(/^https?:\/\//i.test(raw)){try{const parsed=new URL(raw);if(['http:','https:'].includes(parsed.protocol)&&!parsed.username&&!parsed.password)url=parsed.href;}catch(e){}}
+  box.innerHTML='';
+  if(!url){const span=document.createElement('span');span.className='small text-muted';span.textContent='Belum ada URL gambar eksternal yang dapat ditampilkan.';box.append(span);return;}
+  const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener noreferrer';
+  const img=document.createElement('img');img.src=url;img.alt='Pratinjau gambar eksternal';img.loading='lazy';img.decoding='async';img.referrerPolicy='no-referrer';img.className='img-thumbnail';
+  img.addEventListener('error',()=>{const warn=document.createElement('div');warn.className='small text-danger';warn.textContent='Thumbnail tidak dapat dimuat. Periksa URL atau buka gambar langsung.';link.textContent='Buka URL gambar';box.replaceChildren(warn,link);});
+  link.append(img);box.append(link);
+  const note=document.createElement('div');note.className='small text-muted mt-1';note.textContent=old?'Pratinjau memakai gambar lama yang dipertahankan. Klik untuk membuka URL penuh.':'Klik gambar untuk membuka URL penuh.';box.append(note);
+ }
  async function save(){
+  const missing=refreshRequirements(true);
+  if(missing.length)throw new Error('Centang konfirmasi wajib: '+missing.map(v=>v.label).join(', ')+'.');
   const action=$id('ki-decision').value,fields={},choices={},relations={};
   Object.keys({...fieldDefaults,...current.row.draft.fields}).forEach(f=>{const el=$id('ki-field-'+f);if(el)fields[f]=el.value;});fields.id_lokasi=$id('ki-field-id_lokasi').value;
   root.querySelectorAll('.ki-choice').forEach(s=>choices[s.dataset.field]=s.value);
@@ -125,7 +167,7 @@
   const bibliografi=Array.from($id('ki-bibliografi').selectedOptions).map(o=>Number(o.value));
   const payload={row_id:Number(current.row.id),action,fields,choices,relations,structure,identifiers,location_history:locationHistory,bibliografi,target_id:Number(current.snapshot?.data.fields.id||0),revision:current.snapshot?.revision||'',location_confirmed:$id('ki-location-confirmed').checked,metadata_confirmed:$id('ki-metadata-confirmed').checked,duplicate_confirmed:$id('ki-duplicate-confirmed').checked,note:$id('ki-note').value};
   const fd=new FormData();fd.set('payload',JSON.stringify(payload));$id('ki-save').disabled=true;
-  try{const result=await api('review',{},fd);bootstrap.Modal.getOrCreateInstance(document.getElementById('ki-modal')).hide();message(result.message+(result.id?' Entri #'+result.id+'.':''));await queue();}finally{$id('ki-save').disabled=false;}
+  try{const result=await api('review',{},fd);bootstrap.Modal.getOrCreateInstance(document.getElementById('ki-modal')).hide();message(result.message+(result.id?' Entri #'+result.id+'.':''));await queue();}catch(e){if(/duplikat/i.test(e.message)){const el=$id('ki-duplicate-confirmed');el?.closest('label')?.classList.add('is-required-missing');el?.focus();}$id('ki-review-message').textContent=e.message;}finally{$id('ki-save').disabled=false;}
  }
  async function deleteBatch(){
   const id=Number($id('ki-batch').value);if(!id)throw new Error('Pilih batch impor terlebih dahulu.');
@@ -156,7 +198,8 @@
   if(e.target.closest('#ki-add-history')){$id('ki-history').insertAdjacentHTML('beforeend',historyRow());return;}
   if(e.target.closest('#ki-prev')){page--;safely(queue);}if(e.target.closest('#ki-next')){page++;safely(queue);}
  });
- root.addEventListener('change',e=>{if(e.target.id==='ki-decision')toggleFields();if(e.target.classList.contains('ki-map-select'))mappingStatus();if(e.target.classList.contains('ki-choice'))e.target.closest('.ki-field-row')?.classList.toggle('ki-selected',e.target.value!=='keep');});
+ root.addEventListener('change',e=>{if(e.target.id==='ki-decision'){toggleFields();refreshRequirements();refreshImagePreview();}if(e.target.classList.contains('ki-map-select'))mappingStatus();if(e.target.classList.contains('ki-choice')){e.target.closest('.ki-field-row')?.classList.toggle('ki-selected',e.target.value!=='keep');refreshRequirements();refreshImagePreview();}if(e.target.id&&e.target.id.endsWith('-confirmed'))refreshRequirements();});
+ root.addEventListener('input',e=>{if(e.target.id==='ki-field-url_gambar_eksternal')refreshImagePreview();});
  $id('ki-save').addEventListener('click',()=>safely(save,true));
  safely(()=>init());
 })();

@@ -60,6 +60,9 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #catalog-importer .ki-old{white-space:pre-wrap;overflow-wrap:anywhere;max-height:160px;overflow:auto;background:#f1f5f9;padding:8px;font-size:.9rem}
 #catalog-importer .ki-field-row{padding:12px 0;border-bottom:1px solid #e2e8f0}
 #catalog-importer #ki-review-message{max-width:75%;overflow-wrap:anywhere}
+#catalog-importer .ki-image-preview{overflow-wrap:anywhere}
+#catalog-importer .ki-image-preview img{width:150px;max-height:170px;object-fit:contain;background:#fff}
+#catalog-importer label.is-required-missing{background:#fff3cd;border-left:3px solid #dc3545;padding:2px 6px;border-radius:4px}
 #ki-modal{z-index:1070}body.modal-open:has(#ki-modal.show) .modal-backdrop{z-index:1060}
 #ki-modal .modal-content{background:#fff;color:#334155}
 #ki-modal .modal-body{max-height:calc(100vh - 260px);max-height:calc(100dvh - 260px);overflow-y:auto}
@@ -84,4 +87,4 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #ki-modal .ki-review-toolbar{display:flex;gap:8px;flex-wrap:wrap;background:#f8fafc}
 @media(max-width:767.98px){#catalog-importer .ki-step{padding:8px 4px;text-align:center}#catalog-importer .ki-step span{position:static;margin:0 auto 5px}#catalog-importer .ki-step small{display:none}#catalog-importer .ki-step strong{font-size:.75rem;overflow-wrap:normal;word-break:normal}#catalog-importer .ki-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
-<script src="<?= BASE_URL ?>/admin/assets/js/catalog-importer.js?v=3.1.71-catalog"></script>
+<script src="<?= BASE_URL ?>/admin/assets/js/catalog-importer.js?v=3.1.71-catalog-ui"></script>

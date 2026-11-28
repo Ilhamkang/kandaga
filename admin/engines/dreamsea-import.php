@@ -57,6 +57,9 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #dreamsea-importer .ds-source{white-space:pre-wrap;overflow-wrap:anywhere;max-height:220px;overflow:auto;background:#f8fafc;padding:12px;border:1px solid #e2e8f0}
 #dreamsea-importer .ds-old{white-space:pre-wrap;overflow-wrap:anywhere;max-height:150px;overflow:auto;background:#f1f5f9;padding:8px;font-size:.9rem}
 #dreamsea-importer #ds-review-message{max-width:75%;overflow-wrap:anywhere}
+#dreamsea-importer .ds-image-preview{overflow-wrap:anywhere}
+#dreamsea-importer .ds-image-preview img{width:150px;max-height:170px;object-fit:contain;background:#fff}
+#dreamsea-importer label.is-required-missing{background:#fff3cd;border-left:3px solid #dc3545;padding:2px 6px;border-radius:4px}
 #ds-modal{z-index:1070}body.modal-open:has(#ds-modal.show) .modal-backdrop{z-index:1060}
 #ds-modal .modal-content{background:#fff;color:#334155}
 #ds-modal .modal-body{max-height:calc(100vh - 200px);max-height:calc(100dvh - 200px);overflow-y:auto}
@@ -74,4 +77,4 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #dreamsea-importer .ds-summary button.is-active{background:#eff6ff;border-color:#2563eb}
 @media(max-width:767.98px){#dreamsea-importer .ds-step{padding:8px 4px;text-align:center}#dreamsea-importer .ds-step span{position:static;margin:0 auto 5px}#dreamsea-importer .ds-step small{display:none}#dreamsea-importer .ds-step strong{font-size:.75rem}#dreamsea-importer .ds-summary{grid-template-columns:repeat(2,minmax(0,1fr))}#ds-modal .modal-dialog{margin:8px}}
 </style>
-<script src="<?= BASE_URL ?>/admin/assets/js/dreamsea-importer.js?v=3.1.71-web"></script>
+<script src="<?= BASE_URL ?>/admin/assets/js/dreamsea-importer.js?v=3.1.71-web-ui"></script>
