@@ -19,7 +19,7 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
    <i class="fa-solid fa-file-csv metadata-engine-icon"></i><span><strong>Importer Katalog Cetak</strong><small>CSV · pemetaan metadata · antrean moderasi · merge</small></span><i class="fa-solid <?= $engine==='catalog'?'fa-circle-check':'fa-arrow-right' ?> ms-auto"></i>
   </a></div>
   <div class="col-md-6 mb-2"><a href="<?= BASE_URL ?>/admin/index.php?page=metadata-importer&amp;engine=web" class="metadata-engine <?= $engine==='web'?'is-active':'' ?>" <?= $engine==='web'?'aria-current="page"':'' ?>>
-   <i class="fa-solid fa-cloud-arrow-down metadata-engine-icon"></i><span><strong>Importer Web</strong><small>CSV hasil scraping · dedup identitas sumber · antrean moderasi</small></span><i class="fa-solid <?= $engine==='web'?'fa-circle-check':'fa-arrow-right' ?> ms-auto"></i>
+   <i class="fa-solid fa-cloud-arrow-down metadata-engine-icon"></i><span><strong>Importer Web</strong><small>CSV dari sumber web · dedup identitas sumber · antrean moderasi</small></span><i class="fa-solid <?= $engine==='web'?'fa-circle-check':'fa-arrow-right' ?> ms-auto"></i>
   </a></div>
  </div>
 </section>
@@ -32,6 +32,6 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 <?php if($engine==='catalog'): ?>
  <?php require __DIR__.'/catalog-importer.php'; ?>
 <?php else: ?>
- <div class="alert alert-info"><i class="fa-solid fa-circle-info me-1"></i>Importer Web memakai antrean dan moderasi per entri untuk CSV hasil scraping. Identitas sumber dipakai untuk deduplikasi; master Kandaga tidak dibuat otomatis. Antrean Importer Web terpisah dari Importer Katalog Cetak. Lihat <code>docs/dreamsea-normalized-import.md</code> untuk format CSV dan gaya terjemahan.</div>
+ <div class="alert alert-info"><i class="fa-solid fa-circle-info me-1"></i>Importer Web memakai antrean dan moderasi per entri untuk CSV dari sumber web mana pun. Identitas sumber dipakai untuk deduplikasi; master Kandaga tidak dibuat otomatis. Antrean Importer Web terpisah dari Importer Katalog Cetak. Lihat <code>docs/web-import-csv.md</code> untuk format CSV dan gaya terjemahan.</div>
  <div id="engine-container" class="card p-4 shadow-sm"><?php require __DIR__.'/engines/dreamsea-import.php'; ?></div>
 <?php endif; ?>

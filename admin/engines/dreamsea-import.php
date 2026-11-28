@@ -19,13 +19,14 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
     <div id="ds-setup" class="alert alert-warning" hidden>Jalankan <code>migrations/005_catalog_import.sql</code>, <code>migrations/013_catalog_structure_stage1.sql</code>, dan <code>migrations/018_web_import_batch_separation.sql</code> pada database aplikasi, lalu muat ulang.</div>
     <div id="ds-work" hidden>
       <div data-step-panel="upload">
-        <h5 class="mb-3">1. Pilih CSV hasil scraping</h5>
+        <h5 class="mb-3">1. Pilih CSV dari sumber web</h5>
         <div class="row g-2">
           <div class="mb-3 col-md-7"><label for="ds-file">CSV (koma, UTF-8; maksimal 10 MB / 5.000 entri)</label><div id="ds-dropzone" class="ds-dropzone"><i class="fa-solid fa-cloud-arrow-up mb-2"></i><p class="mb-2">Tarik CSV ke sini atau pilih berkas</p><input id="ds-file" class="form-control" type="file" accept=".csv,text/csv" required><small id="ds-file-info" class="d-block mt-2 text-muted">Belum ada berkas dipilih.</small></div></div>
           <div class="mb-3 col-md-5"><label for="ds-label">Nama sumber/batch</label><input id="ds-label" class="form-control" maxlength="255" value="Web — Indramayu (Jawa Barat)"><small class="form-text text-muted">Gunakan nama sumber/kota/proyek agar batch mudah dikenali.</small></div>
         </div>
         <button id="ds-inspect" type="button" class="btn btn-outline-primary"><i class="fa-solid fa-magnifying-glass me-1"></i>Baca CSV</button>
         <a class="btn btn-outline-secondary" href="<?= BASE_URL ?>/import-examples/dreamsea-normalized-template.csv" download><i class="fa-solid fa-download me-1"></i>Template CSV</a>
+        <a class="btn btn-outline-secondary" href="<?= BASE_URL ?>/docs/web-import-csv.md" target="_blank" rel="noopener"><i class="fa-solid fa-book me-1"></i>Panduan format CSV</a>
       </div>
       <div data-step-panel="preview" hidden>
         <div class="d-flex flex-wrap justify-content-between align-items-center mt-3"><h5>2. Pratinjau validasi</h5><span id="ds-preview-status" class="badge bg-secondary"></span></div>
@@ -57,6 +58,7 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #dreamsea-importer .ds-source{white-space:pre-wrap;overflow-wrap:anywhere;max-height:220px;overflow:auto;background:#f8fafc;padding:12px;border:1px solid #e2e8f0}
 #dreamsea-importer .ds-old{white-space:pre-wrap;overflow-wrap:anywhere;max-height:150px;overflow:auto;background:#f1f5f9;padding:8px;font-size:.9rem}
 #dreamsea-importer #ds-review-message{max-width:75%;overflow-wrap:anywhere}
+#dreamsea-importer .ds-history-block{border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc}
 #dreamsea-importer .ds-image-preview{overflow-wrap:anywhere}
 #dreamsea-importer .ds-image-preview img{width:150px;max-height:170px;object-fit:contain;background:#fff}
 #dreamsea-importer label.is-required-missing{background:#fff3cd;border-left:3px solid #dc3545;padding:2px 6px;border-radius:4px}
@@ -77,4 +79,4 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #dreamsea-importer .ds-summary button.is-active{background:#eff6ff;border-color:#2563eb}
 @media(max-width:767.98px){#dreamsea-importer .ds-step{padding:8px 4px;text-align:center}#dreamsea-importer .ds-step span{position:static;margin:0 auto 5px}#dreamsea-importer .ds-step small{display:none}#dreamsea-importer .ds-step strong{font-size:.75rem}#dreamsea-importer .ds-summary{grid-template-columns:repeat(2,minmax(0,1fr))}#ds-modal .modal-dialog{margin:8px}}
 </style>
-<script src="<?= BASE_URL ?>/admin/assets/js/dreamsea-importer.js?v=3.1.71-web-ui"></script>
+<script src="<?= BASE_URL ?>/admin/assets/js/dreamsea-importer.js?v=3.1.71-web-history"></script>

@@ -262,8 +262,16 @@ function dsApprove($input) {
     try {
         $row = kiRow($id, true, KI_ENGINE_WEB);
         if (!in_array($row['status'], ['pending', 'deferred'], true)) throw new InvalidArgumentException('Baris ini sudah diputuskan. Muat ulang antrean.');
+        $oldHistory = $row['draft']['location_history'] ?? [];
+        $history = kiLocationHistory($input, $oldHistory, dsSourceLabel($row['draft']['source']));
         if (in_array($action, ['rejected', 'deferred'], true)) {
-            kiAudit($row, $action, null, null, null, $input);
+            if ($history !== $oldHistory) {
+                $draft = $row['draft'];
+                $draft['location_history'] = $history;
+                kiQuery('UPDATE katalog_import_rows SET draft_json=? WHERE id=?', [kiJson($draft), $row['id']]);
+                $row['draft'] = $draft;
+            }
+            kiAudit($row, $action, null, ['location_history' => $oldHistory], ['location_history' => $history], $input);
             $conn->commit();
             return ['id' => null, 'action' => $action];
         }
@@ -338,7 +346,7 @@ function dsApprove($input) {
         // Riwayat lokasi dari sumber ditulis saat entri baru dibuat. Pada merge,
         // hanya ditambahkan bila entri tujuan belum punya riwayat lokasi sama sekali.
         $writeHistory = $action === 'created' || !kiQuery('SELECT id_naskah FROM katalog_location_history WHERE id_naskah=?', [$target])->get_result()->fetch_assoc();
-        if ($writeHistory) foreach ($row['draft']['location_history'] as $item) kiQuery('INSERT INTO katalog_location_history(id_naskah,location_kind,place_name,district,province,country,period_label,certainty,source_text,sort_order) VALUES(?,?,?,?,?,?,?,?,?,?)', [$target, $item['kind'], $item['place'], $item['district'], $item['province'], $item['country'], $item['period'], $item['certainty'], $item['source'], $item['sort_order']]);
+        if ($writeHistory) foreach ($history as $item) kiQuery('INSERT INTO katalog_location_history(id_naskah,location_kind,place_name,district,province,country,period_label,certainty,source_text,sort_order) VALUES(?,?,?,?,?,?,?,?,?,?)', [$target, $item['kind'], $item['place'], $item['district'], $item['province'], $item['country'], $item['period'], $item['certainty'], $item['source'], $item['sort_order']]);
         if (!kiQuery('SELECT source_key FROM katalog_import_sources WHERE source_key=?', [$row['source_key']])->get_result()->fetch_assoc()) kiQuery('INSERT INTO katalog_import_sources(source_key,katalog_id,import_row_id) VALUES(?,?,?)', [$row['source_key'], $target, $row['id']]);
         $after = dsSnapshot($target)['data'];
         kiAudit($row, $action, $target, $before, $after, $input);

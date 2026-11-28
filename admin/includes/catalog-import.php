@@ -319,6 +319,27 @@ function kiHtml($text) {
     $html=nl2br(htmlspecialchars($text,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8'),false);
     return mb_encode_numericentity($html,[0x80,0x10ffff,0,0x1fffff],'UTF-8');
 }
+function kiLocationHistory($input,$fallback=[],$sourceLabel='') {
+    $items=$input['location_history']??$fallback;
+    if(!is_array($items))throw new InvalidArgumentException('Riwayat lokasi tidak valid.');
+    $out=[];
+    foreach($items as $item) {
+        if(!is_array($item))continue;
+        $kind=trim((string)($item['kind']??'asal')) ?: 'asal';
+        if(!in_array($kind,['asal','ditemukan','sebelumnya'],true))throw new InvalidArgumentException('Location_Kind tidak dikenal.');
+        $certainty=trim((string)($item['certainty']??'belum_diketahui')) ?: 'belum_diketahui';
+        if(!in_array($certainty,['pasti','kemungkinan','dugaan','belum_diketahui'],true))throw new InvalidArgumentException('Location_Certainty tidak dikenal.');
+        $place=mb_substr(trim((string)($item['place']??'')),0,255);
+        $district=mb_substr(trim((string)($item['district']??'')),0,150);
+        $province=mb_substr(trim((string)($item['province']??'')),0,150);
+        $country=mb_substr(trim((string)($item['country']??'')),0,150);
+        if($place===''&&$district===''&&$province===''&&$country==='')continue;
+        $sort=filter_var($item['sort_order']??1,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]]) ?: 1;
+        $source=mb_substr(trim((string)($item['source']??'')) ?: trim((string)$sourceLabel),0,255);
+        $out[]=['kind'=>$kind,'place'=>$place,'district'=>$district,'province'=>$province,'country'=>$country,'period'=>mb_substr(trim((string)($item['period']??'')),0,150),'certainty'=>$certainty,'source'=>$source,'sort_order'=>$sort];
+    }
+    return $out;
+}
 function kiAudit($row,$action,$target,$before,$after,$decision) {
     kiQuery('INSERT INTO katalog_import_audit(import_row_id,action,katalog_id,before_json,after_json,decision_json,username) VALUES(?,?,?,?,?,?,?)',[$row['id'],$action,$target,$before===null?null:kiJson($before),$after===null?null:kiJson($after),kiJson($decision),$_SESSION['username']]);
     kiQuery('UPDATE katalog_import_rows SET status=?,target_id=?,reviewed_by=?,reviewed_at=NOW(),note=? WHERE id=?',[$action,$target,$_SESSION['username'],(string)($decision['note']??''),$row['id']]);
@@ -358,8 +379,16 @@ function kiApprove($input) {
     try {
         $row=kiRow($id,true,KI_ENGINE_CATALOG);
         if(!in_array($row['status'],['pending','deferred'],true)) throw new InvalidArgumentException('Baris ini sudah diputuskan. Muat ulang antrean.');
+        $oldHistory=$row['draft']['location_history']??[];
+        $history=kiLocationHistory($input,$oldHistory,$row['source_label']);
         if(in_array($action,['rejected','deferred'],true)) {
-            kiAudit($row,$action,null,null,null,$input);$conn->commit();return ['id'=>null,'action'=>$action];
+            if($history!==$oldHistory) {
+                $draft=$row['draft'];$draft['location_history']=$history;
+                kiQuery('UPDATE katalog_import_rows SET draft_json=? WHERE id=?',[kiJson($draft),$row['id']]);
+                $row['draft']=$draft;
+            }
+            kiAudit($row,$action,null,['location_history'=>$oldHistory],['location_history'=>$history],$input);
+            $conn->commit();return ['id'=>null,'action'=>$action];
         }
         if($row['draft']['source']['Status_Sumber']==='berita') throw new InvalidArgumentException('Berita adanya naskah belum dapat diterbitkan. Tunda sampai identitas bendanya terverifikasi; siapkan CSV baru berstatus deskriptif.');
         if(kiLinked($row['source_key'])) throw new InvalidArgumentException('Identitas sumber ini sudah diimpor. Tidak disimpan ulang.');
@@ -453,21 +482,6 @@ function kiApprove($input) {
             $scheme=trim((string)($item['scheme']??'')); $value=trim((string)($item['value']??''));
             if($scheme===''||$value==='')continue;
             $identifiers[]=['scheme'=>mb_substr($scheme,0,64),'value'=>mb_substr($value,0,255),'source'=>mb_substr(trim((string)($item['source']??'')) ?: $row['source_label'],0,255),'primary'=>!empty($item['primary'])];
-        }
-        $history=[];
-        foreach((array)($input['location_history']??($row['draft']['location_history']??[])) as $item) {
-            if(!is_array($item))continue;
-            $kind=trim((string)($item['kind']??'asal')) ?: 'asal';
-            if(!in_array($kind,['asal','ditemukan','sebelumnya'],true))throw new InvalidArgumentException('Location_Kind tidak dikenal.');
-            $certainty=trim((string)($item['certainty']??'belum_diketahui')) ?: 'belum_diketahui';
-            if(!in_array($certainty,['pasti','kemungkinan','dugaan','belum_diketahui'],true))throw new InvalidArgumentException('Location_Certainty tidak dikenal.');
-            $sort=filter_var($item['sort_order']??1,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]]) ?: 1;
-            $history[]=[
-                'kind'=>$kind,'place'=>mb_substr(trim((string)($item['place']??'')),0,255),
-                'district'=>mb_substr(trim((string)($item['district']??'')),0,150),'province'=>mb_substr(trim((string)($item['province']??'')),0,150),
-                'country'=>mb_substr(trim((string)($item['country']??'')),0,150),'period'=>mb_substr(trim((string)($item['period']??'')),0,150),
-                'certainty'=>$certainty,'source'=>mb_substr(trim((string)($item['source']??'')) ?: $row['source_label'],0,255),'sort_order'=>$sort
-            ];
         }
         kiEncoding($resolved);
         if($action==='created') {

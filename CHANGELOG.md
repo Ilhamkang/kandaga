@@ -17,7 +17,7 @@
 - Menolak pembuatan otomatis master `tb_bahasa`, `tb_aksara`, `tb_alas_tulis`, dan `tb_lokasi`; istilah belum dikenal harus dipilih manual dari data Kandaga yang sudah ada.
 - Menambahkan pratinjau metadata mentah, perbandingan entri dengan pemeriksaan revisi, charset preflight, validasi URL, dan audit lengkap pada `katalog_import_audit`.
 - Menonaktifkan endpoint AJAX lama di `admin/engines/dreamsea-import.php`; aksi baru berada di `admin/actions/dreamsea-import.php` dengan otorisasi admin dan CSRF.
-- Menambahkan `import-examples/dreamsea-normalized-template.csv` dan `docs/dreamsea-normalized-import.md` dengan format kolom baru serta gaya terjemahan Kandaga.
+- Menambahkan `import-examples/dreamsea-normalized-template.csv` dan `docs/web-import-csv.md` dengan format kolom baru serta gaya terjemahan Kandaga.
 - Rilis code-only tanpa migrasi SQL; tabel staging `005` dan struktur `013` sudah tersedia sejak rilis sebelumnya.
 
 # v3.1.69 — Perapian kontrak layout dan nesting modul
