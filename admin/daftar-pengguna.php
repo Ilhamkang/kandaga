@@ -22,10 +22,8 @@ $result = $conn->query($query);
 <div class="card shadow-sm border-0">
     <div class="card-header bg-white py-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0 fw-bold" style="color: #0f2042;">
-                <i class="fa-solid fa-users me-2"></i>Manajemen Pengguna
-            </h5>
-            <a href="index.php?page=pendaftaran-user" class="btn btn-sm btn-primary" style="background-color: #0f2042; border:none;">
+            <h2 class="h5 mb-0"><i class="fa-solid fa-users me-2"></i>Manajemen Pengguna</h2>
+            <a href="index.php?page=pendaftaran-user" class="btn btn-sm btn-primary">
                 <i class="fa-solid fa-plus me-1"></i>Tambah User
             </a>
         </div>
@@ -100,18 +98,18 @@ $result = $conn->query($query);
             <div class="modal-body">
                 <input type="hidden" name="user_id" id="modal_user_id">
                 <div class="mb-3">
-                    <label>Username</label>
+                    <label class="form-label">Username</label>
                     <input type="text" class="form-control" id="modal_username" readonly>
                 </div>
                 <div class="mb-3">
-                    <label>Tentukan Peran</label>
+                    <label class="form-label">Tentukan Peran</label>
                     <select name="role" class="form-select" id="modal_role">
                         <option value="kontributor">Kontributor</option>
                         <option value="admin">Admin</option>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label>Status Verifikasi</label>
+                    <label class="form-label">Status Verifikasi</label>
                     <select name="status" class="form-select" id="modal_status">
                         <option value="pending">Pending</option>
                         <option value="verified">Verified</option>

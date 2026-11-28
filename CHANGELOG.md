@@ -1,3 +1,15 @@
+# v3.1.73 — Moderasi impor Web dan Katalog Cetak
+
+- Pencarian bibliografi pada kedua importer kini dapat diketik; label menampilkan judul, penyusun, dan tahun tanpa menambah endpoint atau CDN baru.
+- Saat membandingkan duplikat, moderator dapat memilih per detail: mempertahankan data lama, memakai draf yang diedit, atau menambahkan draf dengan atribusi sumber.
+- Pilihan serupa tersedia untuk lokasi serta relasi bahasa, aksara, dan alas tulis; nilai lama tidak lagi tertimpa tanpa keputusan.
+- Sumber yang sudah tertaut kini dapat dibandingkan dan digabung ke entri tujuan yang sama. Pembuatan entri baru tetap ditolak untuk identitas tersebut.
+- Kode inventaris yang sama tidak memblokir entri baru apabila identitas sumber berbeda; konfirmasi duplikat tetap wajib.
+- Validasi draf hanya dijalankan bila draf memang dipakai, sehingga memilih data lama tidak terhalang oleh draf yang bermasalah.
+- Antrean menampilkan penanda “Tersimpan” untuk entri yang dibuat atau digabung, lengkap dengan tautan ke entri katalog.
+- Ringkasan moderasi kini memuat badge “Dilewati” dan filter yang sesuai.
+- Rilis code-only tanpa migrasi baru; paket tetap membawa migrasi additif bawaan manifest (`min_from 3.1.70`).
+
 # v3.1.72 — Antrean impor yang dapat dibersihkan
 
 - Batch yang sudah diproses kini dapat dihapus setelah konfirmasi.

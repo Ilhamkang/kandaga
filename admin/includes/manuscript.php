@@ -3,6 +3,7 @@ require_once __DIR__ . '/request.php';
 require_once __DIR__ . '/upload.php';
 require_once __DIR__ . '/log-tracker.php';
 require_once __DIR__ . '/catalog-structure.php';
+require_once __DIR__ . '/../../includes/access-options.php';
 
 function kandagaIds($field) {
     $values = $_POST[$field] ?? [];
@@ -59,7 +60,7 @@ function kandagaSaveManuscript($editing = false) {
     try {
         $id = $editing ? filter_var($_POST['id'] ?? '', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) : 0;
         if ($editing && !$id) throw new InvalidArgumentException('ID naskah tidak valid.');
-        $fields = ['judul', 'id_lokasi', 'kode_inventaris', 'deskripsi_fisik', 'deskripsi_isi', 'kata_kunci', 'riwayat_naskah', 'penyedia_akses', 'url_web', 'url_repositori', 'iiif_manifest', 'url_pdf', 'url_gambar_eksternal'];
+        $fields = ['judul', 'id_lokasi', 'kode_inventaris', 'deskripsi_fisik', 'deskripsi_isi', 'kata_kunci', 'riwayat_naskah', 'penyedia_akses', 'url_web', 'url_repositori', 'iiif_manifest', 'url_pdf', 'url_gambar_eksternal', 'mode_akses_fisik', 'pihak_kontak', 'status_arsip_digital', 'keterangan_arsip_digital'];
         $values = [];
         foreach ($fields as $field) {
             if (isset($_POST[$field]) && !is_string($_POST[$field])) throw new InvalidArgumentException('Format ' . $field . ' tidak valid.');
@@ -70,7 +71,7 @@ function kandagaSaveManuscript($editing = false) {
         // empty value compatible with existing installations and show a
         // neutral placeholder in public views.
         if ($values[0] === '') throw new InvalidArgumentException('Judul wajib diisi.');
-        foreach ([0, 2, 5, 8, 9, 10, 11, 12] as $index) {
+        foreach ([0, 2, 5, 8, 9, 10, 11, 12, 13, 14, 15] as $index) {
             if (mb_strlen($values[$index], 'UTF-8') > 255) throw new InvalidArgumentException('Isi ' . $fields[$index] . ' maksimal 255 karakter.');
         }
         $values[1] = filter_var($values[1], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
@@ -78,6 +79,11 @@ function kandagaSaveManuscript($editing = false) {
         foreach ([8, 9, 10, 11, 12] as $index) {
             if ($values[$index] !== '' && (!filter_var($values[$index], FILTER_VALIDATE_URL) || !in_array(strtolower(parse_url($values[$index], PHP_URL_SCHEME) ?? ''), ['http', 'https'], true))) throw new InvalidArgumentException('URL ' . $fields[$index] . ' harus menggunakan http atau https.');
         }
+        if ($values[13] !== '' && !array_key_exists($values[13], kandagaAccessModeOptions())) throw new InvalidArgumentException('Mode akses fisik tidak valid.');
+        if ($values[15] !== '' && !array_key_exists($values[15], kandagaDigitalStatusOptions())) throw new InvalidArgumentException('Status arsip digital tidak valid.');
+        $values[14] = trim(strip_tags($values[14]));
+        $values[16] = trim(strip_tags($values[16]));
+        if (mb_strlen($values[16], 'UTF-8') > 500) throw new InvalidArgumentException('Isi keterangan arsip digital maksimal 500 karakter.');
         $conn->begin_transaction(); $transaction = true;
         $old = null;
         if ($editing) {
@@ -95,7 +101,7 @@ function kandagaSaveManuscript($editing = false) {
         $image = $newFile ?? ($old['gambar'] ?? '');
         if (!$newFile && $values[12] !== '' && $values[12] !== ($old['url_gambar_eksternal'] ?? '')) $image = '';
         $values[] = $image;
-        $types = 'sissssssssssss';
+        $types = 'si' . str_repeat('s', count($fields) - 2);
         $username = $_SESSION['username'];
         if ($editing) {
             $assignments = implode(', ', array_map(fn($name) => "$name = ?", $fields));

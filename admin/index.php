@@ -16,6 +16,23 @@ $page = $_GET['page'] ?? 'dashboard';
 if ($page === 'catalog-importer') { $page = 'metadata-importer'; $_GET['engine'] = 'catalog'; }
 if (in_array($page, ['tampil-lokasi', 'form-lokasi', 'entri_katalog'], true)) $page = 'manage-referensi';
 
+// Shared styles are loaded once by the shell; page styles keep their original
+// cascade position just before the token bridge in admin-theme.css.
+$adminSharedStyles = [
+    'admin/assets/css/admin-form.css',
+    'admin/assets/css/admin-log.css',
+    'admin/assets/css/admin-importer.css',
+    'admin/assets/css/admin-dashboard.css',
+    'admin/assets/css/admin-statistik.css',
+    'admin/assets/css/admin-settings.css',
+    'admin/assets/css/admin-user-status.css',
+];
+$adminPageStyles = [
+    'inbox' => ['admin/assets/css/style-inbox.css'],
+    'feedback-naskah' => ['admin/assets/css/style-inbox.css', 'admin/assets/css/feedback-naskah.css'],
+    'update' => ['admin/assets/css/update-center.css'],
+];
+
 // Maintenance Mode Check
 if (file_exists(ROOT_PATH . '/maintenance.lock') && ($page !== 'update')) {
     die("
@@ -99,9 +116,9 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <link rel="icon" type="image/png" href="<?= BASE_URL ?>/assets/images/favicon.png">
     <link rel="shortcut icon" type="image/png" href="<?= BASE_URL ?>/assets/images/favicon.png">
-    <link rel="stylesheet" href="assets/css/style-index-admin.css">
-    <link rel="stylesheet" href="assets/css/select2.min.css" />
-    <link rel="stylesheet" href="<?= BASE_URL ?>/admin/assets/css/goah-theme.css?v=3.1.5">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/admin/assets/css/style-index-admin.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/admin/assets/css/select2.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/admin/assets/css/goah-theme.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <script src="<?= BASE_URL ?>/assets/js/jquery-3.6.0.min.js"></script>
     <script>window.KANDAGA_CSRF = <?= json_encode($_SESSION['csrf_token']) ?>;</script>
     <script src="<?= BASE_URL ?>/admin/assets/js/request-security.js"></script>
@@ -112,6 +129,13 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
     <script src="<?= BASE_URL ?>/assets/js/mobile-detect.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
+<?php foreach ($adminSharedStyles as $adminStyle): ?>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/<?= htmlspecialchars($adminStyle, ENT_QUOTES, 'UTF-8') ?>?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+<?php endforeach; ?>
+<?php foreach ($adminPageStyles[$page] ?? [] as $adminPageStyle): ?>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/<?= htmlspecialchars($adminPageStyle, ENT_QUOTES, 'UTF-8') ?>?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+<?php endforeach; ?>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/admin/assets/css/admin-theme.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 </head>
 
 <body class="kandaga-module kandaga-admin-shell">
@@ -126,7 +150,7 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
     <nav class="navbar navbar-expand navbar-light fixed-top shadow-sm bg-white" style="z-index: 1050;">
         <div class="container-fluid">
             <button class="btn btn-link text-dark me-3" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
+                <i class="fa-solid fa-bars"></i>
             </button>
             <a class="navbar-brand d-flex align-items-center" href="index.php">
                 <img src="<?= BASE_URL ?>/assets/images/favicon.png" height="35" alt="Logo">
@@ -139,9 +163,9 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                         <img class="img-profile rounded-circle border" src="<?= $path_foto_user; ?>" style="width: 32px; height: 32px; object-fit: cover;">
                     </a>
                     <div class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="userDropdown" style="border-radius: 8px;">
-                        <a class="dropdown-item py-2" href="index.php?page=profil-user"><i class="fas fa-user me-2 text-gray-400"></i> Profil Saya</a>
+                        <a class="dropdown-item py-2" href="index.php?page=profil-user"><i class="fa-solid fa-user me-2 text-muted"></i> Profil Saya</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item py-2 text-danger" href="javascript:void(0)" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Keluar</a>
+                        <a class="dropdown-item py-2 text-danger" href="javascript:void(0)" onclick="logout()"><i class="fa-solid fa-right-from-bracket me-2"></i> Keluar</a>
                     </div>
                 </li>
             </ul>
@@ -230,14 +254,16 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                         <li class="breadcrumb-item active text-capitalize"><?= str_replace('_', ' ', str_replace('-', ' ', $page)); ?></li>
                     </ol>
                 </nav>
-                <?php
-                $file_path = __DIR__ . '/' . $page . ".php";
-                if (file_exists($file_path)) {
-                    include($file_path);
-                } else {
-                    echo "<div class='card border-0 shadow-sm p-5 text-center'><h4>Modul '$page' tidak ditemukan.</h4></div>";
-                }
-                ?>
+                <div id="adminModule" class="admin-module-surface" data-page="<?= htmlspecialchars($page, ENT_QUOTES, 'UTF-8') ?>">
+                    <?php
+                    $file_path = __DIR__ . '/' . $page . ".php";
+                    if (file_exists($file_path)) {
+                        include($file_path);
+                    } else {
+                        echo "<div class='card border-0 shadow-sm p-5 text-center'><h4>Modul '$page' tidak ditemukan.</h4></div>";
+                    }
+                    ?>
+                </div>
             </div>
         </main>
     </div>
@@ -340,10 +366,10 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
     });
 
     function logout() {
-        Swal.fire({ title: 'Keluar Sistem?', text: "Yakin ingin keluar?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#0f2345', confirmButtonText: 'Ya, Keluar' }).then((result) => { if (result.isConfirmed) { window.location.href = "logout.php"; } });
+        Swal.fire({ title: 'Keluar Sistem?', text: "Yakin ingin keluar?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#0f766e', confirmButtonText: 'Ya, Keluar' }).then((result) => { if (result.isConfirmed) { window.location.href = "logout.php"; } });
     }
 </script>
 
-<script src="<?= BASE_URL ?>/admin/assets/js/goah-theme.js?v=3.1.5"></script>
+<script src="<?= BASE_URL ?>/admin/assets/js/goah-theme.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

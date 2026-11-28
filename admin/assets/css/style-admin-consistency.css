@@ -19,7 +19,7 @@ body.kandaga-module #kontenUtama h3,
 body.kandaga-module #kontenUtama h4,
 body.kandaga-module #kontenUtama h5,
 body.kandaga-module #kontenUtama h6 {
-    color: #172554;
+    color: var(--kandaga-heading);
     font-weight: var(--kandaga-weight-bold);
     letter-spacing: -.01em;
 }
@@ -33,7 +33,7 @@ body.kandaga-module #kontenUtama label,
 body.kandaga-module #kontenUtama .form-label {
     font-size: var(--kandaga-text-sm);
     font-weight: var(--kandaga-weight-semibold);
-    color: #334155;
+    color: var(--kandaga-text);
 }
 
 body.kandaga-module #kontenUtama .form-control,
@@ -68,7 +68,7 @@ body.kandaga-module #kontenUtama .card,
 body.kandaga-module #kontenUtama .section-card,
 body.kandaga-module #kontenUtama .form-section {
     border-color: var(--kandaga-border);
-    border-radius: 12px;
+    border-radius: var(--kandaga-radius-lg);
 }
 
 body.kandaga-module #kontenUtama code,
@@ -106,10 +106,6 @@ body.kandaga-module .audit-timestamp {
 }
 
 @media (max-width: 575.98px) {
-    body.kandaga-module #kontenUtama h1 { font-size: 1.5rem !important; }
-    body.kandaga-module #kontenUtama h2 { font-size: 1.3rem !important; }
-    body.kandaga-module #kontenUtama h3 { font-size: 1.15rem !important; }
-    body.kandaga-module #kontenUtama h4 { font-size: 1rem !important; }
     body.kandaga-module #kontenUtama .table { font-size: .82rem; }
     body.kandaga-module #kontenUtama .table thead th { font-size: .7rem; }
 }

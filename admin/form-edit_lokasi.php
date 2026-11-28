@@ -14,22 +14,10 @@ if (!$data) {
 }
 ?>
 
-<style>
-    .page-header { margin-bottom: 1.5rem; }
-    .page-title { font-weight: 700; color: #334155; }
-    .form-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 25px; border: none; margin-bottom: 2rem; }
-    .section-title { font-size: 1.1rem; font-weight: 600; color: #2563eb; margin-bottom: 1.5rem; display: flex; align-items: center; border-bottom: 2px solid #eff6ff; padding-bottom: 10px; }
-    .section-title i { margin-right: 10px; }
-    .mb-3 label { font-weight: 600; color: #475569; font-size: 0.9rem; margin-bottom: 8px; }
-    .form-control, .form-select { border-radius: 8px; border: 1px solid #e2e8f0; padding: 10px 15px; }
-    .sticky-submit { background: #f8fafc; padding: 15px 25px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; }
-    .preview-img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #e2e8f0; margin-bottom: 10px; }
-</style>
-
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid py-4"><?php endif; ?>
-    <div class="page-header">
-        <h2 class="page-title">Edit Lokasi Koleksi</h2>
-        <p class="text-muted small">Perbarui data institusi atau perpustakaan penyimpan naskah.</p>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface py-4"><?php endif; ?>
+    <div class="admin-page-header">
+        <h1>Edit Lokasi Koleksi</h1>
+        <p>Perbarui data institusi atau perpustakaan penyimpan naskah.</p>
     </div>
 
     <form id="formEditLokasi" enctype="multipart/form-data">
@@ -40,7 +28,7 @@ if (!$data) {
             <div class="row">
                 <div class="col-md-12 mb-3">
                     <div class="mb-3">
-                        <label>Nama Tempat / Institusi</label>
+                        <label class="form-label">Nama Tempat / Institusi</label>
                         <input type="text" class="form-control" name="nama_tempat"
                                value="<?= htmlspecialchars($data['nama_tempat']) ?>" required>
                     </div>
@@ -48,7 +36,7 @@ if (!$data) {
 
                 <div class="col-md-6 mb-3">
                     <div class="mb-3">
-                        <label>Negara</label>
+                        <label class="form-label">Negara</label>
                         <input type="text" class="form-control" name="negara" list="listNegara"
                                value="<?= htmlspecialchars($data['negara'] ?? '') ?>" required>
                         <datalist id="listNegara">
@@ -64,7 +52,7 @@ if (!$data) {
 
                 <div class="col-md-6 mb-3">
                     <div class="mb-3">
-                        <label>Foto Lokasi</label><br>
+                        <label class="form-label">Foto Lokasi</label><br>
                         <?php
                         $path_foto = !empty($data['foto_lokasi']) ? "../assets/images/" . $data['foto_lokasi'] : "../assets/images/lokasi-placeholder.png";
                         ?>
@@ -80,14 +68,14 @@ if (!$data) {
 
                 <div class="col-md-12 mb-3">
                     <div class="mb-3">
-                        <label>Alamat Lengkap</label>
+                        <label class="form-label">Alamat Lengkap</label>
                         <textarea class="form-control" name="alamat" rows="2" placeholder="Masukkan alamat lengkap lokasi..."><?= htmlspecialchars($data['alamat'] ?? '') ?></textarea>
                     </div>
                 </div>
 
                 <div class="col-md-12 mb-3">
                     <div class="mb-3">
-                        <label>Deskripsi Singkat</label>
+                        <label class="form-label">Deskripsi Singkat</label>
                         <textarea class="form-control" name="deskripsi" rows="4"><?= htmlspecialchars($data['deskripsi'] ?? '') ?></textarea>
                     </div>
                 </div>
@@ -108,7 +96,7 @@ if (!$data) {
         let btn = $('#btnUpdateLokasi');
         let formData = new FormData(this);
 
-        btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Memproses...');
+        btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Memproses...');
 
         $.ajax({
             url: 'actions/proses-edit_lokasi.php',

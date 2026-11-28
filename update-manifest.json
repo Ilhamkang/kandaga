@@ -67,12 +67,8 @@
         "admin\/assets\/css\/goah-theme.css": "020d56680d668a698bb565cf0371cc0c6974ee89943b63e1a7921e3435b2917a",
         "admin\/assets\/css\/select2.min.css": "cda4a81c187015d95ed2c71f1841540b08203cdec5fa2a7d5d1825a3c2166f8c",
         "admin\/assets\/css\/style-admin-consistency.css": "ee80f539dcc5258627cd16cc24ffd015ddd94725606b2190e06355009e0631a0",
-        "admin\/assets\/css\/style-dashboard.css": "ad97db5f79575e6b0f6af044c851d6cdecc33ce21bf23552dd995ab3be5607e5",
         "admin\/assets\/css\/style-inbox.css": "70e3abec3a29c995c59549a76b419902c261e0a20f02397229b23d1d45463d53",
         "admin\/assets\/css\/style-index-admin.css": "9f9ba9822418a2faa6295507ca65a9dadd4c8e273160f50ed66b6d7a503c8cac",
-        "admin\/assets\/css\/style-kurasi-koleksi.css": "fc394dd73d3a887e9dcd05da886c46f0492eeee9c212c86e87bacd8d6709c74e",
-        "admin\/assets\/css\/style-tampil-lokasi.css": "19fdc13a6bc962720fc9388249f3afb43ee98d2edea265f122ec64378741f5ca",
-        "admin\/assets\/css\/style-tampil-naskah.css": "117d985100a10f6a52ac8e60b1686a5a90120450b25899462b0f802270dbd8f8",
         "admin\/assets\/css\/update-center.css": "b69567bcecb6b7c50a31449ded5fe3dcc44a57dc560eaa6cf98976954bf9eb5e",
         "admin\/assets\/js\/catalog-importer.js": "f3fe7491f4734125489430e67ff90a02282a79c469478d36226ba67cdbf16d9f",
         "admin\/assets\/js\/feedback-naskah.js": "76a7eb8a991d97b9fd382d1fd2fd913289674fa2ca3998201ccf41bc05a325a0",
@@ -441,9 +437,26 @@
                     "columns": ["import_row_id"]
                 }
             ]
+        },
+        {
+            "id": "020_catalog_access_metadata",
+            "path": "migrations/020_catalog_access_metadata.sql",
+            "sha256": "7b61a11874faab372aa5ca2f02699dc007409f2798b476082148951e2e0c25cc",
+            "idempotent": true,
+            "backward_compatible": true,
+            "checks": [
+                {
+                    "table": "katalog",
+                    "columns": ["mode_akses_fisik", "pihak_kontak", "status_arsip_digital", "keterangan_arsip_digital"]
+                }
+            ]
         }
     ],
     "delete": [
+        "admin\/assets\/css\/style-dashboard.css",
+        "admin\/assets\/css\/style-kurasi-koleksi.css",
+        "admin\/assets\/css\/style-tampil-lokasi.css",
+        "admin\/assets\/css\/style-tampil-naskah.css",
         "assets\/js\/dompdf\/AUTHORS.md",
         "assets\/js\/dompdf\/LICENSE.LGPL",
         "assets\/js\/dompdf\/README.md",

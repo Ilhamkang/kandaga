@@ -37,6 +37,15 @@ require_once __DIR__ . '/../includes/version.php';
                 <p>Inisiasi perancangan dimulai tahun 2023 atas dukungan program <b>Fellowship Lingling Wiyadharma</b> dari Scaliger Institut di Universitas Leiden, Belanda dan Masyarakat Pernaskahan Nusantara (Manassa). Tahap awal pengumpulan informasi melibatkan koleksi naskah Sunda dari Perpustakaan Universitas Leiden, yang kemudian dikembangkan dengan data dari berbagai katalog institusi lainnya secara bertahap.</p>
 
                 <p>Dalam tahap awal pengembangan platform, kode disusun secara menyeluruh (<i>fullstack</i>) oleh Ilham Nurwansah. Entri katalog dan informasi metadata didukung oleh para <a href="<?= BASE_URL ?>/kontributor">kontributor</a> yang berdedikasi menyediakan informasi pernaskahan untuk kepentingan publik. </p>
+
+                <hr>
+
+                <h4><i class="fa-solid fa-handshake me-2 text-primary"></i> Kolaborasi Metadata Naskah Sunda</h4>
+                <p>KANDAGA tumbuh dari keyakinan bahwa naskah Sunda bukan milik satu lembaga saja, melainkan warisan bersama yang dijaga oleh banyak tangan. Kami mengundang perpustakaan, museum, pesantren, lembaga kajian, komunitas, peneliti, dan pemilik naskah untuk berjalan bersama merawat serta membagikan cerita tentang naskah Sunda.</p>
+                <p>Kolaborasi tidak perlu dimulai dari hal yang besar. Sebuah koreksi kecil, katalog yang pernah disusun, ingatan tentang pemilik naskah, atau petunjuk ke koleksi lain dapat menjadi bagian yang sangat berarti. Setiap kontribusi membantu naskah yang selama ini tersembunyi dapat ditemukan, dipahami, dan dikenang kembali oleh generasi yang akan datang.</p>
+                <p>Kami percaya kerja sama ini memberi manfaat dua arah: lembaga dan pemilik naskah memperoleh ruang tampil serta jejak yang tertaut rapi, sementara KANDAGA mendapatkan kepercayaan dan kedalaman informasi untuk menjadi wadah bersama. Setiap data akan kami perlakukan dengan hormat, sesuai dengan kebijakan dan atribusi yang disepakati.</p>
+                <p class="mb-0">Silakan sampaikan minat berkolaborasi melalui <a href="<?= BASE_URL ?>/kontak.php">halaman kontak</a>. Kami dengan senang hati akan mendiskusikan bentuk kerja sama yang paling nyaman bagi semua pihak.</p>
+
                 <hr>
                 <h6 class="support-title">Dukungan Inisiasi</h6>
                 <div class="supporter-grid">

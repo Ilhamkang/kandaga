@@ -1,0 +1,14 @@
+/* Shared Goah activity/log presentation. */
+.card-custom {
+    border-radius: var(--kandaga-radius-lg);
+    overflow: hidden;
+}
+
+.header-custom,
+.card-header-custom {
+    background: var(--kandaga-surface-alt);
+    color: var(--kandaga-heading);
+    padding: 18px 20px;
+    font-weight: var(--kandaga-weight-bold);
+    border-bottom: 1px solid var(--kandaga-border);
+}

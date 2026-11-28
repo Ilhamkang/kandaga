@@ -9,10 +9,8 @@ if (($_SESSION['role'] ?? '') !== 'admin') {
 ?>
 
 <div class="card shadow-sm border-0 mb-4">
-    <div class="card-header bg-white border-bottom p-3">
-        <h6 class="mb-0 fw-bold text-dark">
-            <i class="fa-solid fa-user-plus text-primary me-2"></i>Tambah Pengguna Baru
-        </h6>
+    <div class="card-header bg-white border-bottom p-3 admin-page-header">
+        <h1><i class="fa-solid fa-user-plus me-2"></i>Tambah Pengguna Baru</h1>
     </div>
     <div class="card-body p-4">
         <form id="formTambahUser">
@@ -58,7 +56,7 @@ if (($_SESSION['role'] ?? '') !== 'admin') {
 
             <div class="mb-3 mt-3">
                 <button type="submit" id="btnUser" class="btn btn-primary px-4">
-                    <i class="fa-solid fa-save me-2"></i>Simpan Pengguna
+                    <i class="fa-solid fa-floppy-disk me-2"></i>Simpan Pengguna
                 </button>
             </div>
         </form>
@@ -84,7 +82,7 @@ $(document).ready(function() {
         e.preventDefault();
         const btn = $("#btnUser");
 
-        btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Memproses...');
+        btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin me-2"></i>Memproses...');
 
         $.ajax({
             url: 'actions/proses-tambah-user.php',
@@ -99,11 +97,11 @@ $(document).ready(function() {
                 } else {
                     Swal.fire('Gagal!', res.message, 'error');
                 }
-                btn.prop('disabled', false).html('<i class="fa-solid fa-save me-2"></i>Simpan Pengguna');
+                btn.prop('disabled', false).html('<i class="fa-solid fa-floppy-disk me-2"></i>Simpan Pengguna');
             },
             error: function() {
                 Swal.fire('Error', 'Terjadi kesalahan sistem.', 'error');
-                btn.prop('disabled', false).html('<i class="fa-solid fa-save me-2"></i>Simpan Pengguna');
+                btn.prop('disabled', false).html('<i class="fa-solid fa-floppy-disk me-2"></i>Simpan Pengguna');
             }
         });
     });

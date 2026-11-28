@@ -1,0 +1,284 @@
+/* Shared Goah metadata importer presentation.
+ * Engine IDs remain in markup; styling lives here instead of inline blocks.
+ */
+.metadata-hub .metadata-engine {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 100%;
+    padding: 18px;
+    border: 1px solid var(--kandaga-border);
+    border-radius: var(--kandaga-radius-lg);
+    background: var(--kandaga-card);
+    color: var(--kandaga-text);
+    text-decoration: none;
+    transition: background .15s, border-color .15s;
+}
+
+.metadata-hub .metadata-engine:hover,
+.metadata-hub .metadata-engine:focus {
+    border-color: var(--kandaga-primary);
+    background: var(--kandaga-primary-soft);
+}
+
+.metadata-hub .metadata-engine.is-active {
+    border: 2px solid var(--kandaga-primary);
+    background: var(--kandaga-primary-soft);
+    color: var(--kandaga-primary-strong);
+}
+
+.metadata-hub .metadata-engine small {
+    display: block;
+    color: var(--kandaga-muted);
+    margin-top: 4px;
+}
+
+.metadata-engine-icon { font-size: 1.7rem; }
+.metadata-engine span { min-width: 0; }
+
+#catalog-importer .ki-source,
+#dreamsea-importer .ds-source {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    max-height: 250px;
+    overflow: auto;
+    background: var(--kandaga-surface);
+    padding: 12px;
+    border: 1px solid var(--kandaga-border);
+}
+
+#dreamsea-importer .ds-source { max-height: 220px; }
+
+#catalog-importer .ki-old,
+#dreamsea-importer .ds-old {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    max-height: 160px;
+    overflow: auto;
+    background: var(--kandaga-surface-alt);
+    padding: 8px;
+    font-size: .9rem;
+}
+
+#dreamsea-importer .ds-old { max-height: 150px; }
+
+#catalog-importer .ki-field-row,
+#dreamsea-importer .ds-field-row {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--kandaga-border);
+}
+
+#catalog-importer .ki-history-block,
+#dreamsea-importer .ds-history-block {
+    border: 1px solid var(--kandaga-border);
+    border-radius: var(--kandaga-radius-md);
+    padding: 10px;
+    background: var(--kandaga-surface);
+}
+
+#catalog-importer #ki-review-message,
+#dreamsea-importer #ds-review-message {
+    max-width: 75%;
+    overflow-wrap: anywhere;
+}
+
+#catalog-importer .ki-image-preview,
+#dreamsea-importer .ds-image-preview { overflow-wrap: anywhere; }
+
+#catalog-importer .ki-image-preview img,
+#dreamsea-importer .ds-image-preview img {
+    width: 150px;
+    max-height: 170px;
+    object-fit: contain;
+    background: var(--kandaga-card);
+}
+
+#catalog-importer label.is-required-missing,
+#dreamsea-importer label.is-required-missing {
+    background: #fff3cd;
+    border-left: 3px solid var(--kandaga-danger);
+    padding: 2px 6px;
+    border-radius: var(--kandaga-radius-xs);
+}
+
+#dreamsea-importer .ds-choice:disabled { opacity: .55; }
+#dreamsea-importer .mb-3.ds-selected {
+    background: var(--kandaga-primary-soft);
+    border-left: 3px solid var(--kandaga-primary);
+    padding-left: 8px;
+    border-radius: var(--kandaga-radius-xs);
+}
+
+#ki-modal,
+#ds-modal { z-index: 1070; }
+body.modal-open:has(#ki-modal.show) .modal-backdrop,
+body.modal-open:has(#ds-modal.show) .modal-backdrop { z-index: 1060; }
+
+#ki-modal .modal-content,
+#ds-modal .modal-content {
+    background: var(--kandaga-card);
+    color: var(--kandaga-text);
+}
+
+#ki-modal .modal-body { max-height: calc(100vh - 260px); max-height: calc(100dvh - 260px); overflow-y: auto; }
+#ds-modal .modal-body { max-height: calc(100vh - 200px); max-height: calc(100dvh - 200px); overflow-y: auto; }
+#ki-modal label { font-weight: var(--kandaga-weight-semibold); }
+
+#catalog-importer .ki-review-toolbar,
+#ds-modal .ds-review-toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: var(--kandaga-surface);
+}
+
+#catalog-importer #ki-queue table,
+#dreamsea-importer #ds-queue table { min-width: 760px; }
+
+#catalog-importer #ki-queue tr.is-saved,
+#dreamsea-importer #ds-queue tr.is-saved { background: #f0fdf4; }
+
+#catalog-importer #ki-queue .badge,
+#dreamsea-importer #ds-queue .badge { font-size: .78rem; }
+
+#catalog-importer #ki-pagination,
+#dreamsea-importer #ds-pagination { gap: 8px; flex-wrap: wrap; }
+
+#catalog-importer .ki-map-select { width: 100%; }
+#catalog-importer .ki-preview-cell { max-width: 260px; max-height: 100px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .85rem; }
+#catalog-importer #ki-preview th,
+#catalog-importer #ki-preview td { min-width: 170px; }
+
+#catalog-importer .ki-field-row.ki-selected {
+    background: var(--kandaga-primary-soft);
+    border-left: 3px solid var(--kandaga-primary);
+}
+
+#catalog-importer .ki-steps,
+#dreamsea-importer .ds-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+#catalog-importer .ki-step,
+#dreamsea-importer .ds-step {
+    position: relative;
+    text-align: left;
+    padding: 12px 12px 12px 48px;
+    border: 1px solid var(--kandaga-border);
+    border-radius: 10px;
+    background: var(--kandaga-surface);
+    color: var(--kandaga-muted);
+}
+
+#catalog-importer .ki-step span,
+#dreamsea-importer .ds-step span {
+    position: absolute;
+    left: 12px;
+    top: 15px;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--kandaga-border);
+    color: var(--kandaga-text);
+}
+
+#catalog-importer .ki-step strong,
+#catalog-importer .ki-step small,
+#dreamsea-importer .ds-step strong,
+#dreamsea-importer .ds-step small { display: block; }
+
+#catalog-importer .ki-step.is-active,
+#dreamsea-importer .ds-step.is-active {
+    border-color: var(--kandaga-primary);
+    background: var(--kandaga-primary-soft);
+    color: var(--kandaga-primary-strong);
+}
+
+#catalog-importer .ki-step.is-active span,
+#dreamsea-importer .ds-step.is-active span {
+    background: var(--kandaga-primary);
+    color: #fff;
+}
+
+#catalog-importer .ki-step:disabled,
+#dreamsea-importer .ds-step:disabled { opacity: .55; cursor: not-allowed; }
+
+#catalog-importer .ki-dropzone,
+#dreamsea-importer .ds-dropzone {
+    padding: 18px;
+    border: 2px dashed var(--kandaga-border-strong);
+    background: var(--kandaga-surface);
+    border-radius: 10px;
+    text-align: center;
+}
+
+#catalog-importer .ki-dropzone > i,
+#dreamsea-importer .ds-dropzone > i {
+    font-size: 1.8rem;
+    color: var(--kandaga-primary);
+}
+
+#catalog-importer .ki-dropzone.is-dragging,
+#dreamsea-importer .ds-dropzone.is-dragging {
+    border-color: var(--kandaga-primary);
+    background: var(--kandaga-primary-soft);
+}
+
+#catalog-importer .ki-summary,
+#dreamsea-importer .ds-summary {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+}
+
+#catalog-importer .ki-summary button,
+#dreamsea-importer .ds-summary button {
+    padding: 14px;
+    text-align: left;
+    background: var(--kandaga-surface);
+    border: 1px solid var(--kandaga-border);
+    border-radius: 10px;
+    color: var(--kandaga-text);
+}
+
+#catalog-importer .ki-summary strong,
+#dreamsea-importer .ds-summary strong {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--kandaga-primary);
+}
+
+#catalog-importer .ki-summary button.is-active,
+#dreamsea-importer .ds-summary button.is-active {
+    background: var(--kandaga-primary-soft);
+    border-color: var(--kandaga-primary);
+}
+
+@media (max-width: 767.98px) {
+    #catalog-importer .card-body,
+    #dreamsea-importer .card-body { padding: 12px; }
+    #catalog-importer .ki-step,
+    #dreamsea-importer .ds-step { padding: 8px 4px; text-align: center; }
+    #catalog-importer .ki-step span,
+    #dreamsea-importer .ds-step span { position: static; margin: 0 auto 5px; }
+    #catalog-importer .ki-step small,
+    #dreamsea-importer .ds-step small { display: none; }
+    #catalog-importer .ki-step strong,
+    #dreamsea-importer .ds-step strong { font-size: .75rem; overflow-wrap: normal; word-break: normal; }
+    #catalog-importer .ki-summary,
+    #dreamsea-importer .ds-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #catalog-importer #ki-pagination > span,
+    #dreamsea-importer #ds-pagination > span { width: 100%; order: 3; text-align: center; }
+    #ki-modal .modal-dialog,
+    #ds-modal .modal-dialog { margin: 8px; }
+    #ki-modal .modal-header,
+    #ki-modal .modal-body,
+    #ki-modal .modal-footer,
+    #ds-modal .modal-header,
+    #ds-modal .modal-body,
+    #ds-modal .modal-footer { padding: 12px; }
+}

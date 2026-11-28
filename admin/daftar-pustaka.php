@@ -207,11 +207,11 @@ if ($stmt = $conn->prepare($query_str)) {
 }
 ?>
 
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid py-4"><?php endif; ?>
-    <div class="row mb-4 align-items-center">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface py-4"><?php endif; ?>
+    <div class="admin-page-header row mb-4 align-items-center">
         <div class="col-md-6">
-            <h3 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-bookmark text-primary me-2"></i>Daftar Pustaka & Bibliografi</h3>
-            <p class="text-muted small mb-0">Kelola rujukan referensi primer, sekunder, dan katalogisasi manuskrip ala Zotero.</p>
+            <h1><i class="fa-solid fa-bookmark me-2"></i>Daftar Pustaka &amp; Bibliografi</h1>
+            <p>Kelola rujukan referensi primer, sekunder, dan katalogisasi manuskrip ala Zotero.</p>
         </div>
         <div class="col-md-6 text-md-end mt-3 mt-md-0">
             <?php if ($isAdmin): ?><button class="btn btn-outline-success shadow-sm fw-bold px-3 me-2" data-bs-toggle="modal" data-bs-target="#modalImportRis">
@@ -249,7 +249,7 @@ if ($stmt = $conn->prepare($query_str)) {
                     </div>
                 </div>
                 <div class="col-md-2 mb-2 mb-md-0">
-                    <select name="f_kategori" class="form-select form-select-sm text-sm">
+                    <select name="f_kategori" class="form-select form-select-sm">
                         <option value="">-- Semua Kategori --</option>
                         <option value="katalog" <?= $f_kategori == 'katalog' ? 'selected' : '' ?>>Katalog</option>
                         <option value="referensi primer" <?= $f_kategori == 'referensi primer' ? 'selected' : '' ?>>Referensi Primer</option>
@@ -257,7 +257,7 @@ if ($stmt = $conn->prepare($query_str)) {
                     </select>
                 </div>
                 <div class="col-md-2 mb-2 mb-md-0">
-                    <select name="f_tipe" class="form-select form-select-sm text-sm">
+                    <select name="f_tipe" class="form-select form-select-sm">
                         <option value="">-- Semua Tipe Item --</option>
                         <option value="buku" <?= $f_tipe == 'buku' ? 'selected' : '' ?>>Buku (Monograf/Section)</option>
                         <option value="jurnal" <?= $f_tipe == 'jurnal' ? 'selected' : '' ?>>Jurnal Ilmiah</option>
@@ -305,7 +305,7 @@ if ($stmt = $conn->prepare($query_str)) {
                                     <span class="badge <?= $kat_badge ?> text-uppercase px-2 py-1 small fw-bold d-block text-center"><?= $row['kategori'] ?></span>
                                     <small class="text-muted d-block text-center mt-1"><i class="<?= $row['tipe_item'] == 'buku' ? 'fa-solid fa-book text-muted' : 'fa-solid fa-file-lines text-warning' ?>"></i> <?= ucfirst($row['tipe_item']) ?></small>
                                 </td>
-                                <td class="text-sm text-dark align-top">
+                                <td class="small text-dark align-top">
                                     <div class="mb-1 d-flex align-items-start"><?php if($cover=kandagaBibliographyCover($row)): ?><img src="<?= htmlspecialchars($cover) ?>" alt="Cover" style="width:42px;height:58px;object-fit:cover" class="rounded me-2"><?php endif; ?><div><?= $display_citation ?></div></div>
                                     <?php if(!empty($row['subjudul'])): ?>
                                         <small class="text-muted d-block">Subjudul: <?= htmlspecialchars($row['subjudul']) ?></small>
@@ -331,7 +331,7 @@ if ($stmt = $conn->prepare($query_str)) {
                                 </td>
                             </tr>
                         <?php endwhile; else: ?>
-                        <tr><td colspan="5" class="text-center py-4 text-muted">Belum ada entri data bibliografi pustaka.</td></tr>
+                        <tr><td colspan="5" class="empty-row">Belum ada entri data bibliografi pustaka.</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>
@@ -339,8 +339,8 @@ if ($stmt = $conn->prepare($query_str)) {
     </div>
 <?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
 
-<div class="modal fade" id="modalBib" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal fade" id="modalBib" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <form method="POST" action="" class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-light border-bottom">
                 <h5 class="modal-title fw-bold text-dark" id="modalTitleBib"><i class="fa-solid fa-book-open text-primary me-2"></i>Tambah Entri Pustaka</h5>
@@ -352,14 +352,14 @@ if ($stmt = $conn->prepare($query_str)) {
                 <div class="row g-2">
                     <div class="mb-3 col-md-6">
                         <label class="fw-bold text-secondary small mb-1">Tipe Item (Zotero-style)</label>
-                        <select name="tipe_item" id="tipe_item" class="form-select form-select-sm text-sm fw-bold bg-white" onchange="toggleTipeInput()" required>
+                        <select name="tipe_item" id="tipe_item" class="form-select form-select-sm fw-bold bg-white" onchange="toggleTipeInput()" required>
                             <option value="buku">📖 Buku / Bagian Buku</option>
                             <option value="jurnal">📰 Artikel Jurnal Ilmiah</option>
                         </select>
                     </div>
                     <div class="mb-3 col-md-6">
                         <label class="fw-bold text-secondary small mb-1">Kategori Dokumen</label>
-                        <select name="kategori" id="kategori" class="form-select form-select-sm text-sm" required>
+                        <select name="kategori" id="kategori" class="form-select form-select-sm" required>
                             <option value="referensi sekunder">Referensi Sekunder</option>
                             <option value="referensi primer">Referensi Primer</option>
                             <option value="katalog">Katalog</option>
@@ -372,15 +372,15 @@ if ($stmt = $conn->prepare($query_str)) {
                 <div class="row g-2">
                     <div class="col-md-12 mb-2">
                         <label class="fw-bold text-secondary small mb-1">Judul Utama</label>
-                        <input type="text" name="judul" id="judul" class="form-control form-control-sm text-sm" placeholder="Judul buku atau judul artikel" required>
+                        <input type="text" name="judul" id="judul" class="form-control form-control-sm" placeholder="Judul buku atau judul artikel" required>
                     </div>
                     <div class="col-md-6 mb-2">
                         <label class="fw-bold text-secondary small mb-1">Subjudul (Optional)</label>
-                        <input type="text" name="subjudul" id="subjudul" class="form-control form-control-sm text-sm">
+                        <input type="text" name="subjudul" id="subjudul" class="form-control form-control-sm">
                     </div>
                     <div class="col-md-6 mb-2">
                         <label class="fw-bold text-secondary small mb-1">Penyusun / Penulis (Author)</label>
-                        <input type="text" name="penyusun" id="penyusun" class="form-control form-control-sm text-sm" required>
+                        <input type="text" name="penyusun" id="penyusun" class="form-control form-control-sm" required>
                     </div>
                 </div>
 
@@ -388,23 +388,23 @@ if ($stmt = $conn->prepare($query_str)) {
                     <div class="row g-2 p-2 bg-light rounded mb-2 border border-dashed">
                         <div class="col-md-4 mb-2">
                             <label class="fw-bold text-muted small mb-1">Penerbit</label>
-                            <input type="text" name="penerbit" id="penerbit" class="form-control form-control-sm text-sm">
+                            <input type="text" name="penerbit" id="penerbit" class="form-control form-control-sm">
                         </div>
                         <div class="col-md-4 mb-2">
                             <label class="fw-bold text-muted small mb-1">Kota Tempat Terbit</label>
-                            <input type="text" name="kota_terbit" id="kota_terbit" class="form-control form-control-sm text-sm">
+                            <input type="text" name="kota_terbit" id="kota_terbit" class="form-control form-control-sm">
                         </div>
                         <div class="col-md-4 mb-2">
                             <label class="fw-bold text-muted small mb-1">Editor / Penyunting</label>
-                            <input type="text" name="editor" id="editor" class="form-control form-control-sm text-sm">
+                            <input type="text" name="editor" id="editor" class="form-control form-control-sm">
                         </div>
                         <div class="col-md-6 mb-0">
                             <label class="fw-bold text-muted small mb-1">Judul Bab / Section</label>
-                            <input type="text" name="judul_bab" id="judul_bab" class="form-control form-control-sm text-sm">
+                            <input type="text" name="judul_bab" id="judul_bab" class="form-control form-control-sm">
                         </div>
                         <div class="col-md-6 mb-0">
                             <label class="fw-bold text-muted small mb-1">Jilid / Edisi</label>
-                            <input type="text" name="jilid" id="jilid" class="form-control form-control-sm text-sm">
+                            <input type="text" name="jilid" id="jilid" class="form-control form-control-sm">
                         </div>
                     </div>
                 </div>
@@ -413,19 +413,19 @@ if ($stmt = $conn->prepare($query_str)) {
                     <div class="row g-2 p-2 bg-light rounded mb-2 border border-dashed">
                         <div class="col-md-6 mb-2">
                             <label class="fw-bold text-warning small mb-1">Nama Jurnal Berkala</label>
-                            <input type="text" name="nama_jurnal" id="nama_jurnal" class="form-control form-control-sm text-sm">
+                            <input type="text" name="nama_jurnal" id="nama_jurnal" class="form-control form-control-sm">
                         </div>
                         <div class="col-md-2 mb-2">
                             <label class="fw-bold text-warning small mb-1">Volume</label>
-                            <input type="text" name="volume" id="volume" class="form-control form-control-sm text-sm">
+                            <input type="text" name="volume" id="volume" class="form-control form-control-sm">
                         </div>
                         <div class="col-md-2 mb-2">
                             <label class="fw-bold text-warning small mb-1">Nomor / Issue</label>
-                            <input type="text" name="nomor" id="nomor" class="form-control form-control-sm text-sm">
+                            <input type="text" name="nomor" id="nomor" class="form-control form-control-sm">
                         </div>
                         <div class="col-md-2 mb-2">
                             <label class="fw-bold text-warning small mb-1">Halaman</label>
-                            <input type="text" name="halaman" id="halaman" class="form-control form-control-sm text-sm" placeholder="12-34">
+                            <input type="text" name="halaman" id="halaman" class="form-control form-control-sm" placeholder="12-34">
                         </div>
                     </div>
                 </div>
@@ -433,23 +433,23 @@ if ($stmt = $conn->prepare($query_str)) {
                 <div class="row g-2">
                     <div class="col-md-3 mb-2">
                         <label class="fw-bold text-secondary small mb-1">Tahun Terbit</label>
-                        <input type="text" name="tahun_terbit" id="tahun_terbit" class="form-control form-control-sm text-sm">
+                        <input type="text" name="tahun_terbit" id="tahun_terbit" class="form-control form-control-sm">
                     </div>
                     <div class="col-md-4 mb-2">
                         <label class="fw-bold text-secondary small mb-1">ISBN / ISSN</label>
-                        <input type="text" name="isbn_issn" id="isbn_issn" class="form-control form-control-sm text-sm">
+                        <input type="text" name="isbn_issn" id="isbn_issn" class="form-control form-control-sm">
                     </div>
                     <div class="col-md-5 mb-2">
                         <label class="fw-bold text-secondary small mb-1">DOI (Digital Object Identifier)</label>
-                        <input type="text" name="doi" id="doi" class="form-control form-control-sm text-sm" placeholder="10.xxxx/xxx">
+                        <input type="text" name="doi" id="doi" class="form-control form-control-sm" placeholder="10.xxxx/xxx">
                     </div>
                     <div class="col-md-12 mb-2">
                         <label class="fw-bold text-secondary small mb-1">URL / Tautan Akses</label>
-                        <input type="url" name="url" id="url" class="form-control form-control-sm text-sm">
+                        <input type="url" name="url" id="url" class="form-control form-control-sm">
                     </div>
                     <div class="col-md-12 mb-0">
                         <label class="fw-bold text-secondary small mb-1">Keterangan / Memo Riset</label>
-                        <textarea name="keterangan" id="keterangan" class="form-control text-sm" rows="2"></textarea>
+                        <textarea name="keterangan" id="keterangan" class="form-control" rows="2"></textarea>
                     </div>
                 </div>
             </div>
@@ -463,8 +463,8 @@ if ($stmt = $conn->prepare($query_str)) {
     </div>
 </div>
 
-<div class="modal fade" id="modalImportRis" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade" id="modalImportRis" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <form method="POST" action="" enctype="multipart/form-data" class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-light border-bottom">
                 <h5 class="modal-title fw-bold text-dark"><i class="fa-solid fa-file-import text-success me-2"></i>Import Bibliografi Zotero</h5>
@@ -477,7 +477,7 @@ if ($stmt = $conn->prepare($query_str)) {
 
                 <div class="mb-3">
                     <label class="fw-bold text-secondary small mb-1">Tentukan Kategori Hasil Import</label>
-                    <select name="kategori_import" class="form-select form-select-sm text-sm" required>
+                    <select name="kategori_import" class="form-select form-select-sm" required>
                         <option value="referensi sekunder" selected>Referensi Sekunder (Default)</option>
                         <option value="referensi primer">Referensi Primer</option>
                         <option value="katalog">Katalog</option>
@@ -488,7 +488,7 @@ if ($stmt = $conn->prepare($query_str)) {
                     <label class="fw-bold text-secondary small mb-1">Pilih File RIS (<code>.ris</code>)</label>
                     <div class="mb-3">
                         <input type="file" name="file_ris" class="form-control" id="customFileRis" accept=".ris" required>
-                        <label class="form-label text-sm" for="customFileRis">Pilih berkas...</label>
+                        <label class="form-label" for="customFileRis">Pilih berkas...</label>
                     </div>
                 </div>
             </div>

@@ -179,7 +179,7 @@
         max-height: min(34vh, 320px);
     }
 
-    /* All metadata tables stack, including Akses Digital and Lokasi Koleksi. */
+    /* All metadata tables stack, including Akses Naskah & Arsip Digital and Lokasi Koleksi. */
     .manuscript-detail-page .table-detail,
     .manuscript-detail-page .table-detail tbody,
     .manuscript-detail-page .table-detail tr,

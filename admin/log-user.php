@@ -35,12 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
 }
 ?>
 
-<style>
-    .card-custom { border-radius: 15px; overflow: hidden; }
-    .header-custom { background: #fdfbf7; color: #5d4037; padding: 18px 20px; font-weight: bold; border-bottom: 1px solid #eee; }
-</style>
-
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface"><?php endif; ?>
     <?php if (!empty($pesan_sukses)): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <?= $pesan_sukses ?>
@@ -50,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
 
     <div class="card shadow-sm border-0 card-custom">
         <div class="header-custom">
-            <i class="fa-solid fa-clock-rotate-left me-2"></i>Riwayat Aktivitas Pengguna
+            <h2 class="h5 mb-0"><i class="fa-solid fa-clock-rotate-left me-2"></i>Riwayat Aktivitas Pengguna</h2>
         </div>
         <div class="table-responsive">
             <table class="table table-hover m-0">
@@ -76,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_update'])) {
                         <td><code><?= $l['ip_address'] ?></code></td>
                     </tr>
                     <?php endwhile; else: ?>
-                    <tr><td colspan="4" class="text-center">Belum ada riwayat aktivitas.</td></tr>
+                    <tr><td colspan="4" class="empty-row">Belum ada riwayat aktivitas.</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>

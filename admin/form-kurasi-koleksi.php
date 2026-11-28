@@ -61,11 +61,11 @@ $tabel_query  = $conn->query("
 ");
 ?>
 
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid py-4"><?php endif; ?>
-    <div class="row mb-4">
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface py-4"><?php endif; ?>
+    <div class="admin-page-header row mb-4">
         <div class="col">
-            <h3 class="page-title fw-bold mb-0">Manajemen Kurasi Koleksi</h3>
-            <p class="text-muted small mb-0">Pengaturan data kurator, penempatan lokasi preservasi, dan dokumentasi naskah.</p>
+            <h1>Manajemen Kurasi Koleksi</h1>
+            <p>Pengaturan data kurator, penempatan lokasi preservasi, dan dokumentasi naskah.</p>
         </div>
     </div>
 
@@ -79,12 +79,12 @@ $tabel_query  = $conn->query("
     <ul class="nav nav-tabs border-bottom-0" id="kurasiTab" role="tablist">
         <li class="nav-item">
             <a class="nav-link active fw-bold" id="form-tab" data-bs-toggle="tab" href="#form" role="tab">
-                <i class="fas fa-plus-circle text-primary me-1"></i> Tambah Kurasi
+                <i class="fa-solid fa-circle-plus text-primary me-1"></i> Tambah Kurasi
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link fw-bold" id="list-tab" data-bs-toggle="tab" href="#list" role="tab">
-                <i class="fas fa-folder-open text-secondary me-1"></i> Daftar Transaksi Kurasi
+                <i class="fa-solid fa-folder-open text-secondary me-1"></i> Daftar Transaksi Kurasi
             </a>
         </li>
     </ul>
@@ -97,7 +97,7 @@ $tabel_query  = $conn->query("
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="fw-bold small text-secondary">Lokasi Penempatan Koleksi</label>
-                        <select name="id_lokasi" class="form-select text-sm" required>
+                        <select name="id_lokasi" class="form-select" required>
                             <option value="">-- Pilih Lembaga / Tempat Penyimpanan --</option>
                             <?php if ($lokasi_query): while ($row = $lokasi_query->fetch_assoc()): ?>
                                 <option value="<?= $row['id_lokasi'] ?>"><?= htmlspecialchars($row['nama_tempat']) ?></option>
@@ -106,7 +106,7 @@ $tabel_query  = $conn->query("
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="fw-bold small text-secondary">Petugas / Kurator Penanggung Jawab</label>
-                        <select name="id_user" class="form-select text-sm" required>
+                        <select name="id_user" class="form-select" required>
                             <option value="">-- Pilih Akun Anggota Kurator --</option>
                             <?php if ($user_query): while ($row = $user_query->fetch_assoc()): ?>
                                 <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['nama']) ?></option>
@@ -118,21 +118,21 @@ $tabel_query  = $conn->query("
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="fw-bold small text-secondary">Posisi / Tingkat Jabatan Kurasi</label>
-                        <input type="text" name="posisi_kurator" class="form-control text-sm" placeholder="Contoh: Kurator Utama, Filolog Madya" required>
+                        <input type="text" name="posisi_kurator" class="form-control" placeholder="Contoh: Kurator Utama, Filolog Madya" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="fw-bold small text-secondary">Tanggal Mulai Tugas</label>
-                        <input type="date" name="tanggal_mulai" class="form-control text-sm" value="<?= date('Y-m-d') ?>" required>
+                        <input type="date" name="tanggal_mulai" class="form-control" value="<?= date('Y-m-d') ?>" required>
                     </div>
                 </div>
 
                 <div class="mb-4">
                     <label class="fw-bold small text-secondary">Keterangan / Catatan Tambahan Laporan</label>
-                    <textarea name="keterangan" class="form-control text-sm" rows="3" placeholder="Tulis catatan deskriptif mengenai kondisi fisik ruang simpan atau cakupan digitalisasi..."></textarea>
+                    <textarea name="keterangan" class="form-control" rows="3" placeholder="Tulis catatan deskriptif mengenai kondisi fisik ruang simpan atau cakupan digitalisasi..."></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary px-4 fw-bold shadow-sm">
-                    <i class="fas fa-save me-1"></i> Simpan Data Kurasi
+                    <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Data Kurasi
                 </button>
             </form>
         </div>
@@ -154,7 +154,7 @@ $tabel_query  = $conn->query("
                             <?php while ($row = $tabel_query->fetch_assoc()): ?>
                             <tr>
                                 <td class="fw-bold text-dark"><?= htmlspecialchars($row['nama_tempat']) ?></td>
-                                <td><i class="fas fa-user-circle text-muted me-1"></i> <?= htmlspecialchars($row['nama']) ?></td>
+                                <td><i class="fa-solid fa-circle-user text-muted me-1"></i> <?= htmlspecialchars($row['nama']) ?></td>
                                 <td><span class="badge bg-info text-dark py-1 px-2 fw-normal"><?= htmlspecialchars($row['posisi_kurator']) ?></span></td>
                                 <td class="text-secondary small"><?= date('d-m-Y', strtotime($row['tanggal_mulai'])) ?></td>
                                 <td class="text-center">
@@ -162,15 +162,15 @@ $tabel_query  = $conn->query("
                                        class="btn btn-sm btn-light shadow-sm text-danger"
 
                                        title="Hapus Data">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </td>
                             </tr>
                             <?php endwhile; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="5" class="text-center py-5 text-muted">
-                                    <i class="fas fa-folder-open mb-2" style="font-size: 2.5rem; opacity: 0.3;"></i><br>Belum ada transaksi rekaman kurasi koleksi.
+                                <td colspan="5" class="empty-row">
+                                    <i class="fa-solid fa-folder-open mb-2" style="font-size: 2.5rem; opacity: 0.3;"></i><br>Belum ada transaksi rekaman kurasi koleksi.
                                 </td>
                             </tr>
                         <?php endif; ?>

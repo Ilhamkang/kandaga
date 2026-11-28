@@ -4,6 +4,7 @@ require_once __DIR__ . '/../config/bootstrap.php';
 // request. Keep the same authenticated page guard in both cases.
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/catalog-structure.php';
+require_once __DIR__ . '/../includes/access-options.php';
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
@@ -20,73 +21,22 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 <head>
 <meta charset="UTF-8">
 <title>Form Input Naskah</title>
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/module-fonts.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+<link rel="stylesheet" href="<?= BASE_URL ?>/admin/assets/css/admin-form.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+<link rel="stylesheet" href="<?= BASE_URL ?>/admin/assets/css/admin-theme.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 <?php endif; ?>
-
-<style>
-
-/* ================= PAGE TITLE ================= */
-.page-title{
-    font-weight:700;
-    color:#334155;
-    margin-bottom:20px;
-}
-
-/* ================= CARD ================= */
-.form-card{
-    background:#fff;
-    border-radius:12px;
-    padding:25px;
-    margin-bottom:20px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.05);
-    border:1px solid #e2e8f0;
-}
-
-/* ================= SECTION TITLE ================= */
-.section-title{
-    font-size:18px; /* lebih stabil dari 20px */
-    font-weight:700;
-    color:#2563eb;
-    margin-bottom:20px; /* FIX: sebelumnya "20 px" salah */
-    padding-bottom:8px;
-    border-bottom:2px solid #eff6ff;
-    display:flex;
-    align-items:center;
-}
-
-.section-title i{
-    margin-right:8px;
-}
-
-/* ================= FORM CONTROL ================= */
-.form-control,
-.form-select{
-    border-radius:8px;
-    font-size:13px;
-}
-
-/* ================= DYNAMIC ROW ================= */
-.dynamic-row{
-    display:flex;
-    gap:10px;
-    margin-bottom:10px;
-    align-items:center;
-}
-
-.dynamic-row select,
-.dynamic
-</style>
 
 <?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
 </head>
 
-<body>
+<body class="kandaga-module kandaga-admin-shell">
 <?php endif; ?>
 
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface"><?php endif; ?>
 
-<div class="page-title">
-<i class="fa-solid fa-book"></i> Tambah Naskah Baru
-</div>
+<div class="admin-page-header"><h1><i class="fa-solid fa-book me-2"></i>Tambah Naskah Baru</h1></div>
 
 <form id="formNaskah" method="POST" enctype="multipart/form-data">
 
@@ -94,11 +44,11 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 <div class="form-card">
 <div class="section-title"><i class="fa-solid fa-sitemap"></i> Struktur & Lokasi Historis <small class="text-muted ms-2">(opsional)</small></div>
 <div class="row">
-<div class="col-md-3 mb-3"><label>Tipe Record</label><select name="record_type" class="form-select"><option value="induk">Naskah induk</option><option value="unit">Unit naskah</option></select></div>
-<div class="col-md-5 mb-3"><label>Naskah Induk</label><select name="parent_id" class="form-select"><option value="">-- Tidak ada / record induk --</option><?php if ($parent_options): while($p=mysqli_fetch_assoc($parent_options)): ?><option value="<?= (int)$p['id'] ?>">#<?= (int)$p['id'] ?> · <?= htmlspecialchars($p['kode_inventaris'].' — '.$p['judul'], ENT_QUOTES, 'UTF-8') ?></option><?php endwhile; endif; ?></select></div>
-<div class="col-md-2 mb-3"><label>Label Unit</label><input type="text" name="unit_label" class="form-control" placeholder="Unit 1"></div>
-<div class="col-md-2 mb-3"><label>Urutan</label><input type="number" min="1" name="unit_order" class="form-control"></div>
-<div class="col-md-12 mb-3"><label>Catatan struktur</label><textarea name="structure_notes" class="form-control" rows="2"></textarea></div>
+<div class="col-md-3 mb-3"><label class="form-label">Tipe Record</label><select name="record_type" class="form-select"><option value="induk">Naskah induk</option><option value="unit">Unit naskah</option></select></div>
+<div class="col-md-5 mb-3"><label class="form-label">Naskah Induk</label><select name="parent_id" class="form-select"><option value="">-- Tidak ada / record induk --</option><?php if ($parent_options): while($p=mysqli_fetch_assoc($parent_options)): ?><option value="<?= (int)$p['id'] ?>">#<?= (int)$p['id'] ?> · <?= htmlspecialchars($p['kode_inventaris'].' — '.$p['judul'], ENT_QUOTES, 'UTF-8') ?></option><?php endwhile; endif; ?></select></div>
+<div class="col-md-2 mb-3"><label class="form-label">Label Unit</label><input type="text" name="unit_label" class="form-control" placeholder="Unit 1"></div>
+<div class="col-md-2 mb-3"><label class="form-label">Urutan</label><input type="number" min="1" name="unit_order" class="form-control"></div>
+<div class="col-md-12 mb-3"><label class="form-label">Catatan struktur</label><textarea name="structure_notes" class="form-control" rows="2"></textarea></div>
 </div>
 <hr><label class="fw-bold">Lokasi historis</label><div id="location-history-input"><div class="row location-history-row mb-2"><div class="col-md-2"><select name="location_history[0][kind]" class="form-select"><option value="asal">Asal</option><option value="ditemukan">Ditemukan</option><option value="sebelumnya">Lokasi sebelumnya</option></select></div><div class="col-md-3"><input name="location_history[0][place]" class="form-control" placeholder="Tempat/desa"></div><div class="col-md-2"><input name="location_history[0][district]" class="form-control" placeholder="Kota/kabupaten"></div><div class="col-md-2"><input name="location_history[0][province]" class="form-control" placeholder="Provinsi"></div><div class="col-md-2"><input name="location_history[0][country]" class="form-control" placeholder="Negara"></div><div class="col-md-1"><button type="button" class="btn btn-outline-primary" onclick="addHistoryRow()">+</button></div></div></div>
 <small class="text-muted">Lokasi sekarang tetap dipilih pada field Lembaga Penyimpan.</small>
@@ -112,12 +62,12 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <div class="row">
 <div class="col-md-12 mb-3">
-<label>Judul Naskah</label>
+<label class="form-label">Judul Naskah</label>
 <input type="text" name="judul" class="form-control" required>
 </div>
 
 <div class="col-md-6 mb-3">
-<label>Lembaga Penyimpan</label>
+<label class="form-label">Lembaga Penyimpan</label>
 <select name="id_lokasi" class="form-select select-clean select-location" data-placeholder="Ketik nama lembaga atau lokasi...">
 <option value="">-- Pilih Lokasi --</option>
 <?php while($l=mysqli_fetch_assoc($data_lokasi)): ?>
@@ -127,12 +77,12 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 </div>
 
 <div class="col-md-6 mb-3">
-<label>Kode Inventaris</label>
+<label class="form-label">Kode Inventaris</label>
 <input type="text" name="kode_inventaris" class="form-control">
 </div>
 
 <div class="col-md-12 mt-3">
-    <label>Riwayat Naskah</label>
+    <label class="form-label">Riwayat Naskah</label>
     <textarea
         id="riwayat_naskah"
         name="riwayat_naskah"
@@ -225,7 +175,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <!-- ================= DESKRIPSI FISIK ================= -->
 <div class="col-md-12 mt-3">
-    <label>Deskripsi Fisik</label>
+    <label class="form-label">Deskripsi Fisik</label>
     <textarea
         id="deskripsi_fisik"
         name="deskripsi_fisik"
@@ -277,15 +227,50 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
     class="form-control mb-3 tinymce"
     rows="10"></textarea>
 
-<label>Kata Kunci</label>
+<label class="form-label">Kata Kunci</label>
 <input type="text" name="kata_kunci" class="form-control">
 </div>
 
 <!-- ================= DIGITAL ACCESS ================= -->
 <div class="form-card">
     <div class="section-title">
-        <i class="fa-solid fa-link"></i> Akses Digital & Media
+        <i class="fa-solid fa-link"></i> Akses Naskah &amp; Arsip Digital
     </div>
+
+    <div class="row mb-3 align-items-center">
+        <label class="col-md-3 col-form-label">Akses Fisik</label>
+        <div class="col-md-9">
+            <select name="mode_akses_fisik" class="form-control">
+                <?= kandagaAccessOptionsMarkup(kandagaAccessModeOptions(), '') ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3 align-items-center">
+        <label class="col-md-3 col-form-label">Pihak yang Dapat Dihubungi</label>
+        <div class="col-md-9">
+            <input type="text" name="pihak_kontak" class="form-control" placeholder="Opsional, misalnya nama pemilik atau pengelola">
+        </div>
+    </div>
+
+    <div class="row mb-3 align-items-center">
+        <label class="col-md-3 col-form-label">Status Arsip Digital</label>
+        <div class="col-md-9">
+            <select name="status_arsip_digital" class="form-control">
+                <?= kandagaAccessOptionsMarkup(kandagaDigitalStatusOptions(), '') ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-md-3 col-form-label">Keterangan Arsip Digital</label>
+        <div class="col-md-9">
+            <textarea name="keterangan_arsip_digital" class="form-control" rows="2" maxlength="500" placeholder="Catatan tambahan yang dianggap relevan"></textarea>
+        </div>
+    </div>
+
+    <hr>
+    <p class="small text-muted">Tautan dan penyedia arsip digital</p>
 
     <!-- Penyedia Akses -->
     <div class="row mb-3 align-items-center">

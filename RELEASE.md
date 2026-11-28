@@ -1,16 +1,16 @@
-# Kandaga v3.1.73
+# Kandaga v3.1.74
 
-Penyempurnaan moderasi impor Web dan Katalog Cetak. Riwayat versi lama tetap tersedia di `CHANGELOG.md` dan GitHub Release.
+Penyatuan tampilan administrasi dan penambahan informasi akses naskah. Riwayat versi lama tetap tersedia di `CHANGELOG.md` dan GitHub Release.
 
-- Pencarian bibliografi pada kedua importer kini dapat diketik; label menampilkan judul, penyusun, dan tahun tanpa menambah endpoint atau CDN baru.
-- Saat membandingkan duplikat, moderator dapat memilih per detail: mempertahankan data lama, memakai draf yang diedit, atau menambahkan draf dengan atribusi sumber.
-- Pilihan serupa tersedia untuk lokasi serta relasi bahasa, aksara, dan alas tulis; nilai lama tidak lagi tertimpa tanpa keputusan.
-- Sumber yang sudah tertaut kini dapat dibandingkan dan digabung ke entri tujuan yang sama. Pembuatan entri baru tetap ditolak untuk identitas tersebut.
-- Kode inventaris yang sama tidak memblokir entri baru apabila identitas sumber berbeda; konfirmasi duplikat tetap wajib.
-- Validasi draf hanya dijalankan bila draf memang dipakai, sehingga memilih data lama tidak terhalang oleh draf yang bermasalah.
-- Antrean menampilkan penanda “Tersimpan” untuk entri yang dibuat atau digabung, lengkap dengan tautan ke entri katalog.
-- Ringkasan moderasi kini memuat badge “Dilewati” dan filter yang sesuai.
+- Seluruh modul admin kini memakai satu permukaan kerja putih yang seragam, termasuk dashboard, kotak masuk, feedback naskah, statistik, dan halaman yang dibuka langsung.
+- Tema admin memakai token warna dan tipografi di dalam repositori dengan aksen teal gelap; Bootstrap tetap satu bundle lokal 5.3.9 tanpa CDN.
+- CSS inline diekstraksi ke stylesheet khusus, duplikasi override dirapikan, dan cache-buster disamakan memakai versi aplikasi.
+- Nesting markup dirapikan: label Bootstrap 5, ikon Font Awesome 6, heading halaman, modal, dan daftar kosong tidak lagi memakai pola lama.
+- Permintaan fragmen jQuery `.load()` kini dikenali sebagai fragmen shell, sehingga pemuatan modul tidak membangun ulang dokumen penuh.
+- Detail naskah menampilkan narasi akses fisik dan status arsip digital berdasarkan field baru; keterangan tambahan tampil bila diisi, tanpa klaim akses publik.
+- Form input/edit naskah menerima `mode_akses_fisik`, `pihak_kontak`, `status_arsip_digital`, dan `keterangan_arsip_digital` dengan validasi nilainya.
+- Halaman Tentang menambahkan ajakan kolaborasi metadata naskah Sunda dengan jalur kontak resmi.
 
-Rilis ini tidak menambah migrasi baru. Paket tetap membawa migrasi additif bawaan manifest (`min_from 3.1.70`), sehingga Pusat Pembaruan tetap mewajibkan backup database penuh sebelum pemasangan.
+Rilis ini **menyertakan migrasi SQL additif** (`migrations/020_catalog_access_metadata.sql`). Paket tetap membawa kelima migrasi bawaan manifest (`min_from 3.1.70`), sehingga Pusat Pembaruan mewajibkan backup database penuh sebelum pemasangan.
 
-Untuk pembaruan dari v3.1.72, buka Pusat Pembaruan, unduh paket v3.1.73, lalu ikuti pratinjau migrasi seperti biasa.
+Untuk pembaruan dari v3.1.70 hingga v3.1.73, buka Pusat Pembaruan, unduh paket v3.1.74, lalu ikuti pratinjau migrasi seperti biasa.

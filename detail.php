@@ -8,6 +8,7 @@ require_once __DIR__ . '/includes/bookmark-button.php';
 require_once __DIR__ . '/includes/bibliography.php';
 require_once __DIR__ . '/includes/website-visits.php';
 require_once __DIR__ . '/includes/version.php';
+require_once __DIR__ . '/includes/access-options.php';
 
 // Pastikan BASE_URL terdefinisi, jika belum (karena file config belum update), kita kasih default kosong
 if (!defined('BASE_URL')) define('BASE_URL', '');
@@ -337,10 +338,26 @@ $seoImage = $display_image_url;
 <div class="row">
     <div class="col-lg-12">
         <div class="bg-white p-4 rounded-lg shadow-sm border-0">
-            <h4 class="detail-title mb-1">Akses Digital</h4>
+            <?php $accessNarrative = kandagaAccessNarrative($row); ?>
+            <h4 class="detail-title mb-1">Akses Naskah &amp; Arsip Digital</h4>
             <div class="table-responsive">
-                <table class="table table-detail">
+                <table class="table table-detail detail-metadata">
                     <tbody>
+                        <tr>
+                            <td class="label-col">Akses naskah</td>
+                            <td class="value-col"><?= htmlspecialchars($accessNarrative['fisik'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Arsip digital</td>
+                            <td class="value-col"><?= htmlspecialchars($accessNarrative['digital'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                        </tr>
+                        <?php if ($accessNarrative['keterangan'] !== ''): ?>
+                        <tr>
+                            <td class="label-col">Keterangan tambahan</td>
+                            <td class="value-col"><?= nl2br(htmlspecialchars($accessNarrative['keterangan'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')) ?></td>
+                        </tr>
+                        <?php endif; ?>
+
                         <tr>
                             <td class="label-col">Penyedia</td>
                             <td class="value-col">

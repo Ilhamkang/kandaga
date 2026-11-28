@@ -34,8 +34,8 @@ if (!file_exists($path_foto)) {
 }
 ?>
 
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
-    <h3 class="mb-4">Pengaturan Profil Pengguna</h3>
+<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface"><?php endif; ?>
+    <div class="admin-page-header mb-4"><h1>Pengaturan Profil Pengguna</h1></div>
 
     <div id="notifikasi"></div>
 
@@ -53,7 +53,7 @@ if (!file_exists($path_foto)) {
                     </a>
 
                     <div class="mb-3 text-start">
-                        <label>Ganti Foto</label>
+                        <label class="form-label">Ganti Foto</label>
                         <input type="file" class="form-control" name="foto_user" id="inputFoto" accept="image/*">
                     </div>
                 </div>
@@ -64,31 +64,31 @@ if (!file_exists($path_foto)) {
                     <h5 class="fw-bold text-primary mb-3">Informasi Akun</h5>
                     <div class="row">
                         <div class="mb-3 col-md-6">
-                            <label>Username (ID Akses)</label>
+                            <label class="form-label">Username (ID Akses)</label>
                             <input type="text" class="form-control bg-light" value="<?= htmlspecialchars($data['username']); ?>" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Nama Lengkap</label>
+                            <label class="form-label">Nama Lengkap</label>
                             <input type="text" class="form-control" name="nama" value="<?= htmlspecialchars($data['nama']); ?>" required>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="mb-3 col-md-12">
-                            <label>Afiliasi</label>
+                            <label class="form-label">Afiliasi</label>
                             <input type="text" class="form-control" name="afiliasi" value="<?= htmlspecialchars($data['afiliasi'] ?? ''); ?>" placeholder="Masukkan instansi/afiliasi Anda">
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label>Deskripsi Kepakaran</label>
+                        <label class="form-label">Deskripsi Kepakaran</label>
                         <textarea class="form-control" name="deskripsi" rows="3"><?= htmlspecialchars($data['deskripsi'] ?? ''); ?></textarea>
                     </div>
 
                     <h5 class="fw-bold text-warning mt-3 mb-3">Keamanan</h5>
                     <div class="row">
                         <div class="mb-3 col-md-6">
-                            <label>Password Baru</label>
+                            <label class="form-label">Password Baru</label>
                             <input type="password" class="form-control" name="password_baru" placeholder="Minimal 6 karakter">
                         </div>
                     </div>

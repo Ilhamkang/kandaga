@@ -2,16 +2,16 @@
    Variables & Base Styles
    ========================================== */
 :root {
-    --navy: #0f2042;
-    --navy-light: #1e3a68;
+    --kandaga-sidebar-bg: var(--kandaga-primary-strong);
+    --kandaga-sidebar-active: var(--kandaga-primary);
     --sidebar-width: 250px;
     --sidebar-mini: 70px;
 }
 
 body {
-    background-color: #f8f9fc;
+    background-color: var(--kandaga-canvas);
     font-family: var(--kandaga-font-ui, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
-    color: #333;
+    color: var(--kandaga-text);
     margin: 0;
 }
 
@@ -24,18 +24,18 @@ body {
 }
 .navbar-brand {
     font-weight: 800;
-    color: var(--navy) !important;
+    color: var(--kandaga-primary-strong) !important;
 }
 
 /* ==========================================
-   Sidebar Styling (Navy Theme)
+   Sidebar Styling (Teal Theme)
    ========================================== */
 #sidebar {
     min-height: 0;
     height: calc(100vh - 60px);
     max-height: calc(100vh - 60px);
-    background: var(--navy);
-    border-right: 1px solid #e3e6f0;
+    background: var(--kandaga-sidebar-bg);
+    border-right: 1px solid var(--kandaga-border);
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: contain;
@@ -73,7 +73,7 @@ body {
 
 #sidebar .nav-link.active {
     color: #ffffff;
-    background-color: var(--navy-light);
+    background-color: var(--kandaga-sidebar-active);
     border-left: 4px solid #ffffff;
     font-weight: 600;
 }
@@ -83,7 +83,7 @@ body {
     padding: 1rem 1.5rem 0.5rem 1.5rem;
     font-size: 0.7rem;
     text-transform: uppercase;
-    color: #5a5c69; /* Abu gelap agar terbaca di background navy */
+    color: #94a3b8; /* Slate terang agar terbaca di background navy */
     font-weight: 800;
     letter-spacing: 0.05rem;
 }
@@ -98,7 +98,8 @@ body {
    ========================================== */
 #main-wrapper {
     margin-left: var(--sidebar-width);
-    transition: margin-left 0.3s ease;
+    width: calc(100% - var(--sidebar-width));
+    transition: margin-left 0.3s ease, width 0.3s ease;
     min-height: 100vh;
     padding: 20px;
 }
@@ -108,7 +109,7 @@ body {
    ========================================== */
 /* Kondisi Mini */
 body.sidebar-mini #sidebar { width: var(--sidebar-mini); }
-body.sidebar-mini #main-wrapper { margin-left: var(--sidebar-mini); }
+body.sidebar-mini #main-wrapper { margin-left: var(--sidebar-mini); width: calc(100% - var(--sidebar-mini)); }
 
 /* Sembunyikan elemen saat Mini */
 body.sidebar-mini #sidebar .nav-link span,
@@ -148,13 +149,20 @@ body.sidebar-mini #sidebar .nav-link i {
 @media (max-width: 768px) {
     #sidebar { margin-left: -250px; }
     body.sidebar-open #sidebar { margin-left: 0; width: var(--sidebar-width); }
-    #main-wrapper { margin-left: 0 !important; }
+    #main-wrapper {
+        margin-left: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow: hidden !important;
+        transition: none !important;
+    }
+    #kontenUtama { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
 }
 
 /* ==========================================
    Custom Utility & Mobile Override
    ========================================== */
-.card { border-radius: 10px; }
+.card { border-radius: var(--kandaga-radius-lg); }
 .badge { padding: 0.3em 0.6em; border-radius: 0.5rem; }
 
 @media (max-width: 576px) {
@@ -164,5 +172,4 @@ body.sidebar-mini #sidebar .nav-link i {
     .breadcrumb { font-size: 0.8rem; margin-bottom: 0.75rem !important; }
     /* Card padding is controlled by each module's Bootstrap utility class. */
     .btn { padding: 0.4rem 0.6rem; font-size: 0.85rem; }
-    h1, h2, h3, h4 { font-size: 1.25rem !important; }
 }

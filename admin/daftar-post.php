@@ -23,10 +23,10 @@ $q_kat = "SELECT DISTINCT kategori FROM tb_kabar WHERE kategori IS NOT NULL AND 
 $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_error($conn));
 ?>
 
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid mt-4"><?php endif; ?>
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold">Daftar Postingan</h4>
-        <button class="btn btn-primary shadow-sm" onclick="tambahPost()">+ Tambah Tulisan</button>
+<?php if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')): ?><div class="container-fluid admin-module-surface mt-4"><?php endif; ?>
+    <div class="admin-page-header d-flex justify-content-between align-items-center mb-4">
+        <h1>Daftar Postingan</h1>
+        <button class="btn btn-primary shadow-sm" onclick="tambahPost()"><i class="fa-solid fa-plus me-1"></i>Tambah Tulisan</button>
     </div>
 
     <div class="card border-0 shadow-sm mb-4">
@@ -94,19 +94,19 @@ $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_
                 <?php
                     endwhile;
                 } else {
-                    echo "<tr><td colspan='7' class='text-center'>Tidak ada data postingan ditemukan.</td></tr>";
+                    echo "<tr><td colspan='7' class='empty-row'>Tidak ada data postingan ditemukan.</td></tr>";
                 }
                 ?>
                 </tbody>
             </table>
         </div>
     </div>
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
+<?php if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')): ?></div><?php endif; ?>
 
 <script>
 // Fungsi Navigasi, Sort, Filter, dan Hapus (Sama seperti sebelumnya)
-function tambahPost() { $('#kontenUtama').load('form-kabar.php'); }
-function editPost(id) { $('#kontenUtama').load('form-edit-kabar.php?id=' + id); }
+function tambahPost() { $('#adminModule').load('form-kabar.php'); }
+function editPost(id) { $('#adminModule').load('form-edit-kabar.php?id=' + id); }
 
 function sortTable(n) {
     let table = document.getElementById("tabelPost");
@@ -161,7 +161,7 @@ jQuery(document).ready(function($) {
                     success: function(res) {
                         if(res.status === 'success') {
                             Swal.fire('Terhapus!', res.message, 'success').then(() => {
-                                $('#kontenUtama').load('daftar-post.php');
+                                $('#adminModule').load('daftar-post.php');
                             });
                         } else {
                             Swal.fire('Gagal!', res.message, 'error');

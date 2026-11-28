@@ -1,0 +1,170 @@
+/* Goah admin theme bridge.
+ * Maps Kandaga tokens onto Bootstrap 5.3.9 variables and restores component
+ * states that legacy !important overrides used to suppress.
+ */
+body.kandaga-admin-shell {
+    --bs-primary: var(--kandaga-primary);
+    --bs-primary-rgb: 15, 118, 110;
+    --bs-success: var(--kandaga-success);
+    --bs-warning: var(--kandaga-warning);
+    --bs-danger: var(--kandaga-danger);
+    --bs-info: var(--kandaga-info);
+    --bs-body-bg: var(--kandaga-surface);
+    --bs-border-color: var(--kandaga-border);
+    --bs-border-radius: var(--kandaga-radius-md);
+    --bs-border-radius-sm: var(--kandaga-radius-sm);
+    --bs-border-radius-lg: var(--kandaga-radius-lg);
+    --bs-link-color: var(--kandaga-primary);
+    --bs-link-hover-color: var(--kandaga-primary-strong);
+    --bs-focus-ring-color: var(--kandaga-focus-ring);
+    background: var(--kandaga-surface);
+    color: var(--kandaga-text);
+}
+
+/* Bootstrap components that bake component-local variables. */
+body.kandaga-admin-shell .btn-primary {
+    --bs-btn-bg: var(--kandaga-primary);
+    --bs-btn-border-color: var(--kandaga-primary);
+    --bs-btn-hover-bg: var(--kandaga-primary-strong);
+    --bs-btn-hover-border-color: var(--kandaga-primary-strong);
+    --bs-btn-focus-shadow-rgb: 15, 118, 110;
+    --bs-btn-active-bg: var(--kandaga-primary-strong);
+    --bs-btn-active-border-color: var(--kandaga-primary-strong);
+    --bs-btn-disabled-bg: var(--kandaga-primary);
+    --bs-btn-disabled-border-color: var(--kandaga-primary);
+}
+
+body.kandaga-admin-shell .btn-outline-primary {
+    --bs-btn-color: var(--kandaga-primary);
+    --bs-btn-border-color: var(--kandaga-primary);
+    --bs-btn-hover-bg: var(--kandaga-primary);
+    --bs-btn-hover-border-color: var(--kandaga-primary);
+    --bs-btn-focus-shadow-rgb: 15, 118, 110;
+    --bs-btn-active-bg: var(--kandaga-primary);
+    --bs-btn-active-border-color: var(--kandaga-primary);
+}
+
+body.kandaga-admin-shell .page-item.active .page-link {
+    --bs-pagination-active-bg: var(--kandaga-primary);
+    --bs-pagination-active-border-color: var(--kandaga-primary);
+}
+
+body.kandaga-admin-shell .list-group-item.active {
+    --bs-list-group-active-bg: var(--kandaga-primary);
+    --bs-list-group-active-border-color: var(--kandaga-primary);
+}
+
+body.kandaga-admin-shell .progress-bar { background-color: var(--kandaga-primary); }
+body.kandaga-admin-shell .form-check-input:checked {
+    background-color: var(--kandaga-primary);
+    border-color: var(--kandaga-primary);
+}
+body.kandaga-admin-shell .form-check-input:focus { border-color: var(--kandaga-primary); box-shadow: 0 0 0 .25rem var(--kandaga-focus-ring); }
+body.kandaga-admin-shell .nav-tabs .nav-link.active {
+    color: var(--kandaga-primary);
+    border-color: var(--kandaga-border) var(--kandaga-border) var(--kandaga-primary);
+}
+
+/* Shared page furniture. */
+body.kandaga-admin-shell .admin-page-header h1,
+body.kandaga-admin-shell .admin-page-header h2,
+body.kandaga-admin-shell .admin-page-header h3,
+body.kandaga-admin-shell .admin-page-header h4,
+body.kandaga-admin-shell .admin-page-header h5,
+body.kandaga-admin-shell .admin-page-header h6 {
+    color: var(--kandaga-heading);
+    font-size: 1.5rem;
+    font-weight: var(--kandaga-weight-bold);
+    letter-spacing: -.01em;
+    margin: 0;
+}
+body.kandaga-admin-shell .admin-page-header p {
+    color: var(--kandaga-muted);
+    font-size: var(--kandaga-text-sm);
+    margin: .25rem 0 0;
+}
+
+/* One white working surface for every Goah submodule, shell or direct. */
+body.kandaga-admin-shell .admin-module-surface {
+    background: var(--kandaga-card);
+    border: 1px solid var(--kandaga-border);
+    border-radius: var(--kandaga-radius-lg);
+    box-shadow: var(--kandaga-shadow-1);
+    padding: 1.25rem;
+    min-width: 0;
+}
+body.kandaga-admin-shell .admin-module-surface > :last-child { margin-bottom: 0; }
+body.kandaga-admin-shell .admin-module-surface > .statistics-dashboard { padding: 0; }
+
+body.kandaga-admin-shell #adminModule[data-page="inbox"],
+body.kandaga-admin-shell #adminModule[data-page="feedback-naskah"] {
+    padding: 0;
+    overflow: hidden;
+}
+body.kandaga-admin-shell #adminModule[data-page="inbox"] > .admin-page-header,
+body.kandaga-admin-shell #adminModule[data-page="feedback-naskah"] > .admin-page-header {
+    padding: 1.25rem 1.25rem 0;
+}
+body.kandaga-admin-shell #adminModule[data-page="inbox"] > .inbox-wrapper,
+body.kandaga-admin-shell #adminModule[data-page="feedback-naskah"] > .inbox-wrapper {
+    border: 0;
+    border-top: 1px solid var(--kandaga-border);
+    border-radius: 0;
+    box-shadow: none;
+}
+body.kandaga-admin-shell #adminModule .inbox-content { background: var(--kandaga-card); }
+
+body.kandaga-admin-shell .table .empty-row {
+    padding: 1.25rem;
+    text-align: center;
+    color: var(--kandaga-muted);
+    font-size: var(--kandaga-text-sm);
+}
+
+/* Compatibility helpers previously referenced without a definition. */
+body.kandaga-admin-shell .bg-success-soft { background-color: rgba(47, 179, 68, .12) !important; }
+body.kandaga-admin-shell .bg-primary-soft { background-color: rgba(15, 118, 110, .12) !important; }
+body.kandaga-admin-shell .bg-warning-soft { background-color: rgba(245, 159, 0, .14) !important; }
+body.kandaga-admin-shell .bg-danger-soft { background-color: rgba(214, 57, 57, .12) !important; }
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .35; }
+}
+
+/* Select2 skin aligned with Bootstrap form controls. */
+body.kandaga-admin-shell .select2-container { width: 100% !important; }
+body.kandaga-admin-shell .select2-container--default .select2-selection--single,
+body.kandaga-admin-shell .select2-container--default .select2-selection--multiple {
+    min-height: 2.375rem;
+    border: 1px solid var(--kandaga-border-strong);
+    border-radius: var(--kandaga-radius-md);
+    background: var(--kandaga-card);
+    color: var(--kandaga-text);
+    font-family: var(--kandaga-font-ui);
+    font-size: var(--kandaga-text-md);
+}
+body.kandaga-admin-shell .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 2.25rem;
+    padding-left: .75rem;
+    color: var(--kandaga-text);
+}
+body.kandaga-admin-shell .select2-container--default .select2-selection--single .select2-selection__arrow { height: 2.3125rem; }
+body.kandaga-admin-shell .select2-container--default.select2-container--focus .select2-selection--single,
+body.kandaga-admin-shell .select2-container--default.select2-container--open .select2-selection--single,
+body.kandaga-admin-shell .select2-container--default.select2-container--focus .select2-selection--multiple,
+body.kandaga-admin-shell .select2-container--default.select2-container--open .select2-selection--multiple {
+    border-color: var(--kandaga-primary);
+    box-shadow: 0 0 0 .25rem var(--kandaga-focus-ring);
+}
+body.kandaga-admin-shell .select2-dropdown {
+    border-color: var(--kandaga-border-strong);
+    border-radius: var(--kandaga-radius-md);
+    font-family: var(--kandaga-font-ui);
+    font-size: var(--kandaga-text-sm);
+}
+body.kandaga-admin-shell .select2-container--default .select2-results__option--highlighted[aria-selected],
+body.kandaga-admin-shell .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background: var(--kandaga-primary);
+    color: #fff;
+}

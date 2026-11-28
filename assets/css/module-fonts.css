@@ -21,8 +21,36 @@
     --kandaga-weight-extrabold: 800;
     --kandaga-text: #334155;
     --kandaga-muted: #64748b;
+    --kandaga-heading: #0f172a;
     --kandaga-border: #e2e8f0;
-    --kandaga-primary: #2563eb;
+    --kandaga-border-strong: #cbd5e1;
+    --kandaga-border-subtle: #edf2f9;
+    --kandaga-primary: #0f766e;
+    --kandaga-primary-strong: #115e59;
+    --kandaga-primary-soft: #ccfbf1;
+    --kandaga-success: #2fb344;
+    --kandaga-warning: #f59f00;
+    --kandaga-danger: #d63939;
+    --kandaga-info: #0ca678;
+    --kandaga-surface: #f8fafc;
+    --kandaga-surface-alt: #f1f5f9;
+    --kandaga-canvas: #f8f9fc;
+    --kandaga-card: #ffffff;
+    --kandaga-radius-xs: 4px;
+    --kandaga-radius-sm: 6px;
+    --kandaga-radius-md: 8px;
+    --kandaga-radius-lg: 12px;
+    --kandaga-radius-xl: 16px;
+    --kandaga-space-1: .25rem;
+    --kandaga-space-2: .5rem;
+    --kandaga-space-3: .75rem;
+    --kandaga-space-4: 1rem;
+    --kandaga-space-5: 1.25rem;
+    --kandaga-space-6: 1.5rem;
+    --kandaga-shadow-1: 0 1px 3px rgba(15, 23, 42, .05);
+    --kandaga-shadow-2: 0 2px 8px rgba(15, 23, 42, .08);
+    --kandaga-shadow-3: 0 8px 24px rgba(15, 23, 42, .08);
+    --kandaga-focus-ring: rgba(15, 118, 110, .25);
 }
 
 html,

@@ -7,18 +7,18 @@ $thumbnailMaxBytes = min(5242880, kandagaPostIniBytes(ini_get('upload_max_filesi
 if (session_status() == PHP_SESSION_NONE) { if (session_status() === PHP_SESSION_NONE) session_start(); }
 ?>
 
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
+<?php if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')): ?><div class="container-fluid admin-module-surface"><?php endif; ?>
     <form id="formInputKabar" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="slug" id="slugInput">
 
         <div class="row">
             <div class="col-md-8">
                 <div class="mb-3">
-                    <label>Judul Berita</label>
+                    <label class="form-label">Judul Berita</label>
                     <input type="text" name="judul" id="judulInput" class="form-control form-control-lg" placeholder="Masukkan judul berita..." required>
                 </div>
                 <div class="mb-3">
-                    <label>Konten</label>
+                    <label class="form-label">Konten</label>
                     <textarea name="konten" id="editorKabar" class="form-control"></textarea>
                 </div>
             </div>
@@ -36,7 +36,7 @@ if (session_status() == PHP_SESSION_NONE) { if (session_status() === PHP_SESSION
                 <div class="card shadow-sm mb-3">
                     <div class="card-header bg-light"><strong>Status & Kategori</strong></div>
                     <div class="card-body">
-                        <label>Kategori</label>
+                        <label class="form-label">Kategori</label>
                         <select name="kategori" class="form-select mb-2">
                             <option value="berita">Berita</option>
                             <option value="kegiatan">Kegiatan</option>
@@ -44,7 +44,7 @@ if (session_status() == PHP_SESSION_NONE) { if (session_status() === PHP_SESSION
                             <option value="artikel">Artikel</option>
                         </select>
 
-                        <label>Status</label>
+                        <label class="form-label">Status</label>
                         <select name="status" class="form-select">
                             <option value="published">Diterbitkan</option>
                             <option value="draft" selected>Draf</option>
@@ -55,12 +55,12 @@ if (session_status() == PHP_SESSION_NONE) { if (session_status() === PHP_SESSION
                 <div class="d-grid gap-2">
                     <button type="submit" name="submit_action" value="published" class="btn btn-primary"><i class="fa-solid fa-paper-plane me-1"></i>Terbitkan Kabar</button>
                     <button type="submit" name="submit_action" value="draft" class="btn btn-outline-secondary"><i class="fa-solid fa-file-pen me-1"></i>Simpan Draf</button>
-                    <button type="button" class="btn btn-secondary" onclick="$('#kontenUtama').load('daftar-post.php')">Batal</button>
+                    <button type="button" class="btn btn-secondary" onclick="$('#adminModule').load('daftar-post.php')">Batal</button>
                 </div>
             </div>
         </div>
     </form>
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
+<?php if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')): ?></div><?php endif; ?>
 
 <script>
     $(document).ready(function() {
@@ -91,7 +91,7 @@ if (session_status() == PHP_SESSION_NONE) { if (session_status() === PHP_SESSION
             if (typeof tinymce !== 'undefined') {
                 tinymce.remove('#editorKabar');
                 tinymce.init({
-        content_css: '<?= BASE_URL ?>/assets/css/editor-fonts.css?v=3.1.2',
+        content_css: '<?= BASE_URL ?>/assets/css/editor-fonts.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>',
                     selector: '#editorKabar',
                     license_key: 'gpl',
                     plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount autoresize',
@@ -138,7 +138,7 @@ if (session_status() == PHP_SESSION_NONE) { if (session_status() === PHP_SESSION
                             timer: 1500,
                             showConfirmButton: false
                         }).then(() => {
-                            $('#kontenUtama').load('daftar-post.php');
+                            $('#adminModule').load('daftar-post.php');
                         });
                     } else {
                         Swal.fire('Gagal!', res.message, 'error');

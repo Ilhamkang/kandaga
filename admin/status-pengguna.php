@@ -41,15 +41,6 @@ foreach ($users as $row) {
 }
 ?>
 
-<style>
-    .stat-card { border-radius: 10px; padding: 15px; background: #fff; border: 1px solid #eee; display: flex; align-items: center; }
-    .stat-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.2rem; }
-    .status-dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
-    .status-online { background-color: #28a745; box-shadow: 0 0 0 rgba(40, 167, 69, 0.4); animation: pulse 2s infinite; }
-    .status-offline { background-color: #adb5bd; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(40, 167, 69, 0); } 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); } }
-</style>
-
 <div class="row mb-4">
     <div class="col-md-3">
         <div class="stat-card">
@@ -79,7 +70,7 @@ foreach ($users as $row) {
 
 <div class="card shadow-sm border-0 user-card">
     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 fw-bold" style="color: #0f2042;"><i class="fa-solid fa-user-gear me-2"></i>Monitor Pengguna</h5>
+        <h2 class="h5 mb-0"><i class="fa-solid fa-user-gear me-2"></i>Monitor Pengguna</h2>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">

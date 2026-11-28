@@ -1,6 +1,12 @@
 <?php
 require_once __DIR__ . '/../../config.php';
 
+// jQuery .load() requests are fragments of the canonical shell, not new pages.
+if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')
+    && strtolower((string)($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) === 'xmlhttprequest') {
+    define('KANDAGA_ADMIN_FRAGMENT', true);
+}
+
 function kandagaJson($success, $message, $extra = [], $code = 200) {
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');

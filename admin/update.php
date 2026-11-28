@@ -2,9 +2,8 @@
 require_once __DIR__.'/includes/request.php';kandagaAuthorize(true);
 if(!defined('KANDAGA_GOAH_PANEL')){header('Location: '.BASE_URL.'/admin/index.php?page=update');exit;}
 ?>
-<link rel="stylesheet" href="<?= BASE_URL ?>/admin/assets/css/update-center.css?v=3.1.65">
 <div id="updateCenter" data-api="<?= BASE_URL ?>/admin/actions/update-center.php" data-recovery="<?= BASE_URL ?>/admin/recover-update.php">
-<div class="d-flex justify-content-between align-items-center flex-wrap mb-4"><div><h1 class="h3"><i class="fa-solid fa-arrows-rotate me-2"></i>Pusat Pembaruan</h1><p class="text-muted mb-0">Versi terpasang <strong id="updateVersion">—</strong> · Kandaga Goah</p></div><button class="btn btn-light border" id="refreshUpdates"><i class="fa-solid fa-rotate-right me-2"></i>Muat ulang</button></div>
+<div class="admin-page-header d-flex justify-content-between align-items-center flex-wrap mb-4"><div><h1><i class="fa-solid fa-arrows-rotate me-2"></i>Pusat Pembaruan</h1><p>Versi terpasang <strong id="updateVersion">—</strong> · Kandaga Goah</p></div><button class="btn btn-light border" id="refreshUpdates"><i class="fa-solid fa-rotate-right me-2"></i>Muat ulang</button></div>
 <div id="updateNotice" role="status" aria-live="polite"></div>
 <div id="updateDiagnostics" role="status" aria-live="polite"></div>
 <div id="updateSetup" class="card p-3 mb-3" hidden><h2 class="h5">Siapkan pusat pembaruan</h2><p>Membuat catatan migrasi dan memeriksa struktur database yang sudah tersedia. Data katalog tetap dipertahankan.</p><button class="btn btn-primary align-self-start" id="setupUpdates"><i class="fa-solid fa-wrench me-2"></i>Siapkan Sekarang</button></div>
@@ -15,4 +14,4 @@ if(!defined('KANDAGA_GOAH_PANEL')){header('Location: '.BASE_URL.'/admin/index.ph
 <div id="updateProgress" class="card p-4 mb-3" hidden></div>
 <div class="card p-4"><h2 class="h5"><i class="fa-solid fa-clock-rotate-left me-2"></i>Riwayat & Backup</h2><p class="small text-muted">Backup dan status pekerjaan tersimpan di server. Browser hanya memantau proses; jika koneksi terputus, buka kembali halaman ini untuk melanjutkan otomatis.</p><div id="updateHistory"></div></div>
 </div>
-<script src="<?= BASE_URL ?>/admin/assets/js/update-center.js?v=3.1.65"></script>
+<script src="<?= BASE_URL ?>/admin/assets/js/update-center.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>

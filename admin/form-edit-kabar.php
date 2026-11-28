@@ -1,5 +1,10 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
+if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')
+    && strtolower((string)($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) === 'xmlhttprequest') {
+    define('KANDAGA_ADMIN_FRAGMENT', true);
+}
+if (!defined('KANDAGA_GOAH_PANEL')) define('KANDAGA_GOAH_PANEL', true);
 function kandagaEditPostIniBytes($value) { $value=trim((string)$value); if($value==='') return 0; $unit=strtolower(substr($value,-1)); $number=(float)$value; return (int)($unit==='g'?$number*1073741824:($unit==='m'?$number*1048576:($unit==='k'?$number*1024:$number))); }
 $thumbnailMaxBytes = min(5242880, kandagaEditPostIniBytes(ini_get('upload_max_filesize')) ?: 5242880);
 // The parent panel already authorizes this page; this guard also covers a
@@ -50,19 +55,22 @@ if (!$data) {
 }
 ?>
 
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
+<?php if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')): ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Edit Kabar</title>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/admin/assets/css/admin-theme.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 </head>
-<body class="kandaga-module">
+<body class="kandaga-module kandaga-admin-shell">
 <?php endif; ?>
 
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid"><?php endif; ?>
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="mb-0">Edit Berita / Kabar</h3>
+<?php if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')): ?><div class="container-fluid admin-module-surface"><?php endif; ?>
+    <div class="admin-page-header d-flex justify-content-between align-items-center mb-4">
+        <h1>Edit Berita / Kabar</h1>
     </div>
 
     <form id="formEditKabar" method="POST" enctype="multipart/form-data">
@@ -74,17 +82,17 @@ if (!$data) {
                 <div class="card shadow-sm mb-3">
                     <div class="card-body">
                         <div class="mb-3">
-                            <label>Judul Berita</label>
+                            <label class="form-label">Judul Berita</label>
                             <input type="text" name="judul" class="form-control form-control-lg"
                                    value="<?= htmlspecialchars($data['judul']); ?>" required>
                         </div>
                         <div class="mb-3">
-                            <label>Slug (URL Friendly)</label>
+                            <label class="form-label">Slug (URL Friendly)</label>
                             <input type="text" name="slug" class="form-control"
                                    value="<?= htmlspecialchars($data['slug']); ?>" required>
                         </div>
                         <div class="mb-3">
-                            <label>Konten</label>
+                            <label class="form-label">Konten</label>
                             <textarea name="konten" id="editorKabar" class="form-control"><?= htmlspecialchars($data['konten']); ?></textarea>
                         </div>
                     </div>
@@ -110,7 +118,7 @@ if (!$data) {
                     <div class="card-header bg-light"><strong>Status & Kategori</strong></div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label>Kategori</label>
+                            <label class="form-label">Kategori</label>
                             <select name="kategori" class="form-select">
                                 <?php foreach(['berita', 'kegiatan', 'pengumuman', 'artikel'] as $kat): ?>
                                     <option value="<?= $kat ?>" <?= $data['kategori'] == $kat ? 'selected' : '' ?>><?= ucfirst($kat) ?></option>
@@ -118,7 +126,7 @@ if (!$data) {
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label>Status</label>
+                            <label class="form-label">Status</label>
                             <select name="status" class="form-select">
                                 <option value="published" <?= $data['status'] == 'published' ? 'selected' : '' ?>>Diterbitkan</option>
                                 <option value="draft" <?= $data['status'] == 'draft' ? 'selected' : '' ?>>Draf</option>
@@ -129,19 +137,19 @@ if (!$data) {
 
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary btn-lg"><i class="fa-solid fa-floppy-disk me-1"></i>Simpan Perubahan</button>
-                    <button type="button" class="btn btn-secondary" onclick="$('#kontenUtama').load('daftar-post.php')">Batal</button>
+                    <button type="button" class="btn btn-secondary" onclick="$('#adminModule').load('daftar-post.php')">Batal</button>
                 </div>
             </div>
         </div>
     </form>
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?></div><?php endif; ?>
+<?php if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')): ?></div><?php endif; ?>
 
 <script>
     // Memastikan TinyMCE di-load kembali saat file ini di-load via AJAX
     if (typeof tinymce !== 'undefined') {
         tinymce.remove('#editorKabar');
         tinymce.init({
-        content_css: '<?= BASE_URL ?>/assets/css/editor-fonts.css?v=3.1.2',
+        content_css: '<?= BASE_URL ?>/assets/css/editor-fonts.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>',
             selector: '#editorKabar',
             license_key: 'gpl',
             height: 300
@@ -182,7 +190,7 @@ if (!$data) {
         });
     });
 </script>
-<?php if (!defined('KANDAGA_ADMIN_SHELL')): ?>
+<?php if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')): ?>
 </body>
 </html>
 <?php endif; ?>

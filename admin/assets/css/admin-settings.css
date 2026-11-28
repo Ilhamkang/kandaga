@@ -1,0 +1,32 @@
+/* Goah settings presentation (extracted from pengaturan.php). */
+.kandaga-settings-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, .42fr);
+    gap: 1rem;
+}
+.kandaga-settings-card {
+    background: var(--kandaga-card);
+    border: 1px solid var(--kandaga-border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    box-shadow: var(--kandaga-shadow-2);
+}
+.kandaga-settings-card h2 {
+    font-size: 1.05rem;
+    margin-bottom: .25rem;
+    color: var(--kandaga-heading);
+}
+.kandaga-settings-status {
+    border-radius: 10px;
+    padding: .75rem 1rem;
+    background: var(--kandaga-surface);
+}
+.kandaga-settings-status strong { display: block; }
+.kandaga-settings-help { font-size: .88rem; color: var(--kandaga-muted); }
+.kandaga-settings-card input,
+.kandaga-settings-card select { border-radius: var(--kandaga-radius-md); }
+.kandaga-settings-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+@media (max-width: 800px) {
+    .kandaga-settings-grid { grid-template-columns: 1fr; }
+}

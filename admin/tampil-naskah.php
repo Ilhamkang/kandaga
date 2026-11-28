@@ -40,9 +40,9 @@ $sql = "SELECT k.*,l.nama_tempat,l.negara,
 $result = $conn->query($sql);
 ?>
 
-<div class="row mb-4 align-items-center">
-    <div class="col"><h3 class="page-title mb-0">Manajemen Data Naskah</h3></div>
-    <div class="col-auto"><a href="index.php?page=form-input" class="btn btn-primary px-4 shadow-sm fw-bold"><i class="fa-solid fa-plus-circle me-2"></i> Tambah Naskah</a></div>
+<div class="admin-page-header row mb-4 align-items-center">
+    <div class="col"><h1>Manajemen Data Naskah</h1></div>
+    <div class="col-auto"><a href="index.php?page=form-input" class="btn btn-primary px-4 shadow-sm"><i class="fa-solid fa-circle-plus me-2"></i>Tambah Naskah</a></div>
 </div>
 
 <div class="table-card">
@@ -104,7 +104,7 @@ $result = $conn->query($sql);
                     </td>
                 </tr>
                 <?php endwhile; else: ?>
-                    <tr><td colspan="8" class="text-center py-4">Data tidak ditemukan.</td></tr>
+                    <tr><td colspan="8" class="empty-row">Data tidak ditemukan.</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>
@@ -160,7 +160,7 @@ $(document).ready(function() {
                     success: function(response) {
                         if (response.status === 'success') {
                             Swal.fire('Berhasil!', response.message, 'success');
-                            $('#kontenUtama').load('tampil-naskah.php');
+                            $('#adminModule').load('tampil-naskah.php');
                         } else {
                             Swal.fire('Gagal!', response.message, 'error');
                         }

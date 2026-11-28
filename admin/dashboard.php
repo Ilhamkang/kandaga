@@ -71,25 +71,6 @@ function kandagaDashboardImage($n){return kandagaImageUrl((array)$n);}
 ?>
 
 <div class="kandaga-dashboard-context">
-    <style>
-        .metric-container { display: flex; gap: 20px; margin-bottom: 20px; }
-        .metric-box { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; flex: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .workspace-split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .workspace-block { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; }
-        .block-title-bar { background: #f8fafc; padding: 15px; border-bottom: 1px solid #e2e8f0; font-weight: bold; }
-        .naskah-node-item { transition: 0.2s; padding: 12px 15px; border-bottom: 1px solid #f1f5f9; }
-        .naskah-node-item:hover { background: #f1f5f9; }
-        .dashboard-welcome { position: relative; overflow: hidden; padding: 26px 30px; border: 0; border-radius: 18px; color: #fff; background: linear-gradient(115deg,#123b62 0%,#236d78 58%,#5a8f80 100%); box-shadow: 0 10px 24px rgba(18,59,98,.18); }
-        .dashboard-welcome:after { content: ''; position: absolute; width: 190px; height: 190px; right: -45px; top: -75px; border-radius: 50%; background: rgba(255,255,255,.11); }
-        .dashboard-welcome .welcome-kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .7rem; font-weight: 700; opacity: .78; }
-        .dashboard-welcome h2 { color: #fff!important; font-size: clamp(1.35rem,2.2vw,1.9rem); letter-spacing: -.02em; }
-        .dashboard-welcome .role-badge { background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); color: #fff; font-weight: 600; }
-        .dashboard-welcome .welcome-clock { position: relative; z-index: 1; min-width: 145px; padding: 11px 14px; border-radius: 12px; text-align: right; background: rgba(0,0,0,.14); }
-        .dashboard-welcome #realtime-clock { color: #fff!important; font-family: var(--kandaga-font-ui); font-size: 1.35rem; letter-spacing: .02em; }
-        .dashboard-welcome #realtime-date { color: rgba(255,255,255,.8)!important; }
-        @media (max-width: 768px) { .workspace-split-grid { grid-template-columns: 1fr; } }
-    </style>
-
     <div class="dashboard-welcome mb-4 d-flex justify-content-between align-items-center">
         <div class="position-relative" style="z-index:1">
             <div class="welcome-kicker mb-2"><i class="fa-solid fa-leaf me-1" aria-hidden="true"></i> Ruang kerja Kandaga</div>
@@ -104,8 +85,8 @@ function kandagaDashboardImage($n){return kandagaImageUrl((array)$n);}
 
     <div class="metric-container">
         <div class="metric-box"><span>Item Terlibat</span><h4 class="m-0"><?= $stats['total_terlibat']; ?></h4></div>
-        <div class="metric-box"><span>Input</span><h4 class="m-0" style="color: #0d47a1;"><?= $stats['total_input']; ?></h4></div>
-        <div class="metric-box"><span>Edit</span><h4 class="m-0" style="color: #e65100;"><?= $stats['total_edit']; ?></h4></div>
+        <div class="metric-box"><span>Input</span><h4 class="m-0" style="color: var(--kandaga-primary);"><?= $stats['total_input']; ?></h4></div>
+        <div class="metric-box"><span>Edit</span><h4 class="m-0" style="color: var(--kandaga-warning);"><?= $stats['total_edit']; ?></h4></div>
     </div>
 
     <div class="workspace-split-grid">
@@ -114,7 +95,7 @@ function kandagaDashboardImage($n){return kandagaImageUrl((array)$n);}
             <ul class="list-unstyled m-0">
                 <?php while ($log = $dataset_log->fetch_assoc()):
                     $aksi = strtolower($log['aksi']);
-                    $icon = strpos($aksi, 'tambah') !== false ? 'fa-plus-circle text-success' : (strpos($aksi, 'edit') !== false ? 'fa-pen-to-square text-primary' : 'fa-history text-secondary');
+                    $icon = strpos($aksi, 'tambah') !== false ? 'fa-circle-plus text-success' : (strpos($aksi, 'edit') !== false ? 'fa-pen-to-square text-primary' : 'fa-history text-secondary');
                 ?>
                 <li class="naskah-node-item d-flex align-items-center">
                     <i class="fa-solid <?= $icon; ?> me-3" style="width: 20px;"></i>

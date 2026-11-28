@@ -1,0 +1,73 @@
+/* Shared Goah form presentation.
+ * Extracted from form-input.php, form-edit.php, and form-edit_lokasi.php.
+ */
+.form-card {
+    background: var(--kandaga-card);
+    border-radius: var(--kandaga-radius-lg);
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: var(--kandaga-shadow-1);
+    border: 1px solid var(--kandaga-border);
+}
+
+.section-title {
+    font-size: 1.125rem;
+    font-weight: var(--kandaga-weight-bold);
+    color: var(--kandaga-primary);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--kandaga-primary-soft);
+    display: flex;
+    align-items: center;
+}
+
+.section-title i {
+    margin-right: 8px;
+}
+
+.form-control,
+.form-select {
+    border-radius: var(--kandaga-radius-md);
+    font-size: var(--kandaga-text-sm);
+}
+
+.dynamic-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.btn-remove-row {
+    flex: 0 0 auto;
+    width: 2.125rem;
+    height: 2.125rem;
+    padding: 0;
+    font-size: 1rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--kandaga-radius-md);
+}
+
+.sticky-submit {
+    position: sticky;
+    bottom: 0;
+    background: var(--kandaga-card);
+    padding: 15px 25px;
+    border-top: 1px solid var(--kandaga-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    z-index: 100;
+}
+
+.preview-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: var(--kandaga-radius-md);
+    border: 2px solid var(--kandaga-border);
+    margin-bottom: 10px;
+}
