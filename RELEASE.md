@@ -1,13 +1,16 @@
-# Kandaga v3.1.72
+# Kandaga v3.1.73
 
-Penyempurnaan pengelolaan antrean impor: batch kini dapat dibersihkan tanpa menghilangkan entri yang sudah disetujui. Riwayat versi lama tetap tersedia di `CHANGELOG.md` dan GitHub Release.
+Penyempurnaan moderasi impor Web dan Katalog Cetak. Riwayat versi lama tetap tersedia di `CHANGELOG.md` dan GitHub Release.
 
-- Batch yang sudah diproses dapat dihapus setelah konfirmasi.
-- Entri katalog yang sudah dibuat tidak ikut terhapus.
-- Tautan identitas dan catatan keputusan moderasi tetap tersimpan walau berkas CSV asal sudah dihapus.
-- Jejak yang menunjuk ke entri yang dihapus manual ikut dibersihkan saat batch dihapus.
-- Teks konfirmasi dan panduan impor diselaraskan dengan perilaku baru.
+- Pencarian bibliografi pada kedua importer kini dapat diketik; label menampilkan judul, penyusun, dan tahun tanpa menambah endpoint atau CDN baru.
+- Saat membandingkan duplikat, moderator dapat memilih per detail: mempertahankan data lama, memakai draf yang diedit, atau menambahkan draf dengan atribusi sumber.
+- Pilihan serupa tersedia untuk lokasi serta relasi bahasa, aksara, dan alas tulis; nilai lama tidak lagi tertimpa tanpa keputusan.
+- Sumber yang sudah tertaut kini dapat dibandingkan dan digabung ke entri tujuan yang sama. Pembuatan entri baru tetap ditolak untuk identitas tersebut.
+- Kode inventaris yang sama tidak memblokir entri baru apabila identitas sumber berbeda; konfirmasi duplikat tetap wajib.
+- Validasi draf hanya dijalankan bila draf memang dipakai, sehingga memilih data lama tidak terhalang oleh draf yang bermasalah.
+- Antrean menampilkan penanda “Tersimpan” untuk entri yang dibuat atau digabung, lengkap dengan tautan ke entri katalog.
+- Ringkasan moderasi kini memuat badge “Dilewati” dan filter yang sesuai.
 
-Paket ini **menyertakan migrasi SQL additif** (`migrations/019_import_detachable_audit.sql`). Update Center mewajibkan backup database penuh sebelum pemasangan. Tanpa migrasi tersebut, penghapusan batch yang sudah diproses tetap ditolak seperti versi sebelumnya.
+Rilis ini tidak menambah migrasi baru. Paket tetap membawa migrasi additif bawaan manifest (`min_from 3.1.70`), sehingga Pusat Pembaruan tetap mewajibkan backup database penuh sebelum pemasangan.
 
-Untuk pembaruan dari v3.1.70 atau v3.1.71, buka Pusat Pembaruan, unduh paket v3.1.72, lalu ikuti pratinjau migrasi.
+Untuk pembaruan dari v3.1.72, buka Pusat Pembaruan, unduh paket v3.1.73, lalu ikuti pratinjau migrasi seperti biasa.

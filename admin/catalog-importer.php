@@ -68,6 +68,8 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #ki-modal .modal-content{background:#fff;color:#334155}
 #ki-modal .modal-body{max-height:calc(100vh - 260px);max-height:calc(100dvh - 260px);overflow-y:auto}
 #catalog-importer #ki-queue table{min-width:760px}
+#catalog-importer #ki-queue tr.is-saved{background:#f0fdf4}
+#catalog-importer #ki-queue .badge{font-size:.78rem}
 #catalog-importer #ki-pagination{gap:8px;flex-wrap:wrap}
 @media(max-width:575.98px){#catalog-importer .card-body{padding:12px}#catalog-importer #ki-pagination>span{width:100%;order:3;text-align:center}#ki-modal .modal-dialog{margin:8px}#ki-modal .modal-header,#ki-modal .modal-body,#ki-modal .modal-footer{padding:12px}}
 #ki-modal label{font-weight:600}
@@ -80,7 +82,7 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #catalog-importer .ki-step.is-active{border-color:#2563eb;background:#eff6ff;color:#1d4ed8}#catalog-importer .ki-step.is-active span{background:#2563eb;color:#fff}
 #catalog-importer .ki-step:disabled{opacity:.55;cursor:not-allowed}
 #catalog-importer .ki-dropzone{padding:18px;border:2px dashed #cbd5e1;background:#f8fafc;border-radius:10px;text-align:center}#catalog-importer .ki-dropzone>i{font-size:1.8rem;color:#2563eb}#catalog-importer .ki-dropzone.is-dragging{border-color:#2563eb;background:#eff6ff}
-#catalog-importer .ki-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#catalog-importer .ki-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
 #catalog-importer .ki-summary button{padding:14px;text-align:left;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;color:#334155}#catalog-importer .ki-summary strong{display:block;font-size:1.5rem;color:#1d4ed8}
 #catalog-importer .ki-summary button.is-active{background:#eff6ff;border-color:#2563eb}#catalog-importer .ki-preview-cell{max-width:260px;max-height:100px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.85rem}
 #catalog-importer #ki-preview th,#catalog-importer #ki-preview td{min-width:170px}
@@ -88,4 +90,4 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #ki-modal .ki-review-toolbar{display:flex;gap:8px;flex-wrap:wrap;background:#f8fafc}
 @media(max-width:767.98px){#catalog-importer .ki-step{padding:8px 4px;text-align:center}#catalog-importer .ki-step span{position:static;margin:0 auto 5px}#catalog-importer .ki-step small{display:none}#catalog-importer .ki-step strong{font-size:.75rem;overflow-wrap:normal;word-break:normal}#catalog-importer .ki-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
-<script src="<?= BASE_URL ?>/admin/assets/js/catalog-importer.js?v=3.1.72-catalog-detachable"></script>
+<script src="<?= BASE_URL ?>/admin/assets/js/catalog-importer.js?v=3.1.72-catalog-merge-choice-3"></script>

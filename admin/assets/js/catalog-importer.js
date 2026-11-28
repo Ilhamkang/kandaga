@@ -4,6 +4,15 @@
  const $id=id=>document.getElementById(id), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const names={judul:'Judul',kode_inventaris:'Nomor inventaris',deskripsi_fisik:'Deskripsi Fisik',deskripsi_isi:'Deskripsi Isi',riwayat_naskah:'Riwayat Naskah',kata_kunci:'Kata kunci',penyedia_akses:'Penyedia akses',url_web:'URL web',url_repositori:'URL repositori',iiif_manifest:'IIIF manifest',url_pdf:'URL PDF',url_gambar_eksternal:'URL gambar eksternal',id_lokasi:'Lokasi penyimpanan saat ini',bahasa:'Bahasa',aksara:'Aksara',alas_tulis:'Alas tulis'};
  const statuses={pending:'Menunggu',deferred:'Ditunda',rejected:'Dilewati',created:'Dibuat',merged:'Digabung'};
+ const savedStatuses=['created','merged'];
+ const savedMark=status=>savedStatuses.includes(status)?'<i class="fa-solid fa-circle-check text-success ms-1" aria-label="Sudah tersimpan"></i>':'';
+ const savedBadge=(status,target)=>{
+  const label=esc(statuses[status]||status);
+  if(status==='rejected')return '<span class="badge bg-secondary">'+label+'</span>';
+  if(!savedStatuses.includes(status))return label;
+  const id=Number(target||0);
+  return '<span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Tersimpan · '+label+'</span>'+(id?'<br><small><a href="'+esc(root.dataset.base)+'/detail.php?id='+id+'" target="_blank" rel="noopener">Lihat #'+id+'</a></small>':'');
+ };
  const fieldDefaults={judul:'',kode_inventaris:'',deskripsi_fisik:'',deskripsi_isi:'',riwayat_naskah:'',kata_kunci:'',penyedia_akses:'',url_web:'',url_repositori:'',iiif_manifest:'',url_pdf:'',url_gambar_eksternal:''};
  const historyKinds={asal:'Asal',ditemukan:'Ditemukan',sebelumnya:'Sebelumnya'};
  const certainties={pasti:'Pasti',kemungkinan:'Kemungkinan',dugaan:'Dugaan',belum_diketahui:'Belum diketahui'};
@@ -40,9 +49,21 @@
   if(!r.ok||!result.success)throw new Error(result.message||'Permintaan gagal.');return result;
  }
  function masterOptions(group,selected=[],empty=true){return (empty?'<option value="">— Pilih —</option>':'')+config.masters[group].map(v=>`<option value="${Number(v.id)}" ${selected.map(Number).includes(Number(v.id))?'selected':''}>${esc(v.name)}</option>`).join('');}
+ function initBibliografiSearch(selector,modal){
+  if(typeof window.jQuery==='undefined'||typeof window.jQuery.fn.select2==='undefined')return;
+  const $el=window.jQuery(selector);if(!$el.length||$el.hasClass('select2-hidden-accessible'))return;
+  if(!$el.find('option[value=""]').length)$el.prepend('<option value=""></option>');
+  const opts={width:'100%',minimumResultsForSearch:0,placeholder:'Ketik untuk mencari bibliografi…',language:{noResults:()=>'Bibliografi tidak ditemukan',searching:()=>'Mencari…'}};
+  if(modal)opts.dropdownParent=window.jQuery(modal);
+  if($el.prop('multiple'))opts.closeOnSelect=false;
+  $el.select2(opts);
+ }
  async function init(batchId){
   config=await api('init');$id('ki-setup').hidden=config.ready;$id('ki-work').hidden=!config.ready;if(!config.ready)return;
-  $id('ki-bib').innerHTML=masterOptions('bibliografi');
+  const bibSelect=$id('ki-bib');
+  if(typeof window.jQuery!=='undefined'&&window.jQuery(bibSelect).data('select2'))window.jQuery(bibSelect).select2('destroy');
+  bibSelect.innerHTML=masterOptions('bibliografi');
+  initBibliografiSearch('#ki-bib');
   const options=config.batches.map(b=>`<option value="${Number(b.id)}">#${Number(b.id)} · ${esc(b.filename)} · ${esc(b.source_label)}</option>`).join('');
   $id('ki-profile').innerHTML='<option value="">Pemetaan otomatis berdasarkan nama kolom</option>'+options;
   $id('ki-batch').innerHTML=options||'<option value="">Belum ada batch</option>';
@@ -64,10 +85,10 @@
  async function queue(){
   const id=$id('ki-batch').value;if(!id)return;const result=await api('queue',{batch_id:id,page,status:$id('ki-filter').value});page=result.page;
   const totals=Object.fromEntries(result.counts.map(x=>[x.status,Number(x.n)]));const all=Object.values(totals).reduce((a,b)=>a+b,0);const final=(totals.created||0)+(totals.merged||0)+(totals.rejected||0);const pct=all?Math.round(final/all*100):0;
-  $id('ki-summary').innerHTML=['pending','deferred','created','merged'].map(status=>`<button type="button" data-status="${status}" class="${$id('ki-filter').value===status?'is-active':''}" aria-pressed="${$id('ki-filter').value===status}"><strong>${totals[status]||0}</strong>${esc(statuses[status])}</button>`).join('');
+  $id('ki-summary').innerHTML=['pending','deferred','rejected','created','merged'].map(status=>`<button type="button" data-status="${status}" class="${$id('ki-filter').value===status?'is-active':''}" aria-pressed="${$id('ki-filter').value===status}"><strong>${totals[status]||0}</strong>${esc(statuses[status])}${savedMark(status)}</button>`).join('');
   $id('ki-progress-text').textContent=`${final}/${all} · ${pct}%`;$id('ki-progress-bar').style.width=pct+'%';$id('ki-progress-bar').setAttribute('aria-valuenow',pct);
   $id('ki-counts').textContent=result.counts.map(x=>`${statuses[x.status]||x.status}: ${x.n}`).join(' · ');
-  $id('ki-queue').innerHTML=result.rows.length?'<table class="table table-sm table-striped"><thead><tr><th>Entri</th><th>Judul / inventaris</th><th>Sumber</th><th>Status</th><th>Aksi</th></tr></thead><tbody>'+result.rows.map(r=>`<tr><td>${Number(r.source_row)}</td><td>${esc(r.title||'[Tanpa judul]')}<br><small>${esc(r.inventory||'Tanpa nomor inventaris')}</small></td><td>${esc(r.source.Bagian_Sumber)} · ${esc(r.source.Nomor_Entri)}<br><small>Hlm. ${esc(r.source.Halaman_Cetak)}; PDF ${esc(r.source.Halaman_PDF)} · ${esc(r.source.Status_Sumber)}</small></td><td>${esc(statuses[r.status]||r.status)}${r.linked_id?'<br><small>Identitas sumber sudah ditautkan ke #'+Number(r.linked_id)+'</small>':''}</td><td><button class="btn btn-sm btn-outline-primary ki-open" data-id="${Number(r.id)}"><i class="fa-solid fa-magnifying-glass me-1"></i>Periksa</button></td></tr>`).join('')+'</tbody></table>':'Tidak ada entri untuk filter ini.';
+  $id('ki-queue').innerHTML=result.rows.length?'<table class="table table-sm table-striped"><thead><tr><th>Entri</th><th>Judul / inventaris</th><th>Sumber</th><th>Status</th><th>Aksi</th></tr></thead><tbody>'+result.rows.map(r=>`<tr class="${savedStatuses.includes(r.status)?'is-saved':''}"><td>${Number(r.source_row)}</td><td>${esc(r.title||'[Tanpa judul]')}<br><small>${esc(r.inventory||'Tanpa nomor inventaris')}</small></td><td>${esc(r.source.Bagian_Sumber)} · ${esc(r.source.Nomor_Entri)}<br><small>Hlm. ${esc(r.source.Halaman_Cetak)}; PDF ${esc(r.source.Halaman_PDF)} · ${esc(r.source.Status_Sumber)}</small></td><td>${savedBadge(r.status,r.target_id)}${r.linked_id?'<br><small>Identitas sumber sudah ditautkan ke #'+Number(r.linked_id)+'</small>':''}</td><td><button class="btn btn-sm btn-outline-primary ki-open" data-id="${Number(r.id)}"><i class="fa-solid fa-magnifying-glass me-1"></i>Periksa</button></td></tr>`).join('')+'</tbody></table>':'Tidak ada entri untuk filter ini.';
   $id('ki-pagination').innerHTML=`<button class="btn btn-sm btn-outline-secondary" id="ki-prev" ${page<=1?'disabled':''}><i class="fa-solid fa-chevron-left me-1"></i>Sebelumnya</button><span>${page} / ${result.pages} · ${result.total} entri</span><button class="btn btn-sm btn-outline-secondary" id="ki-next" ${page>=result.pages?'disabled':''}>Berikutnya<i class="fa-solid fa-chevron-right ms-1"></i></button>`;
  }
  async function open(id,target=0,locationId=0,historical=false){
@@ -78,7 +99,7 @@
   const done=!['pending','deferred'].includes(row.status),blocked=done;
   $id('ki-save').disabled=blocked;$id('ki-review-message').textContent='';
   let html=`<p><strong>${esc(row.source_label)}</strong> · ${esc(src.Bagian_Sumber)}, entri ${esc(src.Nomor_Entri)}, hlm. ${esc(src.Halaman_Cetak)} (PDF ${esc(src.Halaman_PDF)}).</p>`;
-  if(linked)html+=`<div class="alert alert-info">Identitas sumber ini sudah ditautkan ke entri #${Number(linked.katalog_id)}${linked.judul?' · '+esc(linked.judul):' (entri tujuan tidak tersedia)'}. Impor ulang ditahan.</div>`;
+  if(linked)html+=`<div class="alert alert-info">Identitas sumber ini sudah ditautkan ke entri #${Number(linked.katalog_id)}${linked.judul?' · '+esc(linked.judul):' (entri tujuan tidak tersedia)'}. Entri baru ditolak; gunakan tombol ini untuk membandingkan dan memperbarui entri tersebut. <button type="button" class="btn btn-sm btn-outline-primary ki-target" data-bs-target="${Number(linked.katalog_id)}"><i class="fa-solid fa-code-merge me-1"></i>Bandingkan #${Number(linked.katalog_id)}</button></div>`;
   if(src.Status_Sumber==='berita')html+='<div class="alert alert-warning">Berita adanya naskah: belum terverifikasi. Hanya boleh ditunda atau dilewati; tidak dapat diterbitkan sebagai entri katalog.</div>';
   html+=`<div class="alert alert-light border">Lokasi/pemilik historis menurut katalog: <strong>${esc(src.Lokasi_Sumber||'Tidak disebutkan')}</strong><br>Asal naskah: ${esc(src.Asal_Naskah||'Tidak disebutkan')}<br>Lokasi sekarang tetap dipilih manual; riwayat lokasi historis dapat dikurasi pada field di bawah.<br>Catatan koreksi: ${esc(src.Catatan_Koreksi||'—')}</div>`;
   html+=`<div class="ki-history-block mb-3"><div class="row g-2"><div class="col-md-3"><label>Riwayat lokasi historis</label><div class="small text-muted">Field ini selalu tersedia. Perubahan pada keputusan Tunda/Lewati disimpan ke draf antrean; hanya keputusan Buat entri baru/Merge yang menulis ke katalog.</div></div><div class="col-md-9"><div id="ki-history">${(row.draft.location_history||[]).map(historyRow).join('')}</div><button type="button" class="btn btn-sm btn-outline-secondary" id="ki-add-history"><i class="fa-solid fa-plus me-1"></i>Tambah riwayat lokasi</button></div></div></div>`;
@@ -89,7 +110,8 @@
   html+='<div class="table-responsive"><table class="table table-sm"><thead><tr><th>Kandidat</th><th>Kode / lokasi</th><th>Alasan</th><th>Aksi</th></tr></thead><tbody>'+candidates.map(c=>`<tr><td>#${Number(c.id)} · ${esc(c.judul)}</td><td>${esc(c.kode_inventaris)}<br>${esc(c.nama_tempat||'')}</td><td>${esc(c.reason)}</td><td><button class="btn btn-sm btn-outline-primary ki-target" data-bs-target="${Number(c.id)}"><i class="fa-solid fa-code-merge me-1"></i>Bandingkan</button> <a class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener" href="${esc(root.dataset.base)}/detail.php?id=${Number(c.id)}"><i class="fa-solid fa-eye"></i><span class="visually-hidden">Detail</span></a></td></tr>`).join('')+'</tbody></table></div>';
   if(!candidates.length)html+='<p>Belum ditemukan kandidat; tetap periksa identitas dan kemungkinan kode historis.</p>';
   html+='<div class="row g-2"><div class="mb-3 col-md-6"><label for="ki-target-manual">Bandingkan ID entri lain</label><div class="input-group"><input id="ki-target-manual" type="number" min="1" class="form-control" placeholder="ID katalog"><button id="ki-load-target" class="btn btn-outline-primary"><i class="fa-solid fa-code-merge me-1"></i>Bandingkan</button></div></div><div class="mb-3 col-md-6"><label for="ki-decision">Keputusan</label><select id="ki-decision" class="form-select">';
-  if(src.Status_Sumber!=='berita'&&!linked)html+='<option value="created">Buat entri baru</option>'+(old?'<option value="merged" selected>Merge ke #'+Number(old.fields.id)+'</option>':'');
+  if(src.Status_Sumber!=='berita'&&!linked)html+='<option value="created">Buat entri baru</option>';
+  if(src.Status_Sumber!=='berita'&&old)html+='<option value="merged" selected>Merge ke #'+Number(old.fields.id)+'</option>';
   html+='<option value="deferred">Tunda</option><option value="rejected">Lewati</option></select></div></div>';
   if(old)html+=`<div class="alert alert-info">Membandingkan dengan #${Number(old.fields.id)} · ${esc(old.fields.judul)}. Semua field merge diawali dengan Pertahankan. Gambar, tautan digital, dan relasi bibliografi lama tetap dipertahankan.</div>`;
   html+='<div id="ki-edit-fields">';
@@ -112,12 +134,13 @@
   html+='<label class="mt-3"><input id="ki-duplicate-confirmed" type="checkbox"> Jika ada kandidat duplikat, saya sudah memeriksa bahwa entri baru ini merupakan naskah/salinan berbeda.</label><div id="ki-requirements" class="ki-requirements mt-3" aria-live="polite"></div></div>';
   html+='<div class="mb-3 mt-3"><label for="ki-note">Catatan keputusan</label><textarea id="ki-note" class="form-control" rows="2" maxlength="4000">'+esc(row.note||'')+'</textarea></div>';
   html+='<details><summary>Riwayat moderasi</summary>'+audit.map(a=>`<p>${esc(a.created_at)} · ${esc(a.username)} · ${esc(statuses[a.action]||a.action)} · ${esc(a.note)}</p>`).join('')+'</details>';
-  $id('ki-review').innerHTML=html;$id('ki-decision').disabled=blocked;toggleFields();refreshRequirements();refreshImagePreview();
+  $id('ki-review').innerHTML=html;initBibliografiSearch('#ki-bibliografi','#ki-modal');$id('ki-decision').disabled=blocked;toggleFields();refreshRequirements();refreshImagePreview();
  }
- function toggleFields(){const decision=$id('ki-decision')?.value;$id('ki-edit-fields').hidden=!['created','merged'].includes(decision);root.querySelectorAll('.ki-choice').forEach(s=>s.disabled=decision!=='merged');}
+ function toggleFields(){const decision=$id('ki-decision')?.value;$id('ki-edit-fields').hidden=!['created','merged'].includes(decision);root.querySelectorAll('.ki-choice').forEach(s=>{s.disabled=decision!=='merged';if(decision!=='merged')s.closest('.ki-field-row')?.classList.remove('ki-selected');});}
  function effectiveImageUrl(){
   const input=$id('ki-field-url_gambar_eksternal');if(!input)return {url:'',old:false};
-  if($id('ki-decision')?.value==='merged'&&root.querySelector('.ki-choice[data-field="url_gambar_eksternal"]')?.value==='keep')return {url:String(current?.snapshot?.data?.fields?.url_gambar_eksternal||''),old:true};
+  const kept=String(current?.snapshot?.data?.fields?.url_gambar_eksternal||'').trim();
+  if($id('ki-decision')?.value==='merged'&&root.querySelector('.ki-choice[data-field="url_gambar_eksternal"]')?.value==='keep'&&kept!=='')return {url:kept,old:true};
   return {url:input.value,old:false};
  }
  const checkable=id=>({id,label:id==='ki-location-confirmed'?'konfirmasi lokasi penyimpanan':id==='ki-metadata-confirmed'?'konfirmasi padanan metadata':'konfirmasi kandidat duplikat',checked:!!$id(id)?.checked});
@@ -167,7 +190,11 @@
   const bibliografi=Array.from($id('ki-bibliografi').selectedOptions).map(o=>Number(o.value));
   const payload={row_id:Number(current.row.id),action,fields,choices,relations,structure,identifiers,location_history:locationHistory,bibliografi,target_id:Number(current.snapshot?.data.fields.id||0),revision:current.snapshot?.revision||'',location_confirmed:$id('ki-location-confirmed').checked,metadata_confirmed:$id('ki-metadata-confirmed').checked,duplicate_confirmed:$id('ki-duplicate-confirmed').checked,note:$id('ki-note').value};
   const fd=new FormData();fd.set('payload',JSON.stringify(payload));$id('ki-save').disabled=true;
-  try{const result=await api('review',{},fd);bootstrap.Modal.getOrCreateInstance(document.getElementById('ki-modal')).hide();message(result.message+(result.id?' Entri #'+result.id+'.':''));await queue();}catch(e){if(/duplikat/i.test(e.message)){const el=$id('ki-duplicate-confirmed');el?.closest('label')?.classList.add('is-required-missing');el?.focus();}$id('ki-review-message').textContent=e.message;}finally{$id('ki-save').disabled=false;}
+  try{const result=await api('review',{},fd);bootstrap.Modal.getOrCreateInstance(document.getElementById('ki-modal')).hide();message(result.message+(result.id?' Entri #'+result.id+'.':''));await queue();}catch(e){
+   if(/tujuan merge|ditautkan ke entri/i.test(e.message)){const el=$id('ki-target-manual');el?.focus();el?.scrollIntoView({block:'center',behavior:'smooth'});}
+   else if(/duplikat/i.test(e.message)){const el=$id('ki-duplicate-confirmed');el?.closest('label')?.classList.add('is-required-missing');el?.focus();}
+   $id('ki-review-message').textContent=e.message;
+  }finally{$id('ki-save').disabled=false;}
  }
  async function deleteBatch(){
   const id=Number($id('ki-batch').value);if(!id)throw new Error('Pilih batch impor terlebih dahulu.');

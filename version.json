@@ -1,4 +1,4 @@
 {
-    "version": "3.1.72",
-    "description": "Pembersihan antrean impor tanpa menghilangkan entri katalog, tautan identitas, atau catatan moderasi."
+    "version": "3.1.73",
+    "description": "Moderasi impor kini mendukung pencarian bibliografi, keputusan per field saat membandingkan duplikat, dan penanda entri tersimpan di antrean."
 }

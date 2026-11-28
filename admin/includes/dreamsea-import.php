@@ -204,7 +204,16 @@ function dsSuggestions($draft, $masters) {
     return $out;
 }
 function dsCandidates($draft) {
-    $out = [];
+    // Satu kandidat per entri katalog: semua sinyal yang cocok digabung dalam satu alasan.
+    $found = [];
+    $add = function ($id, $judul, $kodeInventaris, $reason, $score) use (&$found) {
+        $id = (int)$id;
+        if (!isset($found[$id])) {
+            $found[$id] = ['id' => $id, 'judul' => (string)$judul, 'kode_inventaris' => (string)$kodeInventaris, 'reasons' => [], 'score' => 0];
+        }
+        if (!in_array($reason, $found[$id]['reasons'], true)) $found[$id]['reasons'][] = $reason;
+        $found[$id]['score'] = max($found[$id]['score'], (int)$score);
+    };
     $identity = $draft['source'];
     $schemes = [
         $identity['primary']['scheme'] => [$identity['primary']['value']],
@@ -215,26 +224,25 @@ function dsCandidates($draft) {
         foreach ($values as $value) {
             if ($value === '') continue;
             $rows = kiQuery('SELECT i.id_naskah, k.judul, k.kode_inventaris FROM katalog_identifiers i LEFT JOIN katalog k ON k.id=i.id_naskah WHERE i.scheme=? AND i.identifier_value=?', [$scheme, $value])->get_result()->fetch_all(MYSQLI_ASSOC);
-            foreach ($rows as $row) $out[] = ['id' => (int)$row['id_naskah'], 'judul' => $row['judul'], 'kode_inventaris' => $row['kode_inventaris'], 'reason' => 'Identitas ' . $scheme . ' sama', 'score' => 100];
+            foreach ($rows as $row) $add($row['id_naskah'], $row['judul'], $row['kode_inventaris'], 'Identitas ' . $scheme . ' sama', 100);
         }
     }
     $linked = kiLinked($draft['source']['source_key']);
-    if ($linked) $out[] = ['id' => (int)$linked['katalog_id'], 'judul' => $linked['judul'], 'kode_inventaris' => '', 'reason' => 'Sumber sudah ditautkan', 'score' => 100];
+    if ($linked) $add($linked['katalog_id'], $linked['judul'], '', 'Sumber sudah ditautkan', 100);
     $codes = kiCodes($draft['fields']['kode_inventaris']);
     $title = kiCode($draft['fields']['judul']);
     $rows = kiQuery('SELECT k.id, k.judul, k.kode_inventaris FROM katalog k')->get_result();
     while ($row = $rows->fetch_assoc()) {
-        if ($codes && array_intersect($codes, kiCodes($row['kode_inventaris']))) $out[] = ['id' => (int)$row['id'], 'judul' => $row['judul'], 'kode_inventaris' => $row['kode_inventaris'], 'reason' => 'Kode inventaris sama/varian', 'score' => 80];
+        if ($codes && array_intersect($codes, kiCodes($row['kode_inventaris']))) $add($row['id'], $row['judul'], $row['kode_inventaris'], 'Kode inventaris sama/varian', 80);
         $other = kiCode($row['judul']);
-        if ($title !== '' && $title === $other && mb_strlen($title) >= 8) $out[] = ['id' => (int)$row['id'], 'judul' => $row['judul'], 'kode_inventaris' => $row['kode_inventaris'], 'reason' => 'Judul sama', 'score' => 60];
+        if ($title !== '' && $title === $other && mb_strlen($title) >= 8) $add($row['id'], $row['judul'], $row['kode_inventaris'], 'Judul sama', 60);
     }
-    $seen = [];
-    $out = array_values(array_filter($out, function ($item) use (&$seen) {
-        $key = $item['id'] . '|' . $item['reason'];
-        if (isset($seen[$key])) return false;
-        $seen[$key] = true;
-        return true;
-    }));
+    $out = [];
+    foreach ($found as $item) {
+        $item['reason'] = implode('; ', $item['reasons']);
+        unset($item['reasons']);
+        $out[] = $item;
+    }
     usort($out, fn($a, $b) => $b['score'] <=> $a['score'] ?: $a['id'] <=> $b['id']);
     return array_slice($out, 0, 20);
 }
@@ -277,45 +285,82 @@ function dsApprove($input) {
         }
         $fields = $input['fields'] ?? null;
         $relations = $input['relations'] ?? [];
-        if (!is_array($fields) || !is_array($relations)) throw new InvalidArgumentException('Format form moderasi tidak valid.');
+        $choices = $input['choices'] ?? [];
+        if (!is_array($fields) || !is_array($relations) || !is_array($choices)) throw new InvalidArgumentException('Format form moderasi tidak valid.');
         $editable = ['judul', 'kode_inventaris', 'deskripsi_fisik', 'deskripsi_isi', 'riwayat_naskah', 'kata_kunci', 'penyedia_akses', 'url_web', 'url_repositori', 'iiif_manifest', 'url_pdf', 'url_gambar_eksternal'];
+        $textFields = ['deskripsi_fisik', 'deskripsi_isi', 'riwayat_naskah'];
+        $target = null;
+        $before = null;
+        $old = null;
+        if ($action === 'merged') {
+            $target = filter_var($input['target_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+            if (!$target) throw new InvalidArgumentException('Pilih entri tujuan merge.');
+            $snapshot = dsSnapshot($target, true);
+            $old = $snapshot['data'];
+            $before = $old;
+            if (!is_string($input['revision'] ?? null) || !hash_equals($snapshot['revision'], $input['revision'])) throw new InvalidArgumentException('Entri tujuan berubah sejak pratinjau. Muat ulang dan periksa kembali.');
+        }
+        $linked = kiLinked($row['source_key']);
+        if ($action === 'created' && $linked) throw new InvalidArgumentException('Identitas sumber ini sudah ditautkan ke entri #' . (int)$linked['katalog_id'] . '. Pilih entri tersebut sebagai tujuan merge.');
+        if ($action === 'merged' && $linked && (int)$linked['katalog_id'] !== $target) throw new InvalidArgumentException('Identitas sumber ini sudah ditautkan ke entri #' . (int)$linked['katalog_id'] . '. Gunakan entri tersebut sebagai tujuan merge.');
+        $duplicate = kiQuery('SELECT i.id_naskah FROM katalog_identifiers i WHERE i.scheme=? AND i.identifier_value=? LIMIT 1', [$row['draft']['source']['primary']['scheme'], $row['draft']['source']['primary']['value']])->get_result()->fetch_assoc();
+        if ($duplicate && $action === 'created' && ($input['duplicate_confirmed'] ?? false) !== true) throw new InvalidArgumentException('Identitas sumber ini sudah tersimpan pada entri #' . (int)$duplicate['id_naskah'] . '. Periksa dan konfirmasikan bila ini memang naskah berbeda.');
         $resolved = [];
         foreach ($editable as $field) {
             if (!is_string($fields[$field] ?? null)) throw new InvalidArgumentException('Field ' . $field . ' tidak valid.');
-            $value = trim($fields[$field]);
-            $max = in_array($field, ['judul', 'kode_inventaris', 'kata_kunci', 'penyedia_akses', 'url_web', 'url_repositori', 'iiif_manifest', 'url_pdf', 'url_gambar_eksternal'], true) ? 255 : 50000;
-            if (mb_strlen($value) > $max) throw new InvalidArgumentException($field . ' terlalu panjang.');
-            if (in_array($field, ['url_web', 'url_repositori', 'iiif_manifest', 'url_pdf', 'url_gambar_eksternal'], true)) $value = kandagaValidateExternalUrl($value, $field);
-            $resolved[$field] = in_array($field, ['deskripsi_fisik', 'deskripsi_isi', 'riwayat_naskah'], true) ? kiHtml($value) : $value;
+            $new = trim($fields[$field]);
+            $text = in_array($field, $textFields, true);
+            $mode = $action === 'created' ? 'use' : ($choices[$field] ?? 'keep');
+            if (!in_array($mode, ['keep', 'use', 'append'], true) || ($mode === 'append' && !$text)) throw new InvalidArgumentException('Pilihan merge tidak valid: ' . $field . '.');
+            $oldValue = (string)($old['fields'][$field] ?? '');
+            if ($mode === 'keep' && trim(strip_tags($oldValue)) !== '') {
+                $resolved[$field] = $oldValue;
+            } else {
+                $max = in_array($field, ['judul', 'kode_inventaris', 'kata_kunci', 'penyedia_akses', 'url_web', 'url_repositori', 'iiif_manifest', 'url_pdf', 'url_gambar_eksternal'], true) ? 255 : 50000;
+                if (mb_strlen($new) > $max) throw new InvalidArgumentException($field . ' terlalu panjang.');
+                if (in_array($field, ['url_web', 'url_repositori', 'iiif_manifest', 'url_pdf', 'url_gambar_eksternal'], true)) $new = kandagaValidateExternalUrl($new, $field);
+                if ($mode === 'append') {
+                    if ($new === '') throw new InvalidArgumentException('Tidak ada teks untuk digabungkan pada ' . $field . '.');
+                    $credit = kiHtml(dsSourceLabel($row['draft']['source']) . '; msid ' . (string)($row['draft']['source']['msid'] ?? '') . '.');
+                    $resolved[$field] = $oldValue . '<p><strong>' . $credit . '</strong><br>' . kiHtml($new) . '</p>';
+                } else {
+                    if ($action === 'merged' && $new === '' && trim(strip_tags($oldValue)) !== '') throw new InvalidArgumentException('Nilai kosong tidak boleh menghapus data lama: ' . $field . '. Pilih pertahankan.');
+                    $resolved[$field] = $text ? kiHtml($new) : $new;
+                }
+            }
+            if ($text && strlen($resolved[$field]) > 60000) throw new InvalidArgumentException('Gabungan deskripsi terlalu panjang untuk kolom TEXT.');
         }
-        if ($resolved['judul'] === '') throw new InvalidArgumentException('Judul wajib diisi.');
+        if (trim($resolved['judul']) === '') throw new InvalidArgumentException('Judul wajib diisi.');
         $locationList = ['lokasi' => ['tb_lokasi', 'id_lokasi'], 'bahasa' => ['tb_bahasa', 'id_bahasa'], 'aksara' => ['tb_aksara', 'id_aksara'], 'alas_tulis' => ['tb_alas_tulis', 'id_alas_tulis']];
         $relationList = ['bahasa' => ['naskah_bahasa', 'id_bahasa'], 'aksara' => ['naskah_aksara', 'id_aksara'], 'alas_tulis' => ['naskah_alas_tulis', 'id_alas_tulis']];
-        $location = dsValidId($input['id_lokasi'] ?? null, 'tb_lokasi', 'id_lokasi');
-        if (($input['location_confirmed'] ?? false) !== true) throw new InvalidArgumentException('Konfirmasikan lokasi penyimpanan saat ini; koleksi historis tidak otomatis menjadi lokasi sekarang.');
+        $locationMode = $action === 'created' ? 'use' : ($choices['id_lokasi'] ?? 'keep');
+        if (!in_array($locationMode, ['keep', 'use'], true)) throw new InvalidArgumentException('Pilihan lokasi tidak valid.');
+        if ($locationMode === 'keep') {
+            $location = (int)($old['fields']['id_lokasi'] ?? 0);
+            if (!$location) throw new InvalidArgumentException('Entri tujuan belum memiliki lokasi. Pilih lokasi dari draf.');
+        } else {
+            $location = dsValidId($input['id_lokasi'] ?? null, 'tb_lokasi', 'id_lokasi');
+            if (($input['location_confirmed'] ?? false) !== true) throw new InvalidArgumentException('Konfirmasikan lokasi penyimpanan saat ini; koleksi historis tidak otomatis menjadi lokasi sekarang.');
+        }
         if (($input['metadata_confirmed'] ?? false) !== true) throw new InvalidArgumentException('Periksa dan konfirmasikan padanan metadata sebelum menyimpan keputusan.');
         $finalRelations = [];
         foreach (['bahasa', 'aksara', 'alas_tulis'] as $group) {
             $values = $relations[$group] ?? [];
             if (!is_array($values)) throw new InvalidArgumentException('Pilihan relasi tidak valid.');
+            $mode = $action === 'created' ? 'replace' : ($choices[$group] ?? 'keep');
+            if (!in_array($mode, ['keep', 'union', 'replace'], true)) throw new InvalidArgumentException('Pilihan relasi tidak valid: ' . $group . '.');
             $valid = [];
-            foreach ($values as $value) $valid[] = dsValidId($value, $locationList[$group][0], $locationList[$group][1]);
-            $finalRelations[$group] = array_values(array_unique($valid));
+            if ($mode !== 'keep') foreach ($values as $value) $valid[] = dsValidId($value, $locationList[$group][0], $locationList[$group][1]);
+            $oldIds = array_map('intval', (array)($old['relations'][$group] ?? []));
+            if ($mode === 'keep') $finalRelations[$group] = array_values(array_unique($oldIds));
+            elseif ($mode === 'union') $finalRelations[$group] = array_values(array_unique(array_merge($oldIds, $valid)));
+            else {
+                if (!$valid && $oldIds) throw new InvalidArgumentException('Pilihan kosong tidak boleh menghapus relasi lama: ' . $group . '.');
+                $finalRelations[$group] = array_values(array_unique($valid));
+            }
         }
         $bibliografi = [];
         foreach ((array)($input['bibliografi'] ?? []) as $value) $bibliografi[] = dsValidId($value, 'tb_bibliografi', 'id');
-        if (kiLinked($row['source_key'])) throw new InvalidArgumentException('Identitas sumber ini sudah ditautkan ke entri Kandaga. Gunakan entri tersebut untuk pemeriksaan, bukan membuat entri baru.');
-        $duplicate = kiQuery('SELECT i.id_naskah FROM katalog_identifiers i WHERE i.scheme=? AND i.identifier_value=? LIMIT 1', [$row['draft']['source']['primary']['scheme'], $row['draft']['source']['primary']['value']])->get_result()->fetch_assoc();
-        if ($duplicate && $action === 'created' && ($input['duplicate_confirmed'] ?? false) !== true) throw new InvalidArgumentException('Identitas sumber ini sudah tersimpan pada entri #' . (int)$duplicate['id_naskah'] . '. Periksa dan konfirmasikan bila ini memang naskah berbeda.');
-        $target = null;
-        $before = null;
-        if ($action === 'merged') {
-            $target = filter_var($input['target_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
-            if (!$target) throw new InvalidArgumentException('Pilih entri tujuan merge.');
-            $snapshot = dsSnapshot($target, true);
-            $before = $snapshot['data'];
-            if (!is_string($input['revision'] ?? null) || !hash_equals($snapshot['revision'], $input['revision'])) throw new InvalidArgumentException('Entri tujuan berubah sejak pratinjau. Muat ulang dan periksa kembali.');
-        }
         kiEncoding($resolved);
         if ($action === 'created') {
             kiQuery("INSERT INTO katalog(tanggal_input,penginput_awal,judul,id_lokasi,kode_inventaris,deskripsi_fisik,deskripsi_isi,riwayat_naskah,kata_kunci,penyedia_akses,gambar,url_web,url_repositori,iiif_manifest,url_pdf,url_gambar_eksternal) VALUES(NOW(),?,?,?,?,?,?,?,?,?,'',?,?,?,?,?)", [$_SESSION['username'], $resolved['judul'], $location, $resolved['kode_inventaris'], $resolved['deskripsi_fisik'], $resolved['deskripsi_isi'], $resolved['riwayat_naskah'], $resolved['kata_kunci'], $resolved['penyedia_akses'], $resolved['url_web'], $resolved['url_repositori'], $resolved['iiif_manifest'], $resolved['url_pdf'], $resolved['url_gambar_eksternal']]);
