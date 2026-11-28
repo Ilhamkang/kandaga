@@ -15,6 +15,11 @@ require_once __DIR__ . '/catalog-analytics.php';
 function kandagaTrafficClass(?string $userAgent = null): array
 {
     $ua = trim((string)($userAgent ?? ($_SERVER['HTTP_USER_AGENT'] ?? '')));
+    // Browser requests always carry a User-Agent. An empty one is almost
+    // always a scripted client and must not inflate public counters.
+    if ($ua === '') {
+        return ['traffic_class' => 'unknown_bot', 'bot_name' => 'Empty User-Agent', 'is_bot' => 1];
+    }
     $patterns = [
         'search_bot' => [
             'Googlebot' => '/googlebot|google-inspectiontool/i',
@@ -28,12 +33,14 @@ function kandagaTrafficClass(?string $userAgent = null): array
             'LinkedInBot' => '/linkedinbot/i',
         ],
         'unknown_bot' => [
-            'Crawler' => '/bot\b|crawler|spider|slurp|headless|archive|curl\b|wget\b/i',
+            'Crawler' => '/bot\b|crawler|spider|slurp|headless|archive\.org|wayback/i',
+            'HTTP client' => '/python-requests|python-urllib|httpx\b|httpie|postmanruntime|go-http-client|node-fetch|axios\b|libwww-perl|selenium|playwright|puppeteer|scrapy|mechanize|curl\b|wget\b|java\/|perl\b|ruby\b/i',
+            'Monitoring' => '/prometheus|datadog|newrelic|pingdom/i',
         ],
     ];
     foreach ($patterns as $class => $names) {
         foreach ($names as $name => $pattern) {
-            if ($ua !== '' && preg_match($pattern, $ua)) {
+            if (preg_match($pattern, $ua)) {
                 return ['traffic_class' => $class, 'bot_name' => $name, 'is_bot' => 1];
             }
         }

@@ -5,6 +5,7 @@ require_once __DIR__ . '/../config/bootstrap.php';
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/bibliography.php';
 require_once __DIR__ . '/../includes/version.php';
+require_once __DIR__ . '/../includes/public-page-header.php';
 
 // 2. Tangkap parameter pencarian, filter kategori, dan nomor halaman
 $search   = isset($_GET['search_bib']) ? trim($_GET['search_bib']) : '';
@@ -69,15 +70,12 @@ if (!empty($kategori)) { $url_params .= "&kat_bib=" . urlencode($kategori); }
 
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
+<?php kandagaPublicHeader('Monograf', 'fa-book-open', 'Sumber primer dan sekunder yang terhubung dengan entri naskah dalam KANDAGA.', '', 'Bibliografi'); ?>
+
 <div class="container pb-5">
     <div class="row">
         <div class="col-12">
             <div class="content-card bibliography-card">
-                <header class="bibliography-header mb-4">
-                    <h1 class="h3 fw-bold mb-2">Monograf</h1>
-                    <p class="mb-0 text-muted">Sumber primer dan sekunder yang terhubung dengan entri naskah dalam KANDAGA.</p>
-                </header>
-
                 <div class="tab-content" id="bibTabContent">
                     <div class="tab-pane fade show active" id="arsip" role="tabpanel" aria-label="Daftar monograf">
 

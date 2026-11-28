@@ -21,6 +21,12 @@ body.kandaga-admin-shell {
     color: var(--kandaga-text);
 }
 
+/* TinyMCE 7 GPL: promotion:false already hides Upgrade; this is a defensive
+   fallback for cached bundles and dynamically reinitialised editors. No vendor
+   file is modified. */
+body.kandaga-admin-shell .tox-promotion,
+body.kandaga-admin-shell .tox-promotion-link { display: none !important; }
+
 /* Bootstrap components that bake component-local variables. */
 body.kandaga-admin-shell .btn-primary {
     --bs-btn-bg: var(--kandaga-primary);
@@ -65,22 +71,50 @@ body.kandaga-admin-shell .nav-tabs .nav-link.active {
     border-color: var(--kandaga-border) var(--kandaga-border) var(--kandaga-primary);
 }
 
-/* Shared page furniture. */
+/* Shared page furniture: one title size, one icon treatment, one description. */
+body.kandaga-admin-shell .admin-page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--kandaga-space-3, .75rem);
+}
+body.kandaga-admin-shell .admin-page-header__copy { min-width: 0; }
+body.kandaga-admin-shell .admin-page-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--kandaga-space-2, .5rem);
+}
 body.kandaga-admin-shell .admin-page-header h1,
 body.kandaga-admin-shell .admin-page-header h2,
 body.kandaga-admin-shell .admin-page-header h3,
 body.kandaga-admin-shell .admin-page-header h4,
 body.kandaga-admin-shell .admin-page-header h5,
 body.kandaga-admin-shell .admin-page-header h6 {
+    display: flex;
+    align-items: center;
     color: var(--kandaga-heading);
     font-size: 1.5rem;
     font-weight: var(--kandaga-weight-bold);
     letter-spacing: -.01em;
+    line-height: var(--kandaga-leading-tight, 1.25);
     margin: 0;
 }
-body.kandaga-admin-shell .admin-page-header p {
+body.kandaga-admin-shell .admin-page-header h1 > i,
+body.kandaga-admin-shell .admin-page-header h2 > i,
+body.kandaga-admin-shell .admin-page-header h3 > i,
+body.kandaga-admin-shell .admin-page-header h4 > i,
+body.kandaga-admin-shell .admin-page-header h5 > i,
+body.kandaga-admin-shell .admin-page-header h6 > i {
+    color: var(--kandaga-primary);
+    font-size: 1.25rem;
+}
+body.kandaga-admin-shell .admin-page-header p,
+body.kandaga-admin-shell .admin-page-header .admin-page-header__desc {
     color: var(--kandaga-muted);
     font-size: var(--kandaga-text-sm);
+    line-height: var(--kandaga-leading-body, 1.5);
     margin: .25rem 0 0;
 }
 
@@ -95,6 +129,21 @@ body.kandaga-admin-shell .admin-module-surface {
 }
 body.kandaga-admin-shell .admin-module-surface > :last-child { margin-bottom: 0; }
 body.kandaga-admin-shell .admin-module-surface > .statistics-dashboard { padding: 0; }
+
+/* Uniform icon-only row actions across every Goah submodule. */
+body.kandaga-admin-shell .kandaga-action-btn {
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--kandaga-border);
+    border-radius: var(--kandaga-radius-md);
+    background: var(--kandaga-card);
+    transition: background-color .2s ease, color .2s ease;
+}
+body.kandaga-admin-shell .kandaga-action-btn:hover { background: var(--kandaga-primary-soft); }
 
 body.kandaga-admin-shell #adminModule[data-page="inbox"],
 body.kandaga-admin-shell #adminModule[data-page="feedback-naskah"] {
@@ -113,6 +162,47 @@ body.kandaga-admin-shell #adminModule[data-page="feedback-naskah"] > .inbox-wrap
     box-shadow: none;
 }
 body.kandaga-admin-shell #adminModule .inbox-content { background: var(--kandaga-card); }
+body.kandaga-admin-shell .email-topic {
+    display: inline-block;
+    margin-top: .2rem;
+    padding: .05rem .4rem;
+    border-radius: 999px;
+    background: var(--kandaga-primary-soft);
+    color: var(--kandaga-primary-strong);
+    font-size: var(--kandaga-text-xs, .75rem);
+    font-weight: var(--kandaga-weight-semibold);
+}
+
+/* Goah activity/log tabs use the same surface and accent as other submodules. */
+body.kandaga-admin-shell .kandaga-log-tabs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+    padding: .25rem;
+    background: var(--kandaga-surface);
+    border: 1px solid var(--kandaga-border);
+    border-radius: 999px;
+}
+body.kandaga-admin-shell .kandaga-log-tabs .kandaga-log-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .4rem .85rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--kandaga-muted);
+    font-size: var(--kandaga-text-sm);
+    font-weight: var(--kandaga-weight-semibold);
+    line-height: 1.2;
+    transition: background-color .2s ease, color .2s ease;
+}
+body.kandaga-admin-shell .kandaga-log-tabs .kandaga-log-tab:hover { color: var(--kandaga-primary-strong); }
+body.kandaga-admin-shell .kandaga-log-tabs .kandaga-log-tab.active {
+    background: var(--kandaga-card);
+    color: var(--kandaga-primary-strong);
+    box-shadow: var(--kandaga-shadow-1);
+}
 
 body.kandaga-admin-shell .table .empty-row {
     padding: 1.25rem;

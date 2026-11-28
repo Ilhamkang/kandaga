@@ -9,7 +9,7 @@ $val = static fn($k,$d='') => htmlspecialchars((string)($row[$k] ?? $d), ENT_QUO
 $cover = kandagaBibliographyCover($row);
 ?>
 <?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface py-4"><?php endif; ?>
-  <div class="admin-page-header d-flex justify-content-between align-items-center mb-4"><div><h1><i class="fa-solid fa-book-open me-2"></i><?= $id ? 'Edit Bibliografi' : 'Tambah Bibliografi' ?></h1><p>Form terpisah untuk monograf, artikel, dan katalog.</p></div><a class="btn btn-light" href="index.php?page=daftar-pustaka"><i class="fa-solid fa-arrow-left me-1"></i>Kembali</a></div>
+  <?php kandagaPageHeader($id ? 'Edit Bibliografi' : 'Tambah Bibliografi', 'fa-book-medical', 'Form terpisah untuk monograf, artikel, dan katalog.', '<a class="btn btn-light" href="index.php?page=daftar-pustaka"><i class="fa-solid fa-arrow-left me-1" aria-hidden="true"></i>Kembali</a>'); ?>
   <form id="bibliographyForm" enctype="multipart/form-data" class="card border-0 shadow-sm"><input type="hidden" name="id" value="<?= $id ?>"><div class="card-body"><div class="row"><div class="col-lg-8">
     <div class="row g-2"><div class="mb-3 col-md-6"><label class="form-label">Tipe item</label><select name="tipe_item" id="tipe_item" class="form-select"><option value="buku" <?= ($row['tipe_item']??'buku')==='buku'?'selected':'' ?>>Buku / katalog</option><option value="jurnal" <?= ($row['tipe_item']??'')==='jurnal'?'selected':'' ?>>Artikel jurnal</option></select></div><div class="mb-3 col-md-6"><label class="form-label">Kategori</label><select name="kategori" class="form-select"><option value="referensi sekunder" <?= ($row['kategori']??'')==='referensi sekunder'?'selected':'' ?>>Referensi sekunder</option><option value="referensi primer" <?= ($row['kategori']??'')==='referensi primer'?'selected':'' ?>>Referensi primer</option><option value="katalog" <?= ($row['kategori']??'')==='katalog'?'selected':'' ?>>Katalog</option></select></div></div>
     <div class="mb-3"><label class="form-label">Judul utama</label><input name="judul" class="form-control" required value="<?= $val('judul') ?>"></div><div class="mb-3"><label class="form-label">Subjudul</label><input name="subjudul" class="form-control" value="<?= $val('subjudul') ?>"></div><div class="mb-3"><label class="form-label">Penyusun / penulis</label><input name="penyusun" class="form-control" required value="<?= $val('penyusun') ?>"><div id="duplicateWarning" class="alert alert-warning small mt-2 py-2 px-3 d-none" role="status"></div><small class="text-muted">Kombinasi judul, penyusun, tahun, dan kategori harus unik.</small></div>
@@ -52,7 +52,7 @@ $cover = kandagaBibliographyCover($row);
       const r=await fetch('actions/proses-bibliografi.php',{method:'POST',body:fd,headers:{'X-CSRF-Token':window.KANDAGA_CSRF||''}}),d=await r.json();
       if(!d.success)throw new Error(d.message);
       window.location.href=d.redirect||'index.php?page=daftar-pustaka';
-    }catch(x){alert(x.message||'Penyimpanan gagal');b.disabled=false}
+    }catch(x){kandagaDialog.show({title:'Gagal',message:x.message||'Penyimpanan gagal',icon:'error'});b.disabled=false}
   });
 })();
 </script>

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/request.php';
+require_once __DIR__ . '/ownership.php';
 require_once __DIR__ . '/upload.php';
 require_once __DIR__ . '/log-tracker.php';
 require_once __DIR__ . '/catalog-structure.php';
@@ -87,13 +88,20 @@ function kandagaSaveManuscript($editing = false) {
         $conn->begin_transaction(); $transaction = true;
         $old = null;
         if ($editing) {
-            $stmt = $conn->prepare('SELECT gambar, url_gambar_eksternal FROM katalog WHERE id = ? FOR UPDATE');
+            $stmt = $conn->prepare('SELECT id_lokasi, gambar, url_gambar_eksternal FROM katalog WHERE id = ? FOR UPDATE');
             $stmt->bind_param('i', $id); $stmt->execute(); $old = $stmt->get_result()->fetch_assoc();
             if (!$old) throw new InvalidArgumentException('Naskah tidak ditemukan.');
         }
         $location = $conn->prepare('SELECT id_lokasi FROM tb_lokasi WHERE id_lokasi = ?');
         $location->bind_param('i', $values[1]); $location->execute();
         if (!$location->get_result()->fetch_assoc()) throw new InvalidArgumentException('Lokasi penyimpanan tidak ditemukan.');
+        if ($editing) {
+            if (!kandagaBolehNaskah($conn, $id, $values[1], $old)) {
+                kandagaDeny('Naskah ini dipegang kurator. Hanya kurator penanggung jawab atau administrator yang dapat mengubahnya.');
+            }
+        } elseif (!kandagaBolehLokasi($conn, $values[1])) {
+            kandagaDeny('Koleksi ini dipegang kurator. Pilih koleksi lain atau hubungi administrator.');
+        }
         $newFile = kandagaUpload('gambar', $directory, 'naskah');
         if ($editing && !array_key_exists('url_gambar_eksternal', $_POST)) $values[12] = $newFile ? '' : ($old['url_gambar_eksternal'] ?? '');
         if ($newFile) $values[12] = ''; // A selected local upload becomes the displayed image.

@@ -1,0 +1,136 @@
+/* Shared public header: compact, token-based, and deliberately breadcrumb-free. */
+.kandaga-page-head {
+    background: var(--kandaga-card);
+    border-bottom: 1px solid var(--kandaga-border);
+    padding: clamp(1.4rem, 3.4vw, 2.6rem) 0;
+}
+.kandaga-page-head__row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .9rem 1rem;
+}
+.kandaga-page-head__icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    border-radius: var(--kandaga-radius-lg);
+    background: var(--kandaga-primary-soft);
+    color: var(--kandaga-primary-strong);
+    font-size: 1.25rem;
+}
+.kandaga-page-head__copy {
+    flex: 1 1 320px;
+    min-width: 0;
+}
+.kandaga-page-head__eyebrow {
+    margin: 0 0 .25rem;
+    color: var(--kandaga-primary);
+    font-size: var(--kandaga-text-xs);
+    font-weight: var(--kandaga-weight-bold);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+.kandaga-page-head h1 {
+    margin: 0;
+    color: var(--kandaga-heading);
+    font-size: clamp(1.45rem, 3vw, 2.1rem);
+    font-weight: var(--kandaga-weight-extrabold);
+    line-height: var(--kandaga-leading-tight);
+    overflow-wrap: anywhere;
+}
+.kandaga-page-head__lead {
+    max-width: 760px;
+    margin: .45rem 0 0;
+    color: var(--kandaga-muted);
+    font-size: var(--kandaga-text-md);
+}
+.kandaga-page-head__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-left: auto;
+}
+.kandaga-page-head__search {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+    width: 100%;
+}
+.kandaga-page-head__search-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    min-height: 38px;
+    padding: .4rem .85rem;
+    border: 1px solid var(--kandaga-border-strong);
+    border-radius: 999px;
+    background: var(--kandaga-card);
+    color: var(--kandaga-heading);
+    font-size: var(--kandaga-text-sm);
+    font-weight: var(--kandaga-weight-semibold);
+    transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+.kandaga-page-head__search-toggle:hover,
+.kandaga-page-head__search-toggle:focus-visible,
+.kandaga-page-head__search-toggle[aria-expanded="true"] {
+    border-color: var(--kandaga-primary);
+    background: var(--kandaga-primary-soft);
+    color: var(--kandaga-primary-strong);
+}
+.kandaga-page-head__search-panel {
+    flex: 1 1 280px;
+    max-width: 520px;
+}
+.kandaga-page-head__search-panel[hidden] { display: none !important; }
+.kandaga-page-head__search-form {
+    display: flex;
+    align-items: stretch;
+    gap: .4rem;
+}
+.kandaga-page-head__search-form .form-control {
+    min-width: 0;
+    border-color: var(--kandaga-border-strong);
+    border-radius: 999px;
+    background: var(--kandaga-card);
+}
+.kandaga-page-head__search-form .form-control:focus {
+    border-color: var(--kandaga-primary);
+    box-shadow: 0 0 0 .15rem var(--kandaga-focus-ring);
+}
+.kandaga-page-head__search-form .btn {
+    flex: 0 0 auto;
+    border-radius: 999px;
+    padding-inline: 1rem;
+}
+
+/* Reusable filter rail for index pages that used to crowd the page header. */
+.kandaga-page-filters { padding: 1rem 0 .25rem; }
+.kandaga-page-filters__label {
+    margin: 0 0 .5rem;
+    color: var(--kandaga-muted);
+    font-size: var(--kandaga-text-xs);
+    font-weight: var(--kandaga-weight-semibold);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+.kandaga-page-filters__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+@media (max-width: 575.98px) {
+    .kandaga-page-head { padding: 1.25rem 0; }
+    .kandaga-page-head__icon { width: 40px; height: 40px; border-radius: var(--kandaga-radius-md); }
+    .kandaga-page-head__lead { font-size: var(--kandaga-text-sm); }
+    .kandaga-page-head__actions,
+    .kandaga-page-head__search { width: 100%; margin-left: 0; }
+    .kandaga-page-head__search-panel { max-width: none; flex-basis: 100%; }
+    .kandaga-page-head__search-form { flex-wrap: wrap; }
+    .kandaga-page-head__search-form .form-control { flex: 1 1 100%; }
+}

@@ -1,4 +1,4 @@
 {
-    "version": "3.1.74",
-    "description": "Tampilan admin diseragamkan dengan kontainer putih dan token teal, ditambah metadata akses naskah serta narasi arsip digital pada detail katalog."
+    "version": "3.1.75",
+    "description": "Modal terpusat, header admin dan publik seragam, Pustaka Media dengan galeri artikel, aturan kurator, CAPTCHA/topik, serta tema Teal dengan dukungan mobile."
 }

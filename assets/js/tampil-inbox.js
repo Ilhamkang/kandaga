@@ -45,14 +45,18 @@
         $(document).on('click', '.btn-delete-mail', function(e){
             e.stopPropagation();
             let id = $(this).data('id');
-            if(!confirm('Hapus pesan ini?')) return;
-            $.post(ACTION_DIR + 'hapus-pesan.php', { id: id }, function(res){
-                if(res.success){
-                    $('#email-' + id).fadeOut(200, function(){ $(this).remove(); });
-                    updateBadge(res.total);
-                    $('#email-content').html('<div class="empty-state"><p>Pesan dihapus.</p></div>');
-                }
-            }, 'json');
+            window.kandagaDialog.confirm('Hapus pesan ini?', {
+                title: 'Konfirmasi hapus', icon: 'warning', confirmLabel: 'Ya, hapus', danger: true
+            }).then(function(result){
+                if(!result.isConfirmed) return;
+                $.post(ACTION_DIR + 'hapus-pesan.php', { id: id }, function(res){
+                    if(res.success){
+                        $('#email-' + id).fadeOut(200, function(){ $(this).remove(); });
+                        updateBadge(res.total);
+                        $('#email-content').html('<div class="empty-state"><p>Pesan dihapus.</p></div>');
+                    }
+                }, 'json');
+            });
         });
     });
 

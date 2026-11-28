@@ -3,6 +3,7 @@ require_once __DIR__ . '/../config/bootstrap.php';
 // This form is normally loaded inside Goah, but it is also a valid direct
 // request. Keep the same authenticated page guard in both cases.
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/ownership.php';
 require_once __DIR__ . '/includes/catalog-structure.php';
 require_once __DIR__ . '/../includes/access-options.php';
 ini_set('display_errors', 0);
@@ -11,7 +12,11 @@ error_reporting(E_ALL);
 $data_bahasa = mysqli_query($conn, "SELECT id_bahasa, nama_bahasa FROM tb_bahasa ORDER BY nama_bahasa ASC");
 $data_aksara = mysqli_query($conn, "SELECT id_aksara, nama_aksara FROM tb_aksara ORDER BY nama_aksara ASC");
 $data_alas   = mysqli_query($conn, "SELECT id_alas_tulis, nama_alas_tulis FROM tb_alas_tulis ORDER BY nama_alas_tulis ASC");
-$data_lokasi = mysqli_query($conn, "SELECT id_lokasi, nama_tempat FROM tb_lokasi ORDER BY nama_tempat ASC");
+$data_lokasi = [];
+$lokasi_query = mysqli_query($conn, "SELECT id_lokasi, nama_tempat FROM tb_lokasi ORDER BY nama_tempat ASC");
+while ($lokasi_row = mysqli_fetch_assoc($lokasi_query)) {
+    if (kandagaBolehLokasi($conn, (int)$lokasi_row['id_lokasi'])) $data_lokasi[] = $lokasi_row;
+}
 $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM katalog ORDER BY kode_inventaris, judul");
 ?>
 
@@ -36,7 +41,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface"><?php endif; ?>
 
-<div class="admin-page-header"><h1><i class="fa-solid fa-book me-2"></i>Tambah Naskah Baru</h1></div>
+<div class="admin-page-header"><div><h1><i class="fa-solid fa-square-plus me-2" aria-hidden="true"></i>Tambah Naskah</h1><p class="mb-0">Isi metadata naskah baru dan pilih lokasi penyimpanannya.</p></div></div>
 
 <form id="formNaskah" method="POST" enctype="multipart/form-data">
 
@@ -70,9 +75,9 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 <label class="form-label">Lembaga Penyimpan</label>
 <select name="id_lokasi" class="form-select select-clean select-location" data-placeholder="Ketik nama lembaga atau lokasi...">
 <option value="">-- Pilih Lokasi --</option>
-<?php while($l=mysqli_fetch_assoc($data_lokasi)): ?>
+<?php foreach($data_lokasi as $l): ?>
 <option value="<?= $l['id_lokasi'] ?>"><?= htmlspecialchars($l['nama_tempat']) ?></option>
-<?php endwhile; ?>
+<?php endforeach; ?>
 </select>
 </div>
 
@@ -361,10 +366,12 @@ function initTinyMCE(selector, height) {
     tinymce.init({
         selector: selector, // Sekarang menangkap semua yang punya class .tinymce
         height: height,
+        license_key: 'gpl',
+        promotion: false,
+        branding: true,
         menubar: false,
-        branding: false,
-        plugins: 'lists link image code fullscreen table paste wordcount',
-        toolbar: 'undo redo | bold italic underline | bullist numlist | link image | alignleft aligncenter alignright | code fullscreen',
+        plugins: 'lists link image code fullscreen table wordcount',
+        toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link image | alignleft aligncenter alignright | code fullscreen',
         setup: function (editor) {
             // Sinkronisasi otomatis ke textarea saat user mengetik
             editor.on('change keyup', function () {

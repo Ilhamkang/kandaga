@@ -35,7 +35,7 @@ if (!file_exists($path_foto)) {
 ?>
 
 <?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface"><?php endif; ?>
-    <div class="admin-page-header mb-4"><h1>Pengaturan Profil Pengguna</h1></div>
+    <div class="admin-page-header mb-4"><div><h1><i class="fa-solid fa-user-gear me-2" aria-hidden="true"></i>Pengaturan Profil</h1><p class="mb-0">Perbarui identitas, foto profil, dan kata sandi akun Anda.</p></div></div>
 
     <div id="notifikasi"></div>
 
@@ -48,8 +48,8 @@ if (!file_exists($path_foto)) {
                     <img src="<?= $path_foto; ?>?v=<?= time(); ?>" class="rounded-circle" style="width:150px; height:150px; object-fit:cover; margin:0 auto 15px;" id="avatarPreview">                    <h5 class="fw-bold"><?= htmlspecialchars($data['nama']); ?></h5>
                     <span class="badge bg-info text-dark mb-3"><?= htmlspecialchars($data['role']); ?></span>
 
-                    <a href="../detail-kontributor?id=<?= urlencode($data['id']); ?>" target="_blank" class="btn btn-outline-primary btn-sm mb-3">
-                        <i class="fa fa-eye"></i> Lihat Profil Publik
+                    <a href="../detail-kontributor?id=<?= urlencode($data['id']); ?>" target="_blank" class="btn btn-sm btn-light text-info kandaga-action-btn mb-3" data-bs-toggle="tooltip" title="Lihat profil publik" aria-label="Lihat profil publik">
+                        <i class="fa-solid fa-eye" aria-hidden="true"></i>
                     </a>
 
                     <div class="mb-3 text-start">

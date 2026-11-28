@@ -450,6 +450,32 @@
                     "columns": ["mode_akses_fisik", "pihak_kontak", "status_arsip_digital", "keterangan_arsip_digital"]
                 }
             ]
+        },
+        {
+            "id": "021_inbox_topic",
+            "path": "migrations/021_inbox_topic.sql",
+            "sha256": "b74bdb4afd4b1a8f687aa746fbd2a0c02f16994c7ca9bb1c0d36b9b59b49e29d",
+            "idempotent": true,
+            "backward_compatible": true,
+            "checks": [
+                {
+                    "table": "tb_inbox",
+                    "columns": ["topik"]
+                }
+            ]
+        },
+        {
+            "id": "022_kabar_gambar",
+            "path": "migrations/022_kabar_gambar.sql",
+            "sha256": "3b2bdcfaad5354b48dd90e82671db1ceb400883febde20bebc7939cda48105d7",
+            "idempotent": true,
+            "backward_compatible": true,
+            "checks": [
+                {
+                    "table": "tb_kabar_gambar",
+                    "columns": ["id_gambar", "id_kabar", "url_gambar", "alt_gambar", "urutan", "created_at"]
+                }
+            ]
         }
     ],
     "delete": [

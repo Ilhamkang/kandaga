@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../config/bootstrap.php';
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/bibliography.php';
+require_once __DIR__ . '/../includes/public-page-header.php';
 
 $catalogId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 0;
 $search = trim((string)($_GET['search'] ?? ''));
@@ -47,10 +48,14 @@ if ($catalogId) {
 </head>
 <body class="kandaga-module bibliography-page kandaga-catalog-page">
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
+<?php if ($catalog): ?>
+    <?php kandagaPublicHeader((string)$catalog['judul'], 'fa-folder-tree', 'Sumber pemuatan data manuskrip dalam KANDAGA.', '<a href="' . BASE_URL . '/katalog" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-arrow-left me-1" aria-hidden="true"></i>Semua katalog</a>', 'Katalog'); ?>
+<?php else: ?>
+    <?php kandagaPublicHeader('Katalog', 'fa-folder-tree', 'Daftar katalog yang menjadi sumber pemuatan data manuskrip dalam KANDAGA.', '<span class="small text-muted">Naskah tayang: <strong>' . number_format($totalPublished) . '</strong></span>', 'Bibliografi'); ?>
+<?php endif; ?>
 <main class="container bibliography-main">
 <?php if (!$catalog): ?>
     <section class="catalog-index-shell bibliography-card">
-    <header class="bibliography-header mb-4"><div class="d-flex justify-content-between align-items-center flex-wrap"><div><h1 class="h3 fw-bold mb-2">Katalog</h1><p class="mb-0 text-muted">Daftar katalog yang menjadi sumber pemuatan data manuskrip dalam KANDAGA.</p></div><div class="text-end text-muted"><i class="fa-solid fa-folder-tree fa-2x"></i><div class="small mt-2">Naskah tayang: <strong><?= number_format($totalPublished) ?></strong></div></div></div></header>
     <form method="get" class="row g-2 align-items-end mb-4"><div class="col-md-10 mb-2 mb-md-0"><label class="small text-muted fw-bold">Cari katalog</label><input class="form-control" name="search" value="<?= $esc($search) ?>" placeholder="Judul, penyusun, atau tahun terbit"></div><div class="col-md-2"><button class="btn btn-primary w-100"><i class="fa-solid fa-search me-1"></i>Cari</button></div></form>
     <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h5 fw-bold mb-0">Daftar katalog</h2><span class="badge bg-primary px-3 py-2"><?= number_format($total) ?> katalog</span></div>
     <div class="row row-cols-2 row-cols-lg-3 g-4">
@@ -60,7 +65,6 @@ if ($catalogId) {
     </div>
     </section>
 <?php else: $cover=kandagaBibliographyCover($catalog); ?>
-    <a href="<?= BASE_URL ?>/katalog" class="small text-muted"><i class="fa-solid fa-arrow-left me-1"></i>Semua katalog</a>
     <div class="row align-items-start mt-3">
         <section class="col-lg-8 order-2 order-lg-1">
             <div class="d-flex justify-content-between align-items-center mb-3"><h1 class="h4 fw-bold mb-0">Manuskrip yang tercatat dalam katalog ini</h1><span class="badge bg-primary px-3 py-2"><?= number_format($total) ?> manuskrip unik</span></div>

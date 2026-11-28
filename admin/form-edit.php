@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../config/bootstrap.php';
 // Direct requests must not expose manuscript metadata or edit controls.
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/ownership.php';
 require_once __DIR__ . '/includes/catalog-structure.php';
 require_once __DIR__ . '/../includes/access-options.php';
 ini_set('display_errors', 0);
@@ -28,6 +29,11 @@ $naskah = $query_katalog->get_result()->fetch_assoc();
 
 if (!$naskah) {
     die("Kesalahan: Data naskah tidak ditemukan di database.");
+}
+if (!kandagaBolehNaskah($conn, $id_naskah, 0, $naskah)) {
+    http_response_code(403);
+    echo "<div class='alert alert-danger'>Naskah ini dipegang kurator. Hanya kurator penanggung jawab atau administrator yang dapat mengubahnya.</div>";
+    exit;
 }
 
 // 2. Query Data Master untuk Pilihan Dropdown
@@ -97,7 +103,7 @@ $parent_options = mysqli_query($conn, "SELECT id, judul, kode_inventaris FROM ka
 
 <?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface py-4"><?php endif; ?>
 
-<div class="admin-page-header"><h1><i class="fa-solid fa-pen-to-square me-2"></i>Edit Naskah: <?= htmlspecialchars($naskah['judul']) ?></h1></div>
+<div class="admin-page-header"><div><h1><i class="fa-solid fa-pen-to-square me-2" aria-hidden="true"></i>Edit Naskah: <?= htmlspecialchars($naskah['judul']) ?></h1><p class="mb-0">Perbarui metadata, relasi, dan informasi akses naskah ini.</p></div></div>
 
 <form id="formEditNaskah" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?= $id_naskah ?>">
@@ -457,10 +463,12 @@ function initTinyMCE(selector, height) {
     tinymce.init({
         selector: selector,
         height: height,
+        license_key: 'gpl',
+        promotion: false,
+        branding: true,
         menubar: false,
-        branding: false,
-        plugins: 'lists link image code fullscreen table paste wordcount',
-        toolbar: 'undo redo | bold italic underline | bullist numlist | link image | alignleft aligncenter alignright | code fullscreen',
+        plugins: 'lists link image code fullscreen table wordcount',
+        toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link image | alignleft aligncenter alignright | code fullscreen',
         setup: function (editor) {
             editor.on('change keyup', function () {
                 tinymce.triggerSave();

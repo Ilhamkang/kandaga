@@ -1,16 +1,17 @@
-# Kandaga v3.1.74
+# Kandaga v3.1.75
 
-Penyatuan tampilan administrasi dan penambahan informasi akses naskah. Riwayat versi lama tetap tersedia di `CHANGELOG.md` dan GitHub Release.
+Penyempurnaan alur penulisan, Pustaka Media, dan tampilan publik dengan tema Teal yang konsisten di seluruh aplikasi.
 
-- Seluruh modul admin kini memakai satu permukaan kerja putih yang seragam, termasuk dashboard, kotak masuk, feedback naskah, statistik, dan halaman yang dibuka langsung.
-- Tema admin memakai token warna dan tipografi di dalam repositori dengan aksen teal gelap; Bootstrap tetap satu bundle lokal 5.3.9 tanpa CDN.
-- CSS inline diekstraksi ke stylesheet khusus, duplikasi override dirapikan, dan cache-buster disamakan memakai versi aplikasi.
-- Nesting markup dirapikan: label Bootstrap 5, ikon Font Awesome 6, heading halaman, modal, dan daftar kosong tidak lagi memakai pola lama.
-- Permintaan fragmen jQuery `.load()` kini dikenali sebagai fragmen shell, sehingga pemuatan modul tidak membangun ulang dokumen penuh.
-- Detail naskah menampilkan narasi akses fisik dan status arsip digital berdasarkan field baru; keterangan tambahan tampil bila diisi, tanpa klaim akses publik.
-- Form input/edit naskah menerima `mode_akses_fisik`, `pihak_kontak`, `status_arsip_digital`, dan `keterangan_arsip_digital` dengan validasi nilainya.
-- Halaman Tentang menambahkan ajakan kolaborasi metadata naskah Sunda dengan jalur kontak resmi.
+- Seluruh popup bawaan `alert()`/`confirm()` dan SweetAlert2 aplikasi kini memakai satu dialog terpusat yang tampil di tengah layar, termasuk konfirmasi untuk aksi berisiko.
+- Judul submodul admin memakai satu kaidah: ikon, judul, dan penjelasan singkat di bawahnya; breadcrumb dihapus dan tombol aksi memakai ikon plus tooltip.
+- Preferensi Katalog diredesain menjadi empat kartu ringkas untuk Aksara, Alas Tulis, Bahasa, dan Lokasi dengan pencarian, badge jumlah, dan switch tampilan.
+- Aturan kurator ditegakkan di sisi server: naskah/koleksi yang dipegang kurator tidak dapat disunting kontributor lain, sementara administrator tetap memiliki kendali penuh.
+- TinyMCE lokal 7.7.2 mengaktifkan seluruh plugin open-source yang tersedia, menyembunyikan promosi/upgrade, dan menyisipkan gambar dari Pustaka Media langsung di posisi kursor.
+- CAPTCHA kontak, registrasi, dan endpoint kontak kini memakai glyph miring dan acak sekali pakai; pesan masuk mendapat field topik tetap (Umum, Kerjasama, Testimoni, Saran & Kritik, Lainnya) yang tampil sebagai filter dan badge di inbox.
+- Tab Log Global/Aktivitas Saya disamakan dengan tema admin; Pustaka Media menggantikan Pustaka Berkas dengan pratinjau metadata, salin tautan, dan hapus aman yang menolak berkas masih terpakai.
+- Artikel dapat memilih gambar utama dan beberapa gambar galeri dari Pustaka Media; nomor urut pada Daftar Postingan dihapus dan galeri dirender pada halaman kabar.
+- Header halaman publik dipraktikkan ulang menjadi kop ringkas tanpa breadcrumb: pencarian kabar menjadi toggle, abjad Indeks Judul pindah ke filter rail, dan seluruh warna mengikuti token Teal/slate dengan penyesuaian mobile.
 
-Rilis ini **menyertakan migrasi SQL additif** (`migrations/020_catalog_access_metadata.sql`). Paket tetap membawa kelima migrasi bawaan manifest (`min_from 3.1.70`), sehingga Pusat Pembaruan mewajibkan backup database penuh sebelum pemasangan.
+Rilis ini **menyertakan migrasi SQL additif** (`migrations/021_inbox_topic.sql` dan `migrations/022_kabar_gambar.sql`). Paket tetap membawa seluruh migrasi bawaan manifest (`min_from 3.1.70`), sehingga Pusat Pembaruan mewajibkan backup database penuh sebelum pemasangan.
 
-Untuk pembaruan dari v3.1.70 hingga v3.1.73, buka Pusat Pembaruan, unduh paket v3.1.74, lalu ikuti pratinjau migrasi seperti biasa.
+Untuk pembaruan dari v3.1.70 hingga v3.1.74, buka Pusat Pembaruan, unduh paket v3.1.75, lalu ikuti pratinjau migrasi seperti biasa.

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/../includes/public-page-header.php';
 // Pastikan path ke database benar
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/version.php';
@@ -48,14 +49,16 @@ $resultIndeks = mysqli_query($conn, $sqlIndeks);
 
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
-<div class="page-header">
-    <div class="container text-center">
-        <h2 class="fw-bold mb-2">Indeks Judul</h2>
-        <p class="text-muted">Menampilkan koleksi naskah berdasarkan urutan alfabetis</p>
-        <div class="d-flex flex-wrap justify-content-center mt-4">
+<?php kandagaPublicHeader('Indeks Judul', 'fa-font', 'Menampilkan koleksi naskah berdasarkan urutan alfabetis.', '', 'Indeks Naskah'); ?>
+
+<div class="kandaga-page-filters">
+    <div class="container">
+        <p class="kandaga-page-filters__label">Pilih huruf awal judul</p>
+        <div class="kandaga-page-filters__list">
             <?php foreach (range('A', 'Z') as $char): ?>
                 <a href="<?= BASE_URL ?>/indeks-judul.php?letter=<?= $char ?>"
-                   class="btn-letter <?= ($abjad == $char) ? 'active' : '' ?>">
+                   class="btn btn-outline-primary btn-sm btn-letter <?= ($abjad == $char) ? 'active' : '' ?>"
+                   <?= ($abjad == $char) ? 'aria-current="page"' : '' ?>>
                     <?= $char ?>
                 </a>
             <?php endforeach; ?>

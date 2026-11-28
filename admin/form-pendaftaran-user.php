@@ -8,10 +8,8 @@ if (($_SESSION['role'] ?? '') !== 'admin') {
 }
 ?>
 
+<?php kandagaPageHeader('Tambah Pengguna', 'fa-user-plus', 'Daftarkan akun kontributor atau administrator baru.'); ?>
 <div class="card shadow-sm border-0 mb-4">
-    <div class="card-header bg-white border-bottom p-3 admin-page-header">
-        <h1><i class="fa-solid fa-user-plus me-2"></i>Tambah Pengguna Baru</h1>
-    </div>
     <div class="card-body p-4">
         <form id="formTambahUser">
             <div class="row">

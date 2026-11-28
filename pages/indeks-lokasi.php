@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/../includes/public-page-header.php';
 // Pastikan path ke database benar
 require_once __DIR__ . '/../config/database.php';
 
@@ -38,8 +39,7 @@ $resultLokasi = mysqli_query($conn, $sqlLokasi);
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
 
     <style>
-        body { background-color: #f8fafc; color: #334155; font-family: 'Inter', sans-serif; }
-        .page-header { background: white; padding: 50px 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 40px; }
+        body { background-color: var(--kandaga-surface); color: var(--kandaga-text); font-family: var(--kandaga-font-ui); }
 
         .location-grid-card { border: none; border-radius: 16px; overflow: hidden; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; display: flex; flex-direction: column; }
         .location-grid-card:hover { transform: translateY(-6px); box-shadow: 0 12px 20px -3px rgba(0,0,0,0.08); }
@@ -82,12 +82,7 @@ $resultLokasi = mysqli_query($conn, $sqlLokasi);
 
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
-<div class="page-header text-center">
-    <div class="container">
-        <h2 class="fw-bold">Lokasi Preservasi Koleksi</h2>
-        <p class="text-muted mb-0">Daftar institusi, perpustakaan, dan tempat penyimpanan manuskrip nusantara yang terdata di platform KANDAGA.</p>
-    </div>
-</div>
+<?php kandagaPublicHeader('Lokasi Preservasi Koleksi', 'fa-map-location-dot', 'Daftar institusi, perpustakaan, dan tempat penyimpanan manuskrip nusantara yang terdata di platform KANDAGA.', '', 'Indeks Naskah'); ?>
 
 <div class="container pb-5">
     <?php if ($resultLokasi && mysqli_num_rows($resultLokasi) > 0): ?>

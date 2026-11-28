@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
-require_once __DIR__ . '/includes/request.php'; kandagaAuthorize(false);
+require_once __DIR__ . '/includes/request.php';
+require_once __DIR__ . '/includes/ownership.php'; kandagaAuthorize(false);
 // Ambil ID dari parameter URL
 $id_lokasi = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
@@ -12,12 +13,16 @@ if (!$data) {
     echo "<div class='alert alert-danger'>Data tidak ditemukan!</div>";
     exit;
 }
+if (!kandagaBolehKoleksi($conn, $id_lokasi)) {
+    http_response_code(403);
+    echo "<div class='alert alert-danger'>Koleksi ini dipegang kurator lain. Hanya kurator penanggung jawab atau administrator yang dapat mengubahnya.</div>";
+    exit;
+}
 ?>
 
 <?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface py-4"><?php endif; ?>
     <div class="admin-page-header">
-        <h1>Edit Lokasi Koleksi</h1>
-        <p>Perbarui data institusi atau perpustakaan penyimpan naskah.</p>
+        <div><h1><i class="fa-solid fa-location-dot me-2" aria-hidden="true"></i>Edit Lokasi Koleksi</h1><p>Perbarui data institusi atau perpustakaan penyimpan naskah.</p></div>
     </div>
 
     <form id="formEditLokasi" enctype="multipart/form-data">
@@ -105,23 +110,19 @@ if (!$data) {
             contentType: false,
             processData: false,
             success: function(response) {
-                if (typeof response !== 'string' || response.trim() !== 'success') { Swal.fire('Gagal', (response && response.message) || 'Penyimpanan gagal.', 'error'); return; }
+                if (typeof response !== 'string' || response.trim() !== 'success') { kandagaDialog.show({title: 'Gagal', message: (response && response.message) || 'Penyimpanan gagal.', icon: 'error'}); btn.prop('disabled', false).text('Update Lokasi'); return; }
                 let res = response.trim();
                 if (res === "success") {
-                    alert("✅ Data lokasi berhasil diperbarui!");
-
-                    // OPSI 1: Jika menggunakan sistem loading AJAX (SPA)
-                    // loadPage('tampil-lokasi.php');
-
-                    // OPSI 2 (Lebih Aman): Redirect penuh via URL index
-                    window.location.href = 'index.php?page=tampil-lokasi';
+                    kandagaDialog.show({title: 'Berhasil', message: 'Data lokasi berhasil diperbarui.', icon: 'success'}).then(function () {
+                        window.location.href = 'index.php?page=tampil-lokasi';
+                    });
                 } else {
-                    alert("❌ " + res);
+                    kandagaDialog.show({title: 'Gagal', message: res, icon: 'error'});
                     btn.prop('disabled', false).text('Update Lokasi');
                 }
             },
             error: function() {
-                alert("❌ Terjadi kesalahan koneksi ke server.");
+                kandagaDialog.show({title: 'Gagal', message: 'Terjadi kesalahan koneksi ke server.', icon: 'error'});
                 btn.prop('disabled', false).text('Update Lokasi');
             }
         });

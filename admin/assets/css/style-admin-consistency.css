@@ -24,11 +24,6 @@ body.kandaga-module #kontenUtama h6 {
     letter-spacing: -.01em;
 }
 
-body.kandaga-module #kontenUtama > .breadcrumb {
-    font-size: var(--kandaga-text-sm);
-    color: var(--kandaga-muted);
-}
-
 body.kandaga-module #kontenUtama label,
 body.kandaga-module #kontenUtama .form-label {
     font-size: var(--kandaga-text-sm);

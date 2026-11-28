@@ -19,15 +19,9 @@ $query = "SELECT * FROM users ORDER BY id DESC";
 $result = $conn->query($query);
 ?>
 
+<?php kandagaPageHeader('Daftar Pengguna', 'fa-users', 'Kelola akun, peran, dan status verifikasi pengguna Kandaga.', '<a href="index.php?page=pendaftaran-user" class="btn btn-sm btn-primary"><i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Tambah Pengguna</a>'); ?>
 <div class="card shadow-sm border-0">
     <div class="card-header bg-white py-3">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="h5 mb-0"><i class="fa-solid fa-users me-2"></i>Manajemen Pengguna</h2>
-            <a href="index.php?page=pendaftaran-user" class="btn btn-sm btn-primary">
-                <i class="fa-solid fa-plus me-1"></i>Tambah User
-            </a>
-        </div>
-
         <ul class="nav nav-tabs card-header-tabs" id="userTab">
             <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#semua">Semua</a></li>
             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#pending">Pending</a></li>
@@ -67,17 +61,17 @@ $result = $conn->query($query);
                         </td>
                         <td class="text-center text-capitalize"><?php echo htmlspecialchars($row['role']); ?></td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info btn-detail"
+                            <button type="button" class="btn btn-sm btn-light text-info kandaga-action-btn btn-detail" data-bs-toggle="tooltip" title="Lihat" aria-label="Lihat pengguna"
                                     data-id="<?php echo $row['id']; ?>"
                                     data-username="<?php echo htmlspecialchars($row['username']); ?>"
                                     data-role="<?php echo htmlspecialchars($row['role']); ?>"
                                     data-status="<?php echo htmlspecialchars($status); ?>">
-                                <i class="fa-solid fa-pen-to-square"></i>
+                                <i class="fa-solid fa-eye" aria-hidden="true"></i>
                             </button>
-                            <button class="btn btn-sm btn-outline-danger btn-hapus"
+                            <button type="button" class="btn btn-sm btn-light text-danger kandaga-action-btn btn-hapus" data-bs-toggle="tooltip" title="Hapus" aria-label="Hapus pengguna"
                                     data-id="<?php echo $row['id']; ?>"
                                     data-user="<?php echo htmlspecialchars($row['username']); ?>">
-                                <i class="fa-solid fa-trash-can"></i>
+                                <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
                             </button>
                         </td>
                     </tr>
@@ -165,7 +159,7 @@ $(document).ready(function() {
         e.preventDefault();
         $.post('actions/proses-verifikasi-user.php', $(this).serialize(), function(res) {
             if(res.trim() == 'success') location.reload();
-            else alert('Gagal memproses data: ' + res);
+            else kandagaDialog.show({title: 'Gagal', message: 'Gagal memproses data: ' + res, icon: 'error'});
         });
     });
 
@@ -188,12 +182,12 @@ $(document).ready(function() {
             if (res.trim() === "success") {
                 location.reload();
             } else {
-                alert("Gagal menghapus: " + res);
+                kandagaDialog.show({title: 'Gagal', message: "Gagal menghapus: " + res, icon: 'error'});
             }
         },
         error: function(xhr, status, error) {
             console.error("AJAX Error: " + error);
-            alert("Error: " + status + ". Cek apakah file benar-benar ada di folder admin/actions/");
+            kandagaDialog.show({title: 'Error', message: "Error: " + status + ". Cek apakah file benar-benar ada di folder admin/actions/", icon: 'error'});
         }
     });
 });

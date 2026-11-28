@@ -208,20 +208,14 @@ if ($stmt = $conn->prepare($query_str)) {
 ?>
 
 <?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface py-4"><?php endif; ?>
-    <div class="admin-page-header row mb-4 align-items-center">
-        <div class="col-md-6">
-            <h1><i class="fa-solid fa-bookmark me-2"></i>Daftar Pustaka &amp; Bibliografi</h1>
-            <p>Kelola rujukan referensi primer, sekunder, dan katalogisasi manuskrip ala Zotero.</p>
-        </div>
-        <div class="col-md-6 text-md-end mt-3 mt-md-0">
-            <?php if ($isAdmin): ?><button class="btn btn-outline-success shadow-sm fw-bold px-3 me-2" data-bs-toggle="modal" data-bs-target="#modalImportRis">
-                <i class="fa-solid fa-file-import me-1"></i> Import dari Zotero (.ris)
-            </button><?php endif; ?>
-            <button class="btn btn-primary shadow-sm fw-bold px-3" onclick="window.location.href='index.php?page=form-bibliografi'">
-                <i class="fa-solid fa-circle-plus me-1"></i> Tambah Bibliografi
-            </button>
-        </div>
-    </div>
+    <?php
+    $pustakaActions = '';
+    if ($isAdmin) {
+        $pustakaActions .= '<button class="btn btn-outline-success shadow-sm fw-bold px-3" data-bs-toggle="modal" data-bs-target="#modalImportRis"><i class="fa-solid fa-file-import me-1" aria-hidden="true"></i>Impor Zotero (.ris)</button>';
+    }
+    $pustakaActions .= '<button class="btn btn-primary shadow-sm fw-bold px-3" onclick="window.location.href=\'index.php?page=form-bibliografi\'"><i class="fa-solid fa-circle-plus me-1" aria-hidden="true"></i>Tambah Bibliografi</button>';
+    kandagaPageHeader('Daftar Pustaka', 'fa-book-bookmark', 'Kelola rujukan referensi primer, sekunder, dan katalogisasi manuskrip ala Zotero.', $pustakaActions);
+    ?>
 
     <?php if (!empty($error_msg)): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -318,14 +312,13 @@ if ($stmt = $conn->prepare($query_str)) {
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group shadow-sm rounded">
-                                        <button type="button" class="btn btn-sm btn-light" title="Edit Item"
+                                        <button type="button" class="btn btn-sm btn-light text-warning kandaga-action-btn" data-bs-toggle="tooltip" title="Edit" aria-label="Edit item pustaka"
                                                 onclick="window.location.href='index.php?page=form-bibliografi&id=<?= (int)$row['id'] ?>'">
-                                            <i class="fa-solid fa-pen-to-square text-warning"></i>
+                                            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
                                         </button>
                                         <a href="index.php?page=daftar-pustaka&del_bib=<?= $row['id'] ?>" data-kandaga-delete="1"
-                                           class="btn btn-sm btn-light"
-                                            title="Hapus">
-                                            <i class="fa-solid fa-trash text-danger"></i>
+                                           class="btn btn-sm btn-light text-danger kandaga-action-btn" data-bs-toggle="tooltip" title="Hapus" aria-label="Hapus item pustaka">
+                                            <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
                                         </a>
                                     </div>
                                 </td>

@@ -7,8 +7,8 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 }
 ?>
 <section id="dreamsea-importer" data-page-title="Importer Web" data-endpoint="<?= htmlspecialchars(BASE_URL, ENT_QUOTES) ?>/admin/actions/dreamsea-import.php" data-base="<?= htmlspecialchars(BASE_URL, ENT_QUOTES) ?>" data-csrf="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES) ?>">
-  <div class="card"><div class="card-header admin-page-header"><h1><i class="fa-solid fa-cloud-arrow-down me-2"></i>Importer Web</h1></div><div class="card-body">
-    <p>Unggah CSV UTF-8 hasil scraping web, periksa pratinjau, lalu moderasi setiap entri. Antrean Importer Web terpisah dari Importer Katalog Cetak. Unggah hanya menambah antrean; data katalog berubah setelah keputusan Buat baru atau Merge.</p>
+  <?php kandagaPageHeader('Importer Web', 'fa-cloud-arrow-down', 'Unggah CSV UTF-8 dari sumber web, periksa pratinjau, lalu moderasi setiap entri. Data katalog berubah setelah keputusan Buat baru atau Merge.'); ?>
+  <div class="card"><div class="card-body">
     <nav class="ds-steps mb-3" aria-label="Tahapan impor web">
       <button class="ds-step is-active" type="button" data-step="upload" aria-current="step"><span>1</span><strong>Unggah CSV</strong><small>Berkas &amp; identitas</small></button>
       <button class="ds-step" type="button" data-step="preview" disabled><span>2</span><strong>Pratinjau</strong><small>Validasi awal</small></button>
@@ -41,7 +41,7 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
         <div class="ds-progress mb-3"><div class="d-flex justify-content-between small mb-1"><span>Keputusan final dalam batch</span><span id="ds-progress-text">0%</span></div><div class="progress"><div id="ds-progress-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:0%"></div></div></div>
         <div class="row g-2 align-items-end"><div class="mb-3 col-md-8"><label class="form-label" for="ds-batch">Batch impor</label><select id="ds-batch" class="form-select"></select></div><div class="mb-3 col-md-4"><label class="form-label" for="ds-filter">Status</label><select id="ds-filter" class="form-select"><option value="all">Semua</option><option value="pending">Menunggu</option><option value="deferred">Ditunda</option><option value="created">Dibuat</option><option value="merged">Digabung</option><option value="rejected">Dilewati</option></select></div></div>
         <button id="ds-refresh" type="button" class="btn btn-sm btn-outline-secondary mb-3"><i class="fa-solid fa-rotate me-1"></i>Muat ulang antrean</button>
-        <button id="ds-delete-batch" type="button" class="btn btn-sm btn-outline-danger mb-3"><i class="fa-solid fa-trash me-1"></i>Hapus batch</button>
+        <button id="ds-delete-batch" type="button" class="btn btn-sm btn-light text-danger kandaga-action-btn mb-3" data-bs-toggle="tooltip" title="Hapus batch" aria-label="Hapus batch"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button>
         <div id="ds-counts" class="mb-2 small"></div>
         <div id="ds-queue" class="table-responsive"></div>
         <div id="ds-pagination" class="d-flex justify-content-between align-items-center"></div>

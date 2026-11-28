@@ -6,6 +6,8 @@
  * pencarian. Tidak menyimpan IP, user-agent, perangkat, geolokasi, token
  * pengunjung, atau status online. Tabel dibuat secara idempoten saat pertama
  * kali dipakai sehingga rilis ini tetap dapat dipasang sebagai code-only.
+ * Permintaan bot, prefetch, dan pengulangan halaman yang sama dalam satu sesi
+ * tidak dihitung agar angka harian tidak membengkak.
  */
 
 require_once __DIR__ . '/analytics-context.php';
@@ -100,10 +102,42 @@ function kandagaCompactAnalyticsDateBounds(string $period): array {
 }
 
 function kandagaCompactAnalyticsIsBot(string $ua): bool {
+    if ($ua === '') return true;
     if (function_exists('kandagaTrafficClass')) {
         return !empty(kandagaTrafficClass($ua)['is_bot']);
     }
-    return (bool)preg_match('/bot|crawler|spider|slurp|headless|meta-external|googlebot|bingbot|petalbot|applebot|facebookexternalhit/i', $ua);
+    return (bool)preg_match('/bot\b|crawler|spider|slurp|headless|archive\.org|wayback|python-requests|python-urllib|httpx\b|httpie|postmanruntime|go-http-client|node-fetch|axios\b|libwww-perl|selenium|playwright|puppeteer|scrapy|curl\b|wget\b|java\/|meta-external|facebookexternalhit/i', $ua);
+}
+
+function kandagaCompactAnalyticsIsPrefetch(): bool {
+    foreach (['HTTP_SEC_PURPOSE', 'HTTP_PURPOSE', 'HTTP_X_MOZ'] as $header) {
+        if (stripos((string)($_SERVER[$header] ?? ''), 'prefetch') !== false) return true;
+    }
+    return false;
+}
+
+/**
+ * Session-local, privacy-safe repeat suppression. It stores only hashed page
+ * keys and timestamps in the PHP session; no IP, UA, or persistent identifier
+ * is written to the analytics tables.
+ */
+function kandagaAnalyticsShouldCount(string $key, int $windowSeconds = 300): bool {
+    if (PHP_SAPI === 'cli' || session_status() !== PHP_SESSION_ACTIVE) return true;
+    $storeKey = 'kandaga_analytics_seen';
+    $seen = $_SESSION[$storeKey] ?? [];
+    if (!is_array($seen)) $seen = [];
+    $now = time();
+    foreach ($seen as $seenKey => $seenAt) {
+        if (!is_int($seenAt) || $seenAt + $windowSeconds <= $now) unset($seen[$seenKey]);
+    }
+    if (isset($seen[$key])) {
+        $_SESSION[$storeKey] = $seen;
+        return false;
+    }
+    $seen[$key] = $now;
+    if (count($seen) > 64) array_shift($seen);
+    $_SESSION[$storeKey] = $seen;
+    return true;
 }
 
 function kandagaCompactPageContext(): array {
@@ -126,7 +160,7 @@ function kandagaCompactTrackPage($conn): void {
 
     try {
         $ua = mb_substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 512, 'UTF-8');
-        if (kandagaCompactAnalyticsIsBot($ua)) return;
+        if (kandagaCompactAnalyticsIsBot($ua) || kandagaCompactAnalyticsIsPrefetch()) return;
         $requestPath = (string)(parse_url((string)($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH) ?? '');
         if ($requestPath !== '' && (str_starts_with($requestPath, '/admin') || str_contains($requestPath, '/admin/'))) return;
         $context = kandagaCompactPageContext();
@@ -138,6 +172,23 @@ function kandagaCompactTrackPage($conn): void {
         $pageTitle = mb_substr((string)($context['title'] ?? ''), 0, 255, 'UTF-8');
         $entityId = isset($context['entity']) && is_numeric($context['entity']) ? (int)$context['entity'] : null;
 
+        $searchTerm = null;
+        $searchSignature = null;
+        if (($context['type'] ?? '') === 'search') {
+            $searchTerm = kandagaNormalizeSearch($context['search'] ?? ($_GET['search'] ?? null));
+            if ($searchTerm !== null) {
+                $searchSignature = hash('sha256', json_encode([
+                    'search' => $searchTerm,
+                    'aksara' => $_GET['aksara'] ?? null,
+                    'bahasa' => $_GET['bahasa'] ?? null,
+                    'alas_tulis' => $_GET['alas_tulis'] ?? null,
+                    'id_lokasi' => $_GET['id_lokasi'] ?? null,
+                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            }
+        }
+        $viewKey = hash('sha256', json_encode(['key' => $key, 'search' => $searchSignature], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        if (!kandagaAnalyticsShouldCount('page|' . $viewKey, 300)) return;
+
         $stmt = $conn->prepare('INSERT INTO kandaga_page_daily (day,page_key,page_type,page_title,entity_id,views) VALUES (?,?,?,?,?,1) ON DUPLICATE KEY UPDATE page_title=VALUES(page_title),page_type=VALUES(page_type),entity_id=VALUES(entity_id),views=views+1');
         if ($stmt) {
             $stmt->bind_param('ssssi', $day, $key, $pageType, $pageTitle, $entityId);
@@ -146,23 +197,13 @@ function kandagaCompactTrackPage($conn): void {
         }
 
         if (($context['type'] ?? '') === 'search') {
-            $term = kandagaNormalizeSearch($context['search'] ?? ($_GET['search'] ?? null));
-            if ($term !== null) {
-                $signature = hash('sha256', json_encode([
-                    'search' => $term,
-                    'aksara' => $_GET['aksara'] ?? null,
-                    'bahasa' => $_GET['bahasa'] ?? null,
-                    'alas_tulis' => $_GET['alas_tulis'] ?? null,
-                    'id_lokasi' => $_GET['id_lokasi'] ?? null,
-                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-                if (($_SESSION['kandaga_compact_search_signature'] ?? null) !== $signature) {
-                    $_SESSION['kandaga_compact_search_signature'] = $signature;
-                    $searchStmt = $conn->prepare('INSERT INTO kandaga_search_daily (day,search_term,searches) VALUES (?,?,1) ON DUPLICATE KEY UPDATE searches=searches+1');
-                    if ($searchStmt) {
-                        $searchStmt->bind_param('ss', $day, $term);
-                        $searchStmt->execute();
-                        $searchStmt->close();
-                    }
+            if ($searchTerm !== null && $searchSignature !== null && ($_SESSION['kandaga_compact_search_signature'] ?? null) !== $searchSignature) {
+                $_SESSION['kandaga_compact_search_signature'] = $searchSignature;
+                $searchStmt = $conn->prepare('INSERT INTO kandaga_search_daily (day,search_term,searches) VALUES (?,?,1) ON DUPLICATE KEY UPDATE searches=searches+1');
+                if ($searchStmt) {
+                    $searchStmt->bind_param('ss', $day, $searchTerm);
+                    $searchStmt->execute();
+                    $searchStmt->close();
                 }
             }
         } else {

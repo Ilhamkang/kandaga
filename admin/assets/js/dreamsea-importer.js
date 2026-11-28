@@ -187,7 +187,7 @@
     const text=config?.batch_delete_detachable
       ? 'Hapus batch Importer Web #'+id+' beserta seluruh baris antreannya? Entri katalog yang sudah dibuat tetap tersimpan, termasuk tautan identitas dan catatan audit. Baris yang ditunda dan belum diterapkan akan ikut hilang.'
       : 'Hapus batch Importer Web #'+id+' beserta seluruh baris antreannya? Baris yang sudah diputuskan, identitas tertaut, dan catatan audit membuat penghapusan ditolak.';
-    if(!window.confirm(text))return;
+    const answer=await window.kandagaDialog.confirm(text,{title:'Hapus batch impor',icon:'warning',confirmLabel:'Ya, hapus',danger:true});if(!answer.isConfirmed)return;
     const fd=new FormData();fd.set('batch_id',id);
     const result=await api('delete_batch',{},fd);current=null;preview=null;page=1;await init();message(result.message);
   }

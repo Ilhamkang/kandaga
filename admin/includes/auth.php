@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/page-header.php';
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 if (($_SESSION['status'] ?? '') !== 'login' || empty($_SESSION['admin_id'])) {

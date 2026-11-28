@@ -60,6 +60,7 @@ body.kandaga-admin-shell #kontenUtama .workspace-block > .list-unstyled { flex: 
     font-weight: var(--kandaga-weight-bold);
     opacity: .78;
 }
+body.kandaga-admin-shell #kontenUtama .dashboard-welcome h1,
 body.kandaga-admin-shell #kontenUtama .dashboard-welcome h2 {
     color: #fff;
     font-size: clamp(1.35rem, 2.2vw, 1.9rem);

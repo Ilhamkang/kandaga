@@ -27,6 +27,24 @@ if (!$data) {
 $stmt_sidebar = $conn->prepare("SELECT judul, slug, thumbnail, konten FROM tb_kabar WHERE slug != ? AND status = 'published' ORDER BY id_kabar DESC LIMIT 3");
 $stmt_sidebar->bind_param('s', $slug); $stmt_sidebar->execute(); $result_sidebar = $stmt_sidebar->get_result();
 
+// Galeri gambar tambahan dari Pustaka Media (opsional, migrasi 022).
+$articleGallery = [];
+$tableCheck = @$conn->query("SHOW TABLES LIKE 'tb_kabar_gambar'");
+if ($tableCheck && $tableCheck->num_rows > 0) {
+    $articleId = (int)$data['id_kabar'];
+    $galleryStmt = $conn->prepare('SELECT url_gambar, alt_gambar FROM tb_kabar_gambar WHERE id_kabar = ? ORDER BY urutan, id_gambar');
+    $galleryStmt->bind_param('i', $articleId);
+    $galleryStmt->execute();
+    $galleryResult = $galleryStmt->get_result();
+    while ($galleryRow = $galleryResult->fetch_assoc()) {
+        $articleGallery[] = [
+            'url' => (string)$galleryRow['url_gambar'],
+            'alt' => (string)$galleryRow['alt_gambar'],
+        ];
+    }
+    $galleryStmt->close();
+}
+
 function get_summary($konten, $limit = 20) {
     $text = strip_tags($konten);
     $words = explode(' ', $text);
@@ -90,11 +108,35 @@ function get_summary($konten, $limit = 20) {
 
                     </div>
 
-                    <img src="<?= BASE_URL; ?>/assets/images/post/<?= $data['thumbnail']; ?>" class="img-fluid w-100 mb-4 article-featured-image" style="border-radius: 8px; max-height: 480px; object-fit: cover;" alt="<?= htmlspecialchars($data['judul']); ?>">
+                    <?php
+                    $thumbnail = (string)($data['thumbnail'] ?? '');
+                    $featured = $thumbnail !== '' && preg_match('/^[A-Za-z0-9][A-Za-z0-9._-]{0,240}$/', $thumbnail)
+                        ? BASE_URL . '/assets/images/post/' . rawurlencode($thumbnail)
+                        : BASE_URL . '/assets/images/msc-placeholder.png';
+                    ?>
+                    <img src="<?= htmlspecialchars($featured, ENT_QUOTES, 'UTF-8'); ?>" class="img-fluid w-100 mb-4 article-featured-image" style="border-radius: 8px; max-height: 480px; object-fit: cover;" alt="<?= htmlspecialchars($data['judul'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>">
 
                     <div class="article-body">
                         <?= $data['konten']; ?>
                     </div>
+
+                    <?php if ($articleGallery): ?>
+                        <section class="article-gallery" aria-label="Galeri gambar artikel">
+                            <h2 class="article-gallery-title"><i class="fa-solid fa-images me-2" aria-hidden="true"></i>Galeri Gambar</h2>
+                            <div class="article-gallery-grid">
+                                <?php foreach ($articleGallery as $galleryItem): ?>
+                                    <?php
+                                    $galleryUrl = (string)$galleryItem['url'];
+                                    if ($galleryUrl === '' || !preg_match('~^(?:https?://|/)~i', $galleryUrl)) continue;
+                                    ?>
+                                    <figure class="article-gallery-item">
+                                        <img src="<?= htmlspecialchars($galleryUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="<?= htmlspecialchars($galleryItem['alt'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>" loading="lazy">
+                                        <?php if ($galleryItem['alt'] !== ''): ?><figcaption><?= htmlspecialchars($galleryItem['alt'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></figcaption><?php endif; ?>
+                                    </figure>
+                                <?php endforeach; ?>
+                            </div>
+                        </section>
+                    <?php endif; ?>
 
                 </div>
             </main>

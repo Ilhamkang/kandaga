@@ -5,9 +5,24 @@
  */
 require_once __DIR__ . '/mail-settings.php';
 
+/** Topics offered by the public contact form and used by the Goah inbox. */
+function kandagaContactTopics(): array
+{
+    return ['Umum', 'Kerjasama', 'Testimoni', 'Saran & Kritik', 'Lainnya'];
+}
+
 function kandagaContactValidate(array $input): array
 {
-    $values = [];
+    // Honeypot: real visitors never see this field, so any value is a bot.
+    if (trim((string)($input['kandaga_website'] ?? '')) !== '') {
+        throw new InvalidArgumentException('Kode verifikasi salah!');
+    }
+    $topics = kandagaContactTopics();
+    $topic = isset($input['topik']) && is_string($input['topik']) ? trim($input['topik']) : 'Umum';
+    if ($topic === '') $topic = 'Umum';
+    if (!in_array($topic, $topics, true)) throw new InvalidArgumentException('Pilih topik pesan yang tersedia.');
+
+    $values = ['topik' => $topic];
     foreach (['nama', 'email', 'subjek', 'isi_pesan'] as $key) {
         $value = isset($input[$key]) && is_string($input[$key]) ? trim($input[$key]) : '';
         if (!mb_check_encoding($value, 'UTF-8') || str_contains($value, "\0")) throw new InvalidArgumentException('Masukan kontak mengandung karakter yang tidak valid.');

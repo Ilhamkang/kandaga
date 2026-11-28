@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/page-header.php';
 
 // jQuery .load() requests are fragments of the canonical shell, not new pages.
 if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')
@@ -12,6 +13,20 @@ function kandagaJson($success, $message, $extra = [], $code = 200) {
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode(array_merge(['status' => $success ? 'success' : 'error', 'success' => $success, 'message' => $message], $extra), JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
     exit;
+}
+
+class KandagaAccessDenied extends RuntimeException {}
+
+function kandagaCurrentUser(): array {
+    return [
+        'id'       => (int)($_SESSION['admin_id'] ?? 0),
+        'username' => (string)($_SESSION['username'] ?? ''),
+        'role'     => (string)($_SESSION['role'] ?? ''),
+    ];
+}
+
+function kandagaDeny($message = 'Akses ditolak.') {
+    throw new KandagaAccessDenied($message);
 }
 
 function kandagaAuthorize($adminOnly = false) {
@@ -73,6 +88,7 @@ function kandagaPost($adminOnly = false) {
 
 function kandagaFailure(Throwable $error) {
     error_log('Kandaga: ' . $error->getMessage());
+    if ($error instanceof KandagaAccessDenied) kandagaJson(false, $error->getMessage(), [], 403);
     $message = $error instanceof InvalidArgumentException ? $error->getMessage() : 'Penyimpanan gagal. Periksa log server dan kompatibilitas database.';
     if ($error instanceof mysqli_sql_exception && $error->getCode() === 1366) $message = 'Database belum dapat menyimpan sebagian karakter ini. Charset tabel masih perlu diperbarui pada tahap migrasi SQL.';
     kandagaJson(false, $message, [], $error instanceof InvalidArgumentException ? 422 : 500);

@@ -47,7 +47,8 @@ if (!$row) {
 // daftar naskah terpopuler hanya karena user-agent-nya tidak memuat kata bot.
 $ua_log = mb_substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 512, 'UTF-8');
 $traffic_log = kandagaTrafficClass($ua_log);
-if (empty($traffic_log['is_bot'])) {
+$traffic_prefetch = kandagaCompactAnalyticsIsPrefetch();
+if (empty($traffic_log['is_bot']) && !$traffic_prefetch && kandagaAnalyticsShouldCount('manuscript|' . $id, 300)) {
     try {
         $ip_log = kandagaClientIp($_SERVER) ?? ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
         $stmt_log = $conn->prepare("INSERT INTO naskah_views (id_naskah, ip_address, user_agent) VALUES (?, ?, ?)");

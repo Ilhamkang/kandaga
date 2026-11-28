@@ -11,7 +11,6 @@ if (session_status() === PHP_SESSION_NONE) session_start();
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/bootstrap/css/bootstrap.min.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-login.css">
-    <script src="<?= BASE_URL ?>/admin/assets/js/sweetalert2.min.js"></script>
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
 </head>
 <body class="kandaga-module kandaga-standalone-page kandaga-ngiringan-page">
@@ -63,8 +62,8 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                 <input type="text" name="captcha" id="captchaInput" class="form-control" placeholder="Masukkan kode" required autocomplete="off">
             </div>
             <div class="text-center">
-                <img src="<?= BASE_URL ?>/modules/captcha.php" id="captchaImage" style="cursor:pointer; border-radius:5px; border:1px solid #ccc;" title="Klik untuk refresh kode">
-                <p class="text-muted" style="font-size: 10px; margin-top:5px;">Klik gambar untuk ganti kode</p>
+                <img src="<?= BASE_URL ?>/modules/captcha.php" id="captchaImage" alt="Kode verifikasi miring" style="cursor:pointer; border-radius:5px; border:1px solid #ccc; max-width:100%;" title="Klik untuk refresh kode">
+                <p class="text-muted" style="font-size: 10px; margin-top:5px;">Ketik enam karakter yang miring; klik gambar untuk ganti kode</p>
             </div>
         </div>
 

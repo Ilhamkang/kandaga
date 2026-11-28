@@ -34,6 +34,9 @@ if (isset($_GET['p']) && is_string($_GET['p']) && $_GET['p'] !== 'home') {
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-kontributor.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-kabar-responsive.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/mobile-layout.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/public-page-header.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/public-theme.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
+    <script src="<?= BASE_URL ?>/assets/js/public-page-header.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>" defer></script>
     <?php include __DIR__ . '/includes/analytics-tag.php'; ?>
 </head>
 <body class="kandaga-public kandaga-home-page">

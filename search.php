@@ -9,6 +9,7 @@ require_once __DIR__ . '/includes/search-options.php';
 require_once __DIR__ . '/includes/bookmark-button.php';
 require_once __DIR__ . '/includes/digital-access.php';
 require_once __DIR__ . '/includes/version.php';
+require_once __DIR__ . '/includes/public-page-header.php';
 
 $kandagaSearchSubmitToken=is_string($_GET['search_submit']??null) && preg_match('/^[a-f0-9]{32}$/',$_GET['search_submit']) ? $_GET['search_submit'] : null;
 unset($_GET['search_submit']);
@@ -152,25 +153,21 @@ function tampilkanPilihanFilterMobile($conn, $sql, $param, $label, $selected) {
 <body class="kandaga-module kandaga-search">
     <?php include __DIR__ . '/includes/navbar.php'; ?>
 
-    <div class="search-hero">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8 text-center">
-                    <h4 class="mb-4 fw-bold">Eksplorasi Katalog Naskah</h4>
-                    <form action="<?= BASE_URL ?>/search.php" method="GET">
-                        <?php foreach ($_GET as $key => $value): if (in_array($key, ['search', 'page'], true)) continue; ?>
-                            <input type="hidden" name="<?= htmlspecialchars($key, ENT_QUOTES, 'UTF-8') ?>" value="<?= htmlspecialchars($value, ENT_QUOTES, 'UTF-8') ?>">
-                        <?php endforeach; ?>
-                        <input type="hidden" name="search_submit" value="<?= bin2hex(random_bytes(16)) ?>">
-                        <div class="search-box-wrapper">
-                            <input type="text" name="search" value="<?= htmlspecialchars($search_keyword); ?>" placeholder="Cari..." class="search-input-modern" />
-                            <button type="submit" class="search-btn-modern"><i class="fa-solid fa-magnifying-glass"></i> Cari</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php
+    $headerHidden = [];
+    foreach ($_GET as $key => $value) {
+        if (in_array($key, ['search', 'page'], true) || !is_scalar($value)) continue;
+        $headerHidden[$key] = (string)$value;
+    }
+    $headerHidden['search_submit'] = bin2hex(random_bytes(16));
+    kandagaPublicHeader(
+        'Eksplorasi Katalog Naskah',
+        'fa-magnifying-glass',
+        'Telusuri naskah berdasarkan judul, bahasa, aksara, lokasi, dan metadata lainnya.',
+        kandagaPublicSearchActions(BASE_URL . '/search.php', $search_keyword, $headerHidden, 'Cari naskah...', 'kandagaSearchHeaderForm', 'Cari naskah'),
+        'Pencarian'
+    );
+    ?>
 
     <div class="container mb-5 mt-4">
         <div class="row">

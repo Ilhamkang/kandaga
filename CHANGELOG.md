@@ -1,3 +1,16 @@
+# v3.1.75 — Pengalaman penulisan, Pustaka Media, dan header publik
+
+- Menggantikan popup bawaan dan SweetAlert2 aplikasi dengan satu dialog terpusat yang selalu tampil di tengah layar, termasuk konfirmasi aksi berisiko.
+- Menyeragamkan judul submodul admin memakai ikon, judul, dan penjelasan singkat; breadcrumb dihapus dan aksi tabel memakai ikon plus tooltip.
+- Mendesain ulang Preferensi Katalog menjadi empat kartu Aksara, Alas Tulis, Bahasa, dan Lokasi dengan pencarian, badge jumlah, dan switch tampilan.
+- Menegakkan aturan kepemilikan kurator di sisi server tanpa mengubah peran `users`: administrator tetap memegang kendali penuh.
+- Mengaktifkan seluruh plugin TinyMCE lokal yang tersedia, menyembunyikan promosi/upgrade, dan menambahkan sisipan gambar inline dari Pustaka Media di posisi kursor.
+- Memperumit CAPTCHA kontak/registrasi dengan glyph sekali pakai yang miring dan acak, lalu menambahkan topik tetap pada pesan masuk beserta filter dan badge di inbox.
+- Menyamakan tab Log Global/Aktivitas Saya dengan tema admin; Pustaka Media menggantikan Pustaka Berkas dengan metadata, salin tautan, dan penghapusan aman yang menolak berkas terpakai.
+- Menambahkan pemilih gambar utama dan galeri beberapa gambar dari Pustaka Media pada artikel, render galeri di halaman kabar, serta menghapus nomor urut dari Daftar Postingan.
+- Merapikan seluruh header publik menjadi kop ringkas tanpa breadcrumb: pencarian kabar sebagai toggle, abjad Indeks Judul di filter rail, warna Teal/slate, dan tata letak mobile yang lega.
+- Menambahkan migrasi additif `021_inbox_topic.sql` dan `022_kabar_gambar.sql` pada manifest Update Center; backup database penuh diwajibkan sebelum pemasangan.
+
 # v3.1.73 — Moderasi impor Web dan Katalog Cetak
 
 - Pencarian bibliografi pada kedua importer kini dapat diketik; label menampilkan judul, penyusun, dan tahun tanpa menambah endpoint atau CDN baru.

@@ -24,9 +24,9 @@ $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_
 ?>
 
 <?php if (!defined('KANDAGA_ADMIN_SHELL') && !defined('KANDAGA_ADMIN_FRAGMENT')): ?><div class="container-fluid admin-module-surface mt-4"><?php endif; ?>
-    <div class="admin-page-header d-flex justify-content-between align-items-center mb-4">
-        <h1>Daftar Postingan</h1>
-        <button class="btn btn-primary shadow-sm" onclick="tambahPost()"><i class="fa-solid fa-plus me-1"></i>Tambah Tulisan</button>
+    <div class="admin-page-header d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+        <div><h1><i class="fa-solid fa-newspaper me-2" aria-hidden="true"></i>Daftar Postingan</h1><p class="mb-0">Kelola berita, kegiatan, dan pengumuman yang tampil di katalog.</p></div>
+        <div class="admin-page-header__actions"><button class="btn btn-primary shadow-sm" onclick="tambahPost()"><i class="fa-solid fa-plus me-1" aria-hidden="true"></i>Tambah Tulisan</button></div>
     </div>
 
     <div class="card border-0 shadow-sm mb-4">
@@ -52,25 +52,22 @@ $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_
             <table class="table table-hover align-middle mb-0" id="tabelPost">
                 <thead class="table-light">
                     <tr>
-                        <th width="50" class="text-center">#</th>
                         <th width="80">Gambar</th>
-                        <th style="cursor: pointer;" onclick="sortTable(2)">Judul</th>
+                        <th style="cursor: pointer;" onclick="sortTable(1)">Judul</th>
                         <th>Kategori</th>
                         <th>Penulis</th>
-                        <th style="cursor: pointer;" onclick="sortTable(5)">Status</th>
+                        <th style="cursor: pointer;" onclick="sortTable(4)">Status</th>
                         <th class="text-end" width="200">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="bodyTabel">
                 <?php
                 if (mysqli_num_rows($result) > 0) {
-                    $no = 1;
                     while ($row = mysqli_fetch_assoc($result)) :
                         $status_indo = ($row['status'] == 'published') ? 'Diterbitkan' : 'Draf';
-                        $thumb_path = (!empty($row['thumbnail'])) ? '../assets/images/post/' . htmlspecialchars($row['thumbnail']) : '../assets/images/default-post.png';
+                        $thumb_path = (!empty($row['thumbnail'])) ? '../assets/images/post/' . htmlspecialchars($row['thumbnail']) : '../assets/images/msc-placeholder.png';
                 ?>
                         <tr data-kategori="<?= htmlspecialchars($row['kategori'] ?? '') ?>">
-                            <td class="text-center"><?= $no++; ?></td>
                             <td>
                                 <img src="<?= $thumb_path ?>" style="width: 60px; height: 60px; object-fit: cover;" class="rounded shadow-sm" alt="Thumbnail">
                             </td>
@@ -83,18 +80,16 @@ $res_kat = mysqli_query($conn, $q_kat) or die("Query Kategori Gagal: " . mysqli_
                             <td><?= $status_indo; ?></td>
                             <td class="text-end">
                                 <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-outline-primary" onclick="editPost(<?= $row['id_kabar']; ?>)">Edit</button>
-                                    <button class="btn btn-outline-info" onclick="window.open('../kabar/<?= htmlspecialchars($row['slug']); ?>', '_blank')">Lihat</button>
-                                    <button class="btn btn-outline-danger btn-hapus"
-                                            data-id="<?= $row['id_kabar']; ?>"
-                                            data-judul="<?= htmlspecialchars($row['judul']); ?>">Hapus</button>
+                                    <button type="button" class="btn btn-sm btn-light text-warning kandaga-action-btn" data-bs-toggle="tooltip" title="Edit" aria-label="Edit postingan" onclick="editPost(<?= $row['id_kabar']; ?>)"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-sm btn-light text-info kandaga-action-btn" data-bs-toggle="tooltip" title="Lihat" aria-label="Lihat postingan" onclick="window.open('../kabar/<?= htmlspecialchars($row['slug']); ?>', '_blank')"><i class="fa-solid fa-eye" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-sm btn-light text-danger kandaga-action-btn btn-hapus" data-bs-toggle="tooltip" title="Hapus" aria-label="Hapus postingan" data-id="<?= $row['id_kabar']; ?>" data-judul="<?= htmlspecialchars($row['judul']); ?>"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button>
                                 </div>
                             </td>
                         </tr>
                 <?php
                     endwhile;
                 } else {
-                    echo "<tr><td colspan='7' class='empty-row'>Tidak ada data postingan ditemukan.</td></tr>";
+                    echo "<tr><td colspan='6' class='empty-row'>Tidak ada data postingan ditemukan.</td></tr>";
                 }
                 ?>
                 </tbody>

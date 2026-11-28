@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/../includes/public-page-header.php';
 // Gunakan Master Loader
 require_once __DIR__ . '/../config.php';
 
@@ -39,12 +40,8 @@ function get_excerpt($konten, $char_limit = 120) {
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-daftar-post.css">
     <style>
-        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
-        .page-header { background: white; padding: 40px 0 30px 0; border-bottom: 1px solid #e2e8f0; }
-        .search-container { max-width: 550px; margin: 20px auto 0 auto; }
-        .search-input { border-radius: 30px 0 0 30px !important; background-color: #f1f5f9; border: 1px solid #cbd5e1; padding-left: 20px; }
-        .search-button { border-radius: 0 30px 30px 0 !important; padding-right: 20px; padding-left: 15px; }
-        .section-kabar { margin-top: 50px; }
+        body { background-color: var(--kandaga-surface); font-family: var(--kandaga-font-ui); }
+        .section-kabar { margin-top: 2.5rem; }
         .section-badge-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 6px 14px; border-radius: 30px; display: inline-block; margin-bottom: 15px; }
         .bg-berita { background-color: #e0f2fe; color: #0369a1; }
         .bg-kegiatan { background-color: #fef3c7; color: #b45309; }
@@ -65,22 +62,14 @@ function get_excerpt($konten, $char_limit = 120) {
 
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
-<div class="page-header text-center">
-    <div class="container">
-        <h2 class="fw-bold" style="color: #0f2042;">Kabar KANDAGA</h2>
-        <p class="text-muted mb-3">Informasi terbaru, kegiatan, dan pembaruan seputar katalog naskah Sunda.</p>
-        <div class="search-container">
-            <form action="<?= BASE_URL ?>/kabar" method="GET">
-                <div class="input-group">
-                    <input type="text" name="search" class="form-control search-input" placeholder="Cari tulisan..." value="<?= htmlspecialchars($search); ?>">
-                    <button class="btn btn-primary search-button" type="submit">
-                        <i class="fas fa-search me-1"></i> Cari
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+<?php
+kandagaPublicHeader(
+    'Kabar KANDAGA',
+    'fa-newspaper',
+    'Informasi terbaru, kegiatan, dan pembaruan seputar katalog naskah Sunda.',
+    kandagaPublicSearchActions(BASE_URL . '/kabar', $search, [], 'Cari tulisan...', 'kabarSearchForm')
+);
+?>
 
 <div class="container pb-5 article-list-shell">
     <?php
@@ -103,7 +92,8 @@ function get_excerpt($konten, $char_limit = 120) {
                     <div class="col">
                         <div class="card-post">
                             <a href="<?= BASE_URL ?>/kabar/<?= $row['slug']; ?>">
-                                <img src="<?= BASE_URL ?>/assets/images/post/<?= $row['thumbnail']; ?>" class="thumb-img" alt="<?= htmlspecialchars($row['judul']); ?>" loading="lazy">
+                                <?php $thumb = (string)($row['thumbnail'] ?? ''); $thumbSrc = preg_match('/^[A-Za-z0-9][A-Za-z0-9._-]{0,240}$/', $thumb) ? BASE_URL . '/assets/images/post/' . rawurlencode($thumb) : BASE_URL . '/assets/images/msc-placeholder.png'; ?>
+                                <img src="<?= htmlspecialchars($thumbSrc, ENT_QUOTES, 'UTF-8'); ?>" class="thumb-img" alt="<?= htmlspecialchars($row['judul'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>" loading="lazy">
                             </a>
                             <div class="card-body p-4">
                                 <h5 class="mb-3">

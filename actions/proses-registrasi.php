@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/../includes/captcha.php';
 /**
  * proses-registrasi.php
  * Updated with Captcha Validation
@@ -22,12 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // --- VALIDASI CAPTCHA ---
 // Pastikan kode captcha diinput dan cocok dengan session
-if (empty($_POST['captcha']) || $_POST['captcha'] != $_SESSION['captcha_code']) {
-    exit(json_encode(['success' => false, 'message' => 'Kode keamanan salah!']));
+if (!kandagaCaptchaVerify($_POST['captcha'] ?? null)) {
+    exit(json_encode(['success' => false, 'message' => 'Kode keamanan salah! Klik gambar untuk kode baru.']));
 }
-
-// Hapus session captcha agar tidak bisa digunakan lagi (one-time use)
-unset($_SESSION['captcha_code']);
 
 // Sanitasi & Input
 $username = htmlspecialchars(trim($_POST['username']), ENT_QUOTES, 'UTF-8');

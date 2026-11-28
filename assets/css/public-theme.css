@@ -1,0 +1,89 @@
+/* Public-theme alignment with the Goah admin token palette. Loaded after
+ * page-specific styles so older hardcoded blues do not win the cascade. */
+.kandaga-nav .navbar {
+    background: #0f172a !important;
+    border-bottom-color: var(--kandaga-primary) !important;
+}
+.kandaga-nav .nav-item.active .nav-link { background: rgba(15, 118, 110, .24) !important; }
+.kandaga-nav .dropdown-item:hover { background: rgba(15, 118, 110, .22) !important; }
+.kandaga-nav .search-pill {
+    background: var(--kandaga-primary) !important;
+    box-shadow: none;
+}
+.kandaga-nav .search-pill:hover { box-shadow: 0 0 15px rgba(15, 118, 110, .55) !important; }
+
+body.kandaga-module .btn-primary,
+body.kandaga-public .btn-primary,
+body.kandaga-module .btn-outline-primary:hover,
+body.kandaga-public .btn-outline-primary:hover,
+body.kandaga-module .btn-outline-primary:focus-visible,
+body.kandaga-public .btn-outline-primary:focus-visible {
+    background-color: var(--kandaga-primary) !important;
+    border-color: var(--kandaga-primary) !important;
+    color: #fff !important;
+}
+body.kandaga-module .btn-outline-primary,
+body.kandaga-public .btn-outline-primary {
+    border-color: var(--kandaga-primary) !important;
+    color: var(--kandaga-primary) !important;
+}
+body.kandaga-module .text-primary,
+body.kandaga-public .text-primary,
+body.kandaga-module a.text-primary,
+body.kandaga-public a.text-primary {
+    color: var(--kandaga-primary) !important;
+}
+body.kandaga-module .badge.bg-primary,
+body.kandaga-public .badge.bg-primary {
+    background-color: var(--kandaga-primary) !important;
+}
+body.kandaga-module .page-link,
+body.kandaga-public .page-link { color: var(--kandaga-primary); }
+body.kandaga-module .page-item.active .page-link,
+body.kandaga-public .page-item.active .page-link {
+    background-color: var(--kandaga-primary) !important;
+    border-color: var(--kandaga-primary) !important;
+    color: #fff !important;
+}
+
+/* Header-led pages: replace heavy blue hero blocks with the shared surface. */
+.kandaga-page-head { background: var(--kandaga-card); }
+
+/* Specific public modules that still carry older inline accent literals. */
+body.kandaga-module .stat-card-header i.main-icon { color: var(--kandaga-primary-soft) !important; }
+body.kandaga-module .stat-card .nav-link.active,
+body.kandaga-module .research-status-detail { color: var(--kandaga-primary) !important; }
+body.kandaga-module .btn-zoom-stat:hover,
+body.kandaga-module .badge-count,
+body.kandaga-module .research-status-title i { color: #fff !important; }
+body.kandaga-module .btn-zoom-stat:hover,
+body.kandaga-module .badge-count,
+body.kandaga-module .research-status-title i,
+body.kandaga-module .research-progress-related,
+body.kandaga-module .research-detail-bar span:not(.muted) { background: var(--kandaga-primary) !important; }
+body.kandaga-module .research-status-detail {
+    border-color: var(--kandaga-border-strong) !important;
+    background: var(--kandaga-card) !important;
+}
+body.kandaga-module .research-status-detail:hover,
+body.kandaga-module .research-status-detail:focus {
+    background: var(--kandaga-primary-soft) !important;
+    border-color: var(--kandaga-primary) !important;
+    color: var(--kandaga-primary-strong) !important;
+}
+body.kandaga-module .country-meta i,
+body.kandaga-module .modal-meta-item i,
+body.kandaga-module .badge-kurasi,
+body.kandaga-module .btn-koleksi-action { color: var(--kandaga-primary) !important; }
+body.kandaga-module .badge-kurasi { background: var(--kandaga-primary) !important; }
+body.kandaga-module .btn-detail-trigger:hover { background: var(--kandaga-primary) !important; }
+body.kandaga-module .catalog-heading { border-left-color: var(--kandaga-primary) !important; }
+body.kandaga-module .catalog-count { color: var(--kandaga-primary) !important; }
+body.kandaga-module .catalog-apsa { background: var(--kandaga-primary-soft) !important; color: var(--kandaga-primary-strong) !important; }
+body.kandaga-module .alert-notice { border-left-color: var(--kandaga-primary) !important; }
+body.kandaga-module .wrapper-disclaimer h4 i { color: var(--kandaga-primary) !important; }
+
+@media (max-width: 767.98px) {
+    .kandaga-nav .navbar-brand img { height: 28px; }
+    .kandaga-nav .nav-link { padding: .5rem .7rem !important; }
+}

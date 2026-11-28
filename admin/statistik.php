@@ -25,7 +25,7 @@ $catalogCards = [
 
 <div id="statisticsDashboard" class="statistics-dashboard<?= defined('KANDAGA_ADMIN_SHELL') ? '' : ' container-fluid p-3' ?>" data-detail-endpoint="<?= htmlspecialchars(BASE_URL . '/admin/actions/statistics-detail.php', ENT_QUOTES, 'UTF-8') ?>">
     <div class="stats-header admin-page-header">
-        <div><h1>Statistik Kandaga</h1><p>Ringkasan katalog dan pemanfaatan halaman yang ringan; rincian dimuat hanya saat diperlukan.</p></div>
+        <div><h1><i class="fa-solid fa-chart-line me-2" aria-hidden="true"></i>Statistik Katalog</h1><p>Ringkasan katalog dan pemanfaatan halaman yang ringan; rincian dimuat hanya saat diperlukan.</p></div>
         <form method="get" action="<?= htmlspecialchars(BASE_URL . '/admin/index.php', ENT_QUOTES, 'UTF-8') ?>" class="d-flex align-items-center gap-2 flex-wrap">
             <input type="hidden" name="page" value="statistik">
             <label for="statisticsPeriod" class="visually-hidden">Periode grafik</label>
@@ -48,9 +48,9 @@ $catalogCards = [
     <?php if ($traffic !== null): ?>
         <section class="stats-panel" aria-labelledby="dailyStatsTitle">
             <div class="stats-panel-heading"><div><h4 id="dailyStatsTitle">Akses halaman harian</h4><p class="stats-caption mb-0">Agregat halaman publik; tanpa log request mentah atau identitas pengunjung.</p></div><span class="badge bg-light text-dark border"><?= $period ?> hari</span></div>
-            <?php if ($daily): ?><div class="stats-chart" role="img" aria-label="Grafik kunjungan harian">
+            <?php if ($daily): ?><div class="stats-chart" role="img" aria-label="Grafik tampilan halaman harian">
                 <?php foreach ($daily as $index => $point): $views = (int)($point['views'] ?? 0); $height = max(2, (int)round(($views / $maxDaily) * 100)); $label = date('d M', strtotime((string)$point['day'])); ?>
-                    <div class="stats-bar-wrap" title="<?= htmlspecialchars($label . ': ' . number_format($views) . ' kunjungan', ENT_QUOTES, 'UTF-8') ?>"><div class="stats-bar" style="height:<?= $height ?>%"></div><?php if ($index === 0 || $index === count($daily)-1 || $index % 5 === 0): ?><span class="stats-bar-label"><?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?></span><?php endif; ?></div>
+                    <div class="stats-bar-wrap" title="<?= htmlspecialchars($label . ': ' . number_format($views) . ' tampilan halaman', ENT_QUOTES, 'UTF-8') ?>"><div class="stats-bar" style="height:<?= $height ?>%"></div><?php if ($index === 0 || $index === count($daily)-1 || $index % 5 === 0): ?><span class="stats-bar-label"><?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?></span><?php endif; ?></div>
                 <?php endforeach; ?></div>
             <?php else: ?><p class="text-muted mb-0">Belum ada data kunjungan pada periode ini.</p><?php endif; ?>
         </section>

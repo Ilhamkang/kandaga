@@ -41,6 +41,8 @@ foreach ($users as $row) {
 }
 ?>
 
+<?php kandagaPageHeader('Monitor Status', 'fa-user-gear', 'Pantau keaktifan dan status akun kontributor Kandaga.'); ?>
+
 <div class="row mb-4">
     <div class="col-md-3">
         <div class="stat-card">
@@ -69,9 +71,6 @@ foreach ($users as $row) {
 </div>
 
 <div class="card shadow-sm border-0 user-card">
-    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-        <h2 class="h5 mb-0"><i class="fa-solid fa-user-gear me-2"></i>Monitor Pengguna</h2>
-    </div>
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover mb-0">
@@ -100,12 +99,12 @@ foreach ($users as $row) {
                         <td class="text-center align-middle">
                             <?php if (!$is_me) : ?>
                                 <div class="btn-group">
-                                    <a href="<?= BASE_URL ?>/detail-kontributor?nama=<?= urlencode($row['nama']); ?>" class="btn btn-sm btn-light text-info"><i class="fa-solid fa-eye"></i></a>
+                                    <a href="<?= BASE_URL ?>/detail-kontributor?nama=<?= urlencode($row['nama']); ?>" class="btn btn-sm btn-light text-info kandaga-action-btn" data-bs-toggle="tooltip" title="Lihat" aria-label="Lihat kontributor"><i class="fa-solid fa-eye" aria-hidden="true"></i></a>
                                     <form method="POST" action="actions/proses-blokir-user.php" class="d-inline">
 <input type="hidden" name="id" value="<?= (int)$row['id'] ?>">
 <input type="hidden" name="status" value="<?= $row['status_akun'] === 'aktif' ? 'blokir' : 'aktif' ?>">
-<button type="submit" class="btn btn-sm btn-light"><?= $row['status_akun'] === 'aktif' ? 'Blokir' : 'Aktifkan' ?></button></form>
-                                    <button class="btn btn-sm btn-light text-danger btn-hapus" data-id="<?= $row['id']; ?>" data-user="<?= $row['username']; ?>"><i class="fa-solid fa-trash-can"></i></button>
+<button type="submit" class="btn btn-sm btn-light <?= $row['status_akun'] === 'aktif' ? 'text-warning' : 'text-success' ?> kandaga-action-btn" data-bs-toggle="tooltip" title="<?= $row['status_akun'] === 'aktif' ? 'Blokir' : 'Aktifkan' ?>" aria-label="<?= $row['status_akun'] === 'aktif' ? 'Blokir kontributor' : 'Aktifkan kontributor' ?>"><i class="fa-solid <?= $row['status_akun'] === 'aktif' ? 'fa-user-lock' : 'fa-user-check' ?>" aria-hidden="true"></i></button></form>
+                                    <button type="button" class="btn btn-sm btn-light text-danger kandaga-action-btn btn-hapus" data-bs-toggle="tooltip" title="Hapus" aria-label="Hapus kontributor" data-id="<?= $row['id']; ?>" data-user="<?= $row['username']; ?>"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button>
                                 </div>
                             <?php else : ?>
                                 <span class="badge bg-secondary">Admin Aktif</span>

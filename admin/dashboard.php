@@ -73,9 +73,9 @@ function kandagaDashboardImage($n){return kandagaImageUrl((array)$n);}
 <div class="kandaga-dashboard-context">
     <div class="dashboard-welcome mb-4 d-flex justify-content-between align-items-center">
         <div class="position-relative" style="z-index:1">
-            <div class="welcome-kicker mb-2"><i class="fa-solid fa-leaf me-1" aria-hidden="true"></i> Ruang kerja Kandaga</div>
-            <h2 class="fw-bold mb-2">Sampurasun, <?= htmlspecialchars($nama_sapaan); ?>!</h2>
-            <p class="mb-0 small">Wilujeng sumping di Goah. <span class="badge role-badge ms-1"><?= htmlspecialchars($role_user); ?></span></p>
+            <div class="welcome-kicker mb-2"><i class="fa-solid fa-leaf me-1" aria-hidden="true"></i>Ruang kerja Kandaga</div>
+            <h1 class="fw-bold mb-2"><i class="fa-solid fa-table-columns me-2" aria-hidden="true"></i>Dashboard</h1>
+            <p class="mb-0">Sampurasun, <?= htmlspecialchars($nama_sapaan); ?>! Wilujeng sumping di Goah. <span class="badge role-badge ms-1"><?= htmlspecialchars($role_user); ?></span></p>
         </div>
         <div class="welcome-clock d-none d-sm-block">
             <div id="realtime-clock">00:00:00</div>

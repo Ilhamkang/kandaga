@@ -4,6 +4,7 @@ ini_set('display_errors', 0);
 error_reporting(E_ALL);
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/version.php';
+require_once __DIR__ . '/../includes/public-page-header.php';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -16,8 +17,7 @@ require_once __DIR__ . '/../includes/version.php';
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style-tentang.css?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>">
 
     <style>
-        body { background-color: #f8fafc; color: #334155; font-family: 'Inter', sans-serif; line-height: 1.6; }
-        .page-header { background: white; padding: 50px 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 40px; }
+        body { background-color: var(--kandaga-surface); color: var(--kandaga-text); font-family: var(--kandaga-font-ui); line-height: 1.6; }
         .wrapper-disclaimer { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); padding: 45px; }
 
         h4 { color: #0f172a; font-weight: 700; margin-top: 35px; margin-bottom: 15px; display: flex; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
@@ -40,11 +40,7 @@ require_once __DIR__ . '/../includes/version.php';
 <body class="kandaga-module kandaga-special-page kandaga-disclaimer-page">
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
-<div class="page-header text-center">
-    <div class="container">
-        <h2 class="fw-bold">Ketentuan Penggunaan &amp; Penafian</h2>
-    </div>
-</div>
+<?php kandagaPublicHeader('Ketentuan Penggunaan & Penafian', 'fa-scale-balanced', 'Kebijakan penggunaan data, atribusi, dan tanggung jawab platform KANDAGA.', '', 'Tentang Proyek'); ?>
 
 <div class="container pb-5">
     <div class="wrapper-disclaimer kandaga-prose">

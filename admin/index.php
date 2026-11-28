@@ -31,6 +31,7 @@ $adminPageStyles = [
     'inbox' => ['admin/assets/css/style-inbox.css'],
     'feedback-naskah' => ['admin/assets/css/style-inbox.css', 'admin/assets/css/feedback-naskah.css'],
     'update' => ['admin/assets/css/update-center.css'],
+    'media-library' => ['admin/assets/css/admin-media.css'],
 ];
 
 // Maintenance Mode Check
@@ -76,13 +77,13 @@ $allowed_pages = [
     'profil-user', 'feedback-naskah', 'inbox', 'daftar-pustaka', 'form-bibliografi', 'form-pendaftaran-user',
     'status-pengguna', 'daftar-pengguna', 'log-user',
     'statistik', 'form-kabar', 'daftar-post', 'form-edit-kabar',
-    'form-kurasi-koleksi', 'manage-referensi', 'pengaturan'
+    'form-kurasi-koleksi', 'manage-referensi', 'media-library', 'pengaturan'
 ];
 
 $admin_only_pages = [
     'daftar-pengguna', 'cek_sesi', 'update','test-download',
     'status-pengguna', 'log-user', 'statistik', 'feedback-naskah', 'inbox', 'form-pendaftaran-user', 'metadata-importer', 'catalog-importer',
-    'form-kabar', 'daftar-post', 'form-edit-kabar', 'form-kurasi-koleksi', 'manage-referensi', 'pengaturan'
+    'form-kabar', 'daftar-post', 'form-edit-kabar', 'form-kurasi-koleksi', 'manage-referensi', 'media-library', 'pengaturan'
 ];
 
 if (!in_array($page, $allowed_pages)) { $page = 'dashboard'; }
@@ -125,7 +126,6 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
     <script src="<?= BASE_URL ?>/assets/bootstrap/js/bootstrap.bundle.min.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
     <script src="<?= BASE_URL ?>/admin/assets/js/select2.min.js"></script>
     <script src="<?= BASE_URL ?>/admin/assets/js/tinymce/tinymce.min.js"></script>
-    <script src="<?= BASE_URL ?>/admin/assets/js/sweetalert2.min.js"></script>
     <script src="<?= BASE_URL ?>/assets/js/mobile-detect.js?v=<?= htmlspecialchars(kandagaVersion(), ENT_QUOTES, 'UTF-8') ?>"></script>
 
 <?php include __DIR__ . '/../includes/module-head.php'; ?>
@@ -163,7 +163,7 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                         <img class="img-profile rounded-circle border" src="<?= $path_foto_user; ?>" style="width: 32px; height: 32px; object-fit: cover;">
                     </a>
                     <div class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="userDropdown" style="border-radius: 8px;">
-                        <a class="dropdown-item py-2" href="index.php?page=profil-user"><i class="fa-solid fa-user me-2 text-muted"></i> Profil Saya</a>
+                        <a class="dropdown-item py-2" href="index.php?page=profil-user"><i class="fa-solid fa-user-gear me-2 text-muted"></i> Pengaturan Profil</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item py-2 text-danger" href="javascript:void(0)" onclick="logout()"><i class="fa-solid fa-right-from-bracket me-2"></i> Keluar</a>
                     </div>
@@ -186,7 +186,7 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                     if ($q_inbox) { $unread = $q_inbox->fetch_assoc()['total']; }
                     ?>
                     <a href="index.php?page=inbox" class="nav-link <?= ($page == 'inbox') ? 'active' : ''; ?>">
-                        <i class="fa-solid fa-envelope"></i> <span>Inbox Feedback</span>
+                        <i class="fa-solid fa-envelope me-2"></i><span>Inbox Feedback</span>
                         <?php if ($unread > 0): ?><span class="badge bg-danger ms-auto" style="font-size: 10px;"><?= $unread ?></span><?php endif; ?>
                     </a>
                     <?php
@@ -218,6 +218,7 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                 <?php if ($role_user === 'admin'): ?>
                 <a id="metadataImporterNav" href="index.php?page=metadata-importer" class="nav-link <?= ($page === 'metadata-importer') ? 'active' : ''; ?>"><i class="fa-solid fa-file-import"></i> <span>Metadata Importer</span></a>
                 <a href="index.php?page=manage-referensi" class="nav-link <?= ($page == 'manage-referensi') ? 'active' : ''; ?>"><i class="fa-solid fa-scroll"></i> <span>Preferensi Katalog</span></a>
+                <a href="index.php?page=media-library" class="nav-link <?= ($page === 'media-library') ? 'active' : ''; ?>"><i class="fa-solid fa-folder-open"></i> <span>Pustaka Media</span></a>
                 <a href="index.php?page=form-kurasi-koleksi" class="nav-link <?= ($page == 'form-kurasi-koleksi') ? 'active' : ''; ?>"><i class="fa-solid fa-scroll"></i> <span>Kurator</span></a>
                 <a href="index.php?page=pengaturan" class="nav-link <?= ($page == 'pengaturan') ? 'active' : ''; ?>"><i class="fa-solid fa-sliders"></i> <span>Pengaturan</span></a>
                 <?php endif; ?>
@@ -228,8 +229,8 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
                 <a href="index.php?page=profil-user" class="nav-link <?= ($page == 'profil-user') ? 'active' : ''; ?>"><i class="fa-solid fa-user-gear"></i> <span>Pengaturan Profil</span></a>
                 <?php if ($role_user === 'admin'): ?>
                 <a href="index.php?page=daftar-pengguna" class="nav-link <?= ($page == 'daftar-pengguna') ? 'active' : ''; ?>"><i class="fa-solid fa-users"></i> <span>Daftar Pengguna</span></a>
-                <a href="index.php?page=form-pendaftaran-user" class="nav-link <?= ($page == 'pendaftaran-user') ? 'active' : ''; ?>"><i class="fa-solid fa-user-plus"></i> <span>Tambah Pengguna</span></a>
-                <a href="index.php?page=status-pengguna" class="nav-link <?= ($page == 'status-pengguna') ? 'active' : ''; ?>"><i class="fa-solid fa-user-plus"></i> <span>Monitor Status</span></a>
+                <a href="index.php?page=form-pendaftaran-user" class="nav-link <?= ($page === 'form-pendaftaran-user') ? 'active' : ''; ?>"><i class="fa-solid fa-user-plus"></i> <span>Tambah Pengguna</span></a>
+                <a href="index.php?page=status-pengguna" class="nav-link <?= ($page == 'status-pengguna') ? 'active' : ''; ?>"><i class="fa-solid fa-user-gear"></i> <span>Monitor Status</span></a>
                 <a href="index.php?page=log-user" class="nav-link <?= ($page == 'log-user') ? 'active' : ''; ?>"><i class="fa-solid fa-clock-rotate-left"></i> <span>Log Aktivitas</span></a>
 
                 <div class="sidebar-heading">Properti Sistem</div>
@@ -247,13 +248,7 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
         </nav>
 
         <main id="main-wrapper" class="w-100">
-            <div class="container-fluid" id="kontenUtama">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb bg-transparent p-0 mb-4">
-                        <li class="breadcrumb-item"><a href="index.php">Goah</a></li>
-                        <li class="breadcrumb-item active text-capitalize"><?= str_replace('_', ' ', str_replace('-', ' ', $page)); ?></li>
-                    </ol>
-                </nav>
+            <div id="kontenUtama">
                 <div id="adminModule" class="admin-module-surface" data-page="<?= htmlspecialchars($page, ENT_QUOTES, 'UTF-8') ?>">
                     <?php
                     $file_path = __DIR__ . '/' . $page . ".php";
@@ -309,6 +304,24 @@ $path_foto_user = BASE_URL . "/assets/images/user/" . $foto_user;
             $links.on('mouseleave focusout', hideTooltip);
             $('#sidebarToggle').on('click', hideTooltip);
             $(window).on('resize scroll', hideTooltip);
+        }());
+
+        // Bootstrap tooltips for icon-only edit/view/delete actions, including
+        // fragments injected into #adminModule by jQuery .load().
+        (function initActionTooltips() {
+            window.kandagaInitTooltips = function (scope) {
+                var root = scope || document;
+                if (!root.querySelectorAll || typeof bootstrap === 'undefined' || !bootstrap.Tooltip) return;
+                root.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+                    if (!bootstrap.Tooltip.getInstance(el)) {
+                        new bootstrap.Tooltip(el, { container: 'body', placement: 'top' });
+                    }
+                });
+            };
+            window.kandagaInitTooltips();
+            $(document).ajaxComplete(function () {
+                window.kandagaInitTooltips(document.getElementById('adminModule'));
+            });
         }());
 
         // Toggle Sidebar

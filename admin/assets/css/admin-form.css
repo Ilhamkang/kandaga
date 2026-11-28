@@ -71,3 +71,50 @@
     border: 2px solid var(--kandaga-border);
     margin-bottom: 10px;
 }
+
+/* Pustaka Media picker and article gallery. */
+.kandaga-post-picker-frame {
+    display: block;
+    width: 100%;
+    height: min(70vh, 700px);
+    min-height: 360px;
+    border: 0;
+    background: var(--kandaga-card);
+}
+.kandaga-post-gallery {
+    display: grid;
+    gap: .6rem;
+}
+.kandaga-post-gallery-item {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    align-items: center;
+    gap: .75rem;
+    padding: .5rem;
+    border: 1px solid var(--kandaga-border);
+    border-radius: var(--kandaga-radius-md);
+    background: var(--kandaga-card);
+}
+.kandaga-post-gallery-item img {
+    width: 72px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: var(--kandaga-radius-sm, 6px);
+    background: var(--kandaga-surface);
+}
+.kandaga-post-gallery-item__body { min-width: 0; }
+.kandaga-post-gallery-item__name {
+    display: block;
+    margin-bottom: .3rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--kandaga-heading);
+    font-size: var(--kandaga-text-sm);
+    font-weight: var(--kandaga-weight-semibold);
+}
+@media (max-width: 575.98px) {
+    .kandaga-post-gallery-item { grid-template-columns: 56px 1fr auto; gap: .5rem; }
+    .kandaga-post-gallery-item img { width: 56px; height: 48px; }
+    .kandaga-post-picker-frame { height: 62vh; min-height: 300px; }
+}

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/../includes/public-page-header.php';
 // 1. Load Master Loader
 require_once __DIR__ . '/../config.php';
 ?>
@@ -16,8 +17,7 @@ require_once __DIR__ . '/../config.php';
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/contributor-activity.css?v=3.1.5">
 
     <style>
-        body { background-color: #f8fafc; color: #334155; font-family: 'Inter', sans-serif; }
-        .page-header { background: white; padding: 50px 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 40px; }
+        body { background-color: var(--kandaga-surface); color: var(--kandaga-text); font-family: var(--kandaga-font-ui); }
         .profile-link { text-decoration: none !important; color: inherit; display: block; height: 100%; }
         .card-kontributor-premium {
             background: white; border: none; border-radius: 14px;
@@ -38,12 +38,7 @@ require_once __DIR__ . '/../config.php';
 <body class="kandaga-module kandaga-special-page kandaga-contributors-page">
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
-<div class="page-header text-center">
-    <div class="container">
-        <h2 class="fw-bold">Kontributor Data</h2>
-        <p class="text-muted">Para penggiat naskah yang berdedikasi menjaga khasanah naskah Sunda.</p>
-    </div>
-</div>
+<?php kandagaPublicHeader('Kontributor Data', 'fa-users', 'Para penggiat naskah yang berdedikasi menjaga khasanah naskah Sunda.', '', 'Tentang Proyek'); ?>
 
 <div class="container pb-5">
 

@@ -1,0 +1,43 @@
+/* Shared dialog surface. Positioning is owned by the global modal rule in
+ * mobile-compat.css; this file only gives the content the Kandaga tokens. */
+.kandaga-dialog-modal .modal-content {
+    border: 1px solid var(--kandaga-border, #e2e8f0);
+    border-radius: var(--kandaga-radius-lg, 16px);
+    background: var(--kandaga-card, #fff);
+    box-shadow: 0 20px 50px -20px rgba(15, 23, 42, .35);
+    overflow: hidden;
+}
+.kandaga-dialog-modal .modal-header,
+.kandaga-dialog-modal .modal-footer {
+    border-color: var(--kandaga-border, #e2e8f0);
+    background: var(--kandaga-card, #fff);
+    padding: 1rem 1.25rem;
+}
+.kandaga-dialog-modal .modal-title {
+    display: flex;
+    align-items: center;
+    color: var(--kandaga-heading, #0f172a);
+    font-size: 1.05rem;
+    font-weight: var(--kandaga-weight-semibold, 600);
+}
+.kandaga-dialog-modal .modal-body { padding: 1.25rem; }
+.kandaga-dialog-modal .kandaga-dialog-message {
+    color: var(--kandaga-text, #334155);
+    font-size: var(--kandaga-text-sm, .925rem);
+    line-height: 1.65;
+}
+.kandaga-dialog-modal .btn-primary {
+    --bs-btn-bg: var(--kandaga-primary, #0f766e);
+    --bs-btn-border-color: var(--kandaga-primary, #0f766e);
+    --bs-btn-hover-bg: var(--kandaga-primary-strong, #115e59);
+    --bs-btn-hover-border-color: var(--kandaga-primary-strong, #115e59);
+}
+.kandaga-dialog-modal .modal-footer .btn { min-width: 92px; }
+
+@media (max-width: 575.98px) {
+    .kandaga-dialog-modal .modal-dialog { margin: .75rem; }
+    .kandaga-dialog-modal .modal-header,
+    .kandaga-dialog-modal .modal-body,
+    .kandaga-dialog-modal .modal-footer { padding: .9rem; }
+    .kandaga-dialog-modal .modal-footer .btn { flex: 1 1 auto; }
+}

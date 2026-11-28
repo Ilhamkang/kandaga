@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/request.php';
 require_once __DIR__ . '/upload.php';
+require_once __DIR__ . '/media-library.php';
 require_once __DIR__ . '/log-tracker.php';
 function kandagaSanitizePostHtml($html) {
     $allowed = '<p><br><strong><b><em><i><u><ul><ol><li><h2><h3><h4><blockquote><a><img><figure><figcaption><hr><table><thead><tbody><tr><th><td>';
@@ -38,9 +39,41 @@ function kandagaSanitizePostHtml($html) {
     foreach (iterator_to_array($root->childNodes) as $child) $out .= $dom->saveHTML($child);
     return $out;
 }
+/**
+ * Synchronise the optional article gallery inside the post transaction.
+ * Returns the names of newly copied files so they can be removed on rollback.
+ */
+function kandagaSyncPostGallery(mysqli $conn, int $id, $raw): array
+{
+    $tableCheck = $conn->prepare("SHOW TABLES LIKE 'tb_kabar_gambar'");
+    $tableCheck->execute();
+    if (!$tableCheck->get_result()->fetch_row()) { $tableCheck->close(); return []; }
+    $tableCheck->close();
+
+    $items = kandagaPostGalleryPayload($raw);
+    $delete = $conn->prepare('DELETE FROM tb_kabar_gambar WHERE id_kabar = ?');
+    $delete->bind_param('i', $id);
+    $delete->execute();
+    $delete->close();
+
+    $copied = [];
+    $insert = $conn->prepare('INSERT INTO tb_kabar_gambar (id_kabar, url_gambar, alt_gambar, urutan) VALUES (?, ?, ?, ?)');
+    foreach ($items as $index => $item) {
+        $stored = kandagaMediaStoreToPost($item['folder'], $item['name']);
+        if ($stored['copied']) $copied[] = $stored['name'];
+        $urutan = $index;
+        $insert->bind_param('issi', $id, $stored['url'], $item['alt'], $urutan);
+        $insert->execute();
+    }
+    $insert->close();
+    return $copied;
+}
+
 function kandagaSavePost($editing) {
     global $conn;
-    kandagaPost(true); $new = null; $started = false; $directory = ROOT_PATH . '/assets/images/post';
+    kandagaPost(true);
+    $new = null; $uploaded = null; $pickedCopied = []; $galleryCopied = [];
+    $started = false; $directory = ROOT_PATH . '/assets/images/post';
     try {
         $id = (int)($_POST['id_kabar'] ?? 0);
         if ($editing && $id < 1) throw new InvalidArgumentException('ID kabar tidak valid.');
@@ -70,7 +103,17 @@ function kandagaSavePost($editing) {
             if ($editing) throw new InvalidArgumentException('Slug sudah dipakai kabar lain. Ubah judul atau slug.');
             $slug = substr($baseSlug, 0, 255 - strlen((string)$suffix) - 1) . '-' . $suffix++;
         } while ($suffix < 10000);
-        $new = kandagaUpload('thumbnail',$directory,'kabar'); $thumbnail = $new ?? ($old['thumbnail'] ?? '');
+        $uploaded = kandagaUpload('thumbnail',$directory,'kabar');
+        $new = $uploaded;
+        if ($new === null && !empty($_POST['thumbnail_pick'])) {
+            $pick = json_decode((string)$_POST['thumbnail_pick'], true);
+            if (is_array($pick)) {
+                $stored = kandagaMediaStoreToPost((string)($pick['folder'] ?? ''), (string)($pick['name'] ?? ''));
+                $new = $stored['name'];
+                if ($stored['copied']) $pickedCopied[] = $new;
+            }
+        }
+        $thumbnail = $new ?? ($old['thumbnail'] ?? '');
         if ($editing) {
             $stmt=$conn->prepare('UPDATE tb_kabar SET judul=?, slug=?, konten=?, thumbnail=?, kategori=?, status=? WHERE id_kabar=?');
             $stmt->bind_param('ssssssi',$judul,$slug,$konten,$thumbnail,$kategori,$status,$id);
@@ -80,8 +123,16 @@ function kandagaSavePost($editing) {
             $stmt->bind_param('sssssis',$judul,$slug,$konten,$thumbnail,$kategori,$author,$status);
         }
         $stmt->execute(); if (!$editing) $id=$conn->insert_id;
+        $galleryCopied = kandagaSyncPostGallery($conn, $id, $_POST['gambar_tambahan'] ?? '[]');
         logAktivitas($conn,$editing?'edit':'input',($editing?'Edit kabar: ':'Input kabar: ').$judul,$id);
         $conn->commit();$started=false;
         kandagaJson(true, $editing ? 'Kabar berhasil diperbarui.' : 'Kabar berhasil disimpan.', ['id'=>$id, 'slug'=>$slug]);
-    } catch(Throwable $error) { if($started)$conn->rollback();if($new)kandagaRemoveUpload($directory,$new);kandagaFailure($error); }
+    } catch(Throwable $error) {
+        if ($started) $conn->rollback();
+        if ($uploaded) kandagaRemoveUpload($directory, $uploaded);
+        foreach (array_merge($pickedCopied, $galleryCopied) as $copiedName) {
+            kandagaRemoveUpload($directory, $copiedName);
+        }
+        kandagaFailure($error);
+    }
 }

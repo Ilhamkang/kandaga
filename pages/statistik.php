@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/../includes/public-page-header.php';
 /**
  * Halaman Statistik Katalog
  * Lokasi: /pages/statistik.php
@@ -108,8 +109,7 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
     <script src="<?= BASE_URL; ?>/assets/js/chart.js"></script>
 
     <style>
-        body { background-color: #f8fafc; color: #334155; font-family: 'Inter', sans-serif; }
-        .page-header { background: white; padding: 60px 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 40px; }
+        body { background-color: var(--kandaga-surface); color: var(--kandaga-text); font-family: var(--kandaga-font-ui); }
         .stat-card { border: none; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); background: white; overflow: hidden; height: 100%; position: relative; }
         .stat-card-header { background: #1e293b; color: white; padding: 1.2rem; display: flex; align-items: center; justify-content: space-between; }
         .stat-card-header-left { display: flex; align-items: center; gap: 10px; }
@@ -142,12 +142,7 @@ $researchPercent = $researchTotal ? round($researchStats['researched'] / $resear
 <body class="kandaga-module kandaga-special-page kandaga-statistics-page">
 <?php include __DIR__ . '/../includes/navbar.php'; ?>
 
-<div class="page-header text-center">
-    <div class="container">
-        <h2 class="fw-bold">Statistik KANDAGA</h2>
-        <p class="text-muted">Data internal katalog dan pemanfaatan katalog dalam dua klaster.</p>
-    </div>
-</div>
+<?php kandagaPublicHeader('Statistik KANDAGA', 'fa-chart-pie', 'Data internal katalog dan pemanfaatan katalog dalam dua klaster.'); ?>
 
 <div class="container pb-5">
     <p class="small text-muted mb-2"><i class="fas fa-clock me-1"></i> Pembaruan katalog terakhir: <strong><?= $researchStats['updated_at'] ? htmlspecialchars(date('d-m-Y H:i', strtotime($researchStats['updated_at'])), ENT_QUOTES, 'UTF-8') : 'Belum tersedia' ?></strong></p>

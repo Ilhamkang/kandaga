@@ -3,7 +3,7 @@ require_once __DIR__.'/includes/request.php';kandagaAuthorize(true);
 if(!defined('KANDAGA_GOAH_PANEL')){header('Location: '.BASE_URL.'/admin/index.php?page=update');exit;}
 ?>
 <div id="updateCenter" data-api="<?= BASE_URL ?>/admin/actions/update-center.php" data-recovery="<?= BASE_URL ?>/admin/recover-update.php">
-<div class="admin-page-header d-flex justify-content-between align-items-center flex-wrap mb-4"><div><h1><i class="fa-solid fa-arrows-rotate me-2"></i>Pusat Pembaruan</h1><p>Versi terpasang <strong id="updateVersion">—</strong> · Kandaga Goah</p></div><button class="btn btn-light border" id="refreshUpdates"><i class="fa-solid fa-rotate-right me-2"></i>Muat ulang</button></div>
+<?php kandagaPageHeader('Pusat Pembaruan', 'fa-cloud-arrow-down', 'Versi terpasang <strong id="updateVersion">—</strong> · Kandaga Goah', '<button class="btn btn-light border" id="refreshUpdates"><i class="fa-solid fa-rotate-right me-1" aria-hidden="true"></i>Muat ulang</button>'); ?>
 <div id="updateNotice" role="status" aria-live="polite"></div>
 <div id="updateDiagnostics" role="status" aria-live="polite"></div>
 <div id="updateSetup" class="card p-3 mb-3" hidden><h2 class="h5">Siapkan pusat pembaruan</h2><p>Membuat catatan migrasi dan memeriksa struktur database yang sudah tersedia. Data katalog tetap dipertahankan.</p><button class="btn btn-primary align-self-start" id="setupUpdates"><i class="fa-solid fa-wrench me-2"></i>Siapkan Sekarang</button></div>

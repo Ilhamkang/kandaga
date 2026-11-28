@@ -4,6 +4,8 @@ kandagaAuthorize(true);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') kandagaCsrf();
 
 require_once __DIR__ . '/../config/bootstrap.php';
+$message = '';
+$message_type = 'info';
 if (isset($_POST['delete'])) {
     $id_hapus = (int)$_POST['delete'];
 
@@ -62,11 +64,8 @@ $tabel_query  = $conn->query("
 ?>
 
 <?php if (!defined('KANDAGA_ADMIN_SHELL')): ?><div class="container-fluid admin-module-surface py-4"><?php endif; ?>
-    <div class="admin-page-header row mb-4">
-        <div class="col">
-            <h1>Manajemen Kurasi Koleksi</h1>
-            <p>Pengaturan data kurator, penempatan lokasi preservasi, dan dokumentasi naskah.</p>
-        </div>
+    <div class="admin-page-header mb-4">
+        <div><h1><i class="fa-solid fa-scroll me-2" aria-hidden="true"></i>Kurator</h1><p>Pengaturan data kurator, penempatan lokasi preservasi, dan dokumentasi naskah.</p></div>
     </div>
 
     <?php if ($message): ?>
@@ -158,12 +157,13 @@ $tabel_query  = $conn->query("
                                 <td><span class="badge bg-info text-dark py-1 px-2 fw-normal"><?= htmlspecialchars($row['posisi_kurator']) ?></span></td>
                                 <td class="text-secondary small"><?= date('d-m-Y', strtotime($row['tanggal_mulai'])) ?></td>
                                 <td class="text-center">
-                                    <a href="index.php?page=form-kurasi-koleksi&delete=<?= $row['id'] ?>" data-kandaga-delete="1"
-                                       class="btn btn-sm btn-light shadow-sm text-danger"
-
-                                       title="Hapus Data">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </a>
+                                    <form method="post" class="d-inline kandaga-confirm-form" data-confirm-message="Hapus data kurasi ini?">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                                        <input type="hidden" name="delete" value="<?= (int)$row['id'] ?>">
+                                        <button type="submit" class="btn btn-sm btn-light text-danger kandaga-action-btn shadow-sm" data-bs-toggle="tooltip" title="Hapus" aria-label="Hapus data kurasi">
+                                            <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             <?php endwhile; ?>

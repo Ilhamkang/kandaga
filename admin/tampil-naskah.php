@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/bootstrap.php';
-require_once __DIR__ . '/includes/request.php'; kandagaAuthorize(false);
+require_once __DIR__ . '/includes/request.php';
+require_once __DIR__ . '/includes/ownership.php'; kandagaAuthorize(false);
 if (session_status() === PHP_SESSION_NONE) { if (session_status() === PHP_SESSION_NONE) session_start(); }
 require_once '../config/database.php';
 
@@ -40,9 +41,9 @@ $sql = "SELECT k.*,l.nama_tempat,l.negara,
 $result = $conn->query($sql);
 ?>
 
-<div class="admin-page-header row mb-4 align-items-center">
-    <div class="col"><h1>Manajemen Data Naskah</h1></div>
-    <div class="col-auto"><a href="index.php?page=form-input" class="btn btn-primary px-4 shadow-sm"><i class="fa-solid fa-circle-plus me-2"></i>Tambah Naskah</a></div>
+<div class="admin-page-header d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+    <div><h1><i class="fa-solid fa-database me-2" aria-hidden="true"></i>Daftar Naskah</h1><p class="mb-0">Telusuri, sunting, dan kelola seluruh naskah dalam katalog.</p></div>
+    <div class="admin-page-header__actions"><a href="index.php?page=form-input" class="btn btn-primary px-4 shadow-sm"><i class="fa-solid fa-circle-plus me-2" aria-hidden="true"></i>Tambah Naskah</a></div>
 </div>
 
 <div class="table-card">
@@ -96,10 +97,13 @@ $result = $conn->query($sql);
                     <td><?php foreach(explode('||', $row['daftar_aksara'] ?? '') as $a) if($a) echo "<span class='badge bg-light text-dark border me-1'>".htmlspecialchars($a,ENT_QUOTES,'UTF-8')."</span>"; ?></td>
                     <td><?php foreach(explode('||', $row['daftar_bahasa'] ?? '') as $b) if($b) echo "<span class='badge bg-light text-dark border me-1'>".htmlspecialchars($b,ENT_QUOTES,'UTF-8')."</span>"; ?></td>
                     <td>
-                        <div class='btn-group btn-action-group'>
-                            <a href='<?= $url_detail ?>' target='_blank' class='btn btn-sm' title='Lihat'><i class='fa-solid fa-eye text-primary'></i></a>
-                            <a href='index.php?page=form-edit&id=<?= $row['id'] ?>' class='btn btn-sm' title='Edit'><i class='fa-solid fa-pen text-warning'></i></a>
-                            <button type='button' class='btn btn-sm btn-hapus' data-id='<?= $row['id'] ?>' title='Hapus'><i class='fa-solid fa-trash text-danger'></i></button>
+                        <?php $bolehUbah = kandagaBolehNaskah($conn, (int)$row['id'], 0, $row); ?>
+                        <div class="btn-group btn-action-group">
+                            <a href="<?= $url_detail ?>" target="_blank" class="btn btn-sm btn-light text-primary kandaga-action-btn" data-bs-toggle="tooltip" title="Lihat" aria-label="Lihat naskah"><i class="fa-solid fa-eye" aria-hidden="true"></i></a>
+                            <?php if ($bolehUbah): ?>
+                                <a href="index.php?page=form-edit&id=<?= $row['id'] ?>" class="btn btn-sm btn-light text-warning kandaga-action-btn" data-bs-toggle="tooltip" title="Edit" aria-label="Edit naskah"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></a>
+                                <button type="button" class="btn btn-sm btn-light text-danger kandaga-action-btn btn-hapus" data-bs-toggle="tooltip" title="Hapus" aria-label="Hapus naskah" data-id="<?= $row['id'] ?>"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button>
+                            <?php endif; ?>
                         </div>
                     </td>
                 </tr>
