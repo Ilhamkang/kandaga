@@ -327,6 +327,7 @@
         "migrations\/016_presence_maintenance.sql": "ad4598eddea7570f24c05f3f6b80755ac3db4dee0a9cd0839442d822fe897daa",
         "migrations\/017_statistics_performance.sql": "6cadd8dae73c8c6057ae99e9f9145d10742574cb192151db2bcff48a2bfa100a",
         "migrations\/018_web_import_batch_separation.sql": "30118a3bf44532616b3d1030ac2ba1cf990bbd211635e7456bdb1f505efc7032",
+        "migrations\/019_import_detachable_audit.sql": "5192440ea7bf09b6e8606c7bd846a2fa0e76553d021803f22a393e223ef35b86",
         "modules\/bookmark-data.php": "1380bf8e621b83a3850ed5cade58c5df50530bc7bafabaa6f15b3cf52bde994c",
         "modules\/captcha.php": "87d059e70b57dc3cf488b6c81f13f7dee30867bad6f026b49e955c11c9c821df",
         "modules\/contribution-data.php": "949f9bdb736efceb6577cd02f215e1f3b432379496ed97395478937f33f49c07",
@@ -421,6 +422,23 @@
                     "table": "katalog_import_batches",
                     "columns": ["engine"],
                     "unique": [["engine", "file_hash"]]
+                }
+            ]
+        },
+        {
+            "id": "019_import_detachable_audit",
+            "path": "migrations/019_import_detachable_audit.sql",
+            "sha256": "5192440ea7bf09b6e8606c7bd846a2fa0e76553d021803f22a393e223ef35b86",
+            "idempotent": true,
+            "backward_compatible": true,
+            "checks": [
+                {
+                    "table": "katalog_import_audit",
+                    "columns": ["import_row_id", "source_key", "batch_id", "filename", "engine"]
+                },
+                {
+                    "table": "katalog_import_sources",
+                    "columns": ["import_row_id"]
                 }
             ]
         }

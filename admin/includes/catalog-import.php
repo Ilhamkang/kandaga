@@ -16,6 +16,22 @@ function kiHasColumn($table, $column) {
     $r = kiQuery('SELECT COUNT(*) AS n FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name=? AND column_name=?', [$table, $column])->get_result();
     return (int)$r->fetch_assoc()['n'] > 0;
 }
+function kiColumnNullable($table, $column) {
+    $row = kiQuery('SELECT IS_NULLABLE AS is_nullable FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name=? AND column_name=?', [$table, $column])->get_result()->fetch_assoc();
+    return $row && strtoupper((string)$row['is_nullable']) === 'YES';
+}
+function kiImportDetachable() {
+    static $ready = null;
+    if ($ready === null) {
+        $ready = kiColumnNullable('katalog_import_audit', 'import_row_id')
+            && kiColumnNullable('katalog_import_sources', 'import_row_id')
+            && kiHasColumn('katalog_import_audit', 'source_key')
+            && kiHasColumn('katalog_import_audit', 'batch_id')
+            && kiHasColumn('katalog_import_audit', 'filename')
+            && kiHasColumn('katalog_import_audit', 'engine');
+    }
+    return $ready;
+}
 function kiReady() {
     $names = [
         'katalog_import_batches','katalog_import_rows','katalog_import_sources','katalog_import_audit',
@@ -288,24 +304,37 @@ function kiBatchDeleteInfo($id,$engine) {
     foreach($counts as $item){$total+=(int)$item['n'];if(!in_array($item['status'],['pending','deferred'],true))$decided+=(int)$item['n'];}
     $linked=(int)kiQuery('SELECT COUNT(*) AS n FROM katalog_import_sources s JOIN katalog_import_rows r ON r.source_key=s.source_key WHERE r.batch_id=?',[$id])->get_result()->fetch_assoc()['n'];
     $audited=(int)kiQuery('SELECT COUNT(*) AS n FROM katalog_import_audit a JOIN katalog_import_rows r ON r.id=a.import_row_id WHERE r.batch_id=?',[$id])->get_result()->fetch_assoc()['n'];
-    return ['total'=>$total,'decided'=>$decided,'linked'=>$linked,'audited'=>$audited];
+    return ['total'=>$total,'decided'=>$decided,'linked'=>$linked,'audited'=>$audited,'detachable'=>kiImportDetachable()];
 }
 function kiDeleteBatch($id,$engine) {
     global $conn;
     $batch=kiAssertBatch($id,$engine);
     $info=kiBatchDeleteInfo($id,$engine);
-    if($info['decided']>0||$info['linked']>0||$info['audited']>0) throw new InvalidArgumentException('Batch ini memiliki '.$info['decided'].' baris diputuskan, '.$info['linked'].' identitas tertaut, dan '.$info['audited'].' catatan audit. Hapus hanya batch yang belum diproses agar jejak audit tetap utuh.');
+    // Tanpa migrasi 019, jejak audit masih terikat pada baris sehingga batch
+    // yang sudah diproses tetap ditolak. Dengan migrasi, jejak dilepas dulu.
+    if(!$info['detachable']&&($info['decided']>0||$info['linked']>0||$info['audited']>0)) throw new InvalidArgumentException('Batch ini memiliki '.$info['decided'].' baris diputuskan, '.$info['linked'].' identitas tertaut, dan '.$info['audited'].' catatan audit. Jalankan migrations/019_import_detachable_audit.sql agar jejak dapat dipertahankan saat batch dihapus.');
+    $detachedAudit=0;$detachedSources=0;$orphans=0;
     $conn->begin_transaction();
     try {
+        if($info['detachable']) {
+            // Jejak yang menuju entri katalog yang sudah dihapus tidak berguna lagi.
+            $orphans+=(int)kiQuery('DELETE a FROM katalog_import_audit a JOIN katalog_import_rows r ON r.id=a.import_row_id LEFT JOIN katalog k ON k.id=a.katalog_id WHERE r.batch_id=? AND a.katalog_id IS NOT NULL AND k.id IS NULL',[$id])->affected_rows;
+            $orphans+=(int)kiQuery('DELETE s FROM katalog_import_sources s JOIN katalog_import_rows r ON r.source_key=s.source_key LEFT JOIN katalog k ON k.id=s.katalog_id WHERE r.batch_id=? AND k.id IS NULL',[$id])->affected_rows;
+            // Lepaskan sisanya dari baris batch; identitas & audit tetap terbaca.
+            $detachedAudit=(int)kiQuery('UPDATE katalog_import_audit a JOIN katalog_import_rows r ON r.id=a.import_row_id SET a.import_row_id=NULL WHERE r.batch_id=?',[$id])->affected_rows;
+            $detachedSources=(int)kiQuery('UPDATE katalog_import_sources s JOIN katalog_import_rows r ON r.source_key=s.source_key SET s.import_row_id=NULL WHERE r.batch_id=?',[$id])->affected_rows;
+        }
         kiQuery('DELETE FROM katalog_import_rows WHERE batch_id=?',[$id]);
         kiQuery('DELETE FROM katalog_import_batches WHERE id=? AND engine=?',[$id,$engine]);
-        logAktivitas($conn,'hapus','Hapus batch impor #'.(int)$id.' ('.$batch['filename'].') pada submodul '.$engine,0);
+        $detail=$info['detachable']?'; '.$detachedAudit.' catatan audit dan '.$detachedSources.' tautan identitas dipertahankan':'';
+        if($orphans)$detail.='; '.$orphans.' jejak yatim dibersihkan';
+        logAktivitas($conn,'hapus','Hapus batch impor #'.(int)$id.' ('.$batch['filename'].') pada submodul '.$engine.'; '.(int)$info['total'].' baris'.$detail,0);
         $conn->commit();
-        return ['id'=>(int)$id,'rows'=>(int)$info['total']];
     }catch(Throwable $e){$conn->rollback();throw $e;}
+    return ['id'=>(int)$id,'rows'=>(int)$info['total'],'decided'=>(int)$info['decided'],'linked'=>(int)$info['linked'],'audited'=>(int)$info['audited'],'detached_audit'=>$detachedAudit,'detached_sources'=>$detachedSources,'orphans_removed'=>$orphans,'detachable'=>$info['detachable']];
 }
 function kiRow($id,$lock=false,$engine=null) {
-    $sql='SELECT r.*,b.source_label,b.bibliography_id,b.engine AS batch_engine FROM katalog_import_rows r JOIN katalog_import_batches b ON b.id=r.batch_id WHERE r.id=?';
+    $sql='SELECT r.*,b.filename AS batch_filename,b.source_label,b.bibliography_id,b.engine AS batch_engine FROM katalog_import_rows r JOIN katalog_import_batches b ON b.id=r.batch_id WHERE r.id=?';
     $args=[$id];
     if($engine!==null){$sql.=' AND b.engine=?';$args[]=$engine;}
     $row=kiQuery($sql.($lock?' FOR UPDATE':''),$args)->get_result()->fetch_assoc();
@@ -341,7 +370,14 @@ function kiLocationHistory($input,$fallback=[],$sourceLabel='') {
     return $out;
 }
 function kiAudit($row,$action,$target,$before,$after,$decision) {
-    kiQuery('INSERT INTO katalog_import_audit(import_row_id,action,katalog_id,before_json,after_json,decision_json,username) VALUES(?,?,?,?,?,?,?)',[$row['id'],$action,$target,$before===null?null:kiJson($before),$after===null?null:kiJson($after),kiJson($decision),$_SESSION['username']]);
+    $payload=[$before===null?null:kiJson($before),$after===null?null:kiJson($after),kiJson($decision),$_SESSION['username']];
+    if(kiImportDetachable()) {
+        kiQuery('INSERT INTO katalog_import_audit(import_row_id,source_key,batch_id,filename,engine,action,katalog_id,before_json,after_json,decision_json,username) VALUES(?,?,?,?,?,?,?,?,?,?,?)',[
+            $row['id'],$row['source_key'],$row['batch_id'],$row['batch_filename']??null,$row['batch_engine'],$action,$target,$payload[0],$payload[1],$payload[2],$payload[3]
+        ]);
+    } else {
+        kiQuery('INSERT INTO katalog_import_audit(import_row_id,action,katalog_id,before_json,after_json,decision_json,username) VALUES(?,?,?,?,?,?,?)',[$row['id'],$action,$target,$payload[0],$payload[1],$payload[2],$payload[3]]);
+    }
     kiQuery('UPDATE katalog_import_rows SET status=?,target_id=?,reviewed_by=?,reviewed_at=NOW(),note=? WHERE id=?',[$action,$target,$_SESSION['username'],(string)($decision['note']??''),$row['id']]);
 }
 function kiEncoding($fields) {

@@ -9,7 +9,7 @@ Gunakan `import-examples/template-katalog-cetak.csv` sebagai Acuan kolom. Format
 3. Pilih referensi bibliografi, unggah CSV, baca pratinjau, lalu periksa pemetaan. **Simpan ke antrean** hanya menulis `katalog_import_batches` dan `katalog_import_rows`.
 4. Buka tiap entri untuk membandingkan draf dengan entri Kandaga. Pilih **Buat entri baru**, **Merge**, **Tunda**, atau **Lewati**.
 5. Setiap keputusan dicatat di `katalog_import_audit`; identitas sumber yang disetujui ditautkan di `katalog_import_sources` agar tidak diimpor ulang.
-6. Batch yang belum diproses dapat dihapus lewat tombol **Hapus batch belum diproses** setelah konfirmasi. Penghapusan ditolak bila ada baris yang sudah diputuskan, identitas tertaut, atau catatan audit.
+6. Batch dapat dihapus lewat tombol **Hapus batch** setelah konfirmasi. Entri katalog yang sudah dibuat tidak ikut terhapus; tautan identitas dan catatan audit tetap tersimpan bila `migrations/019_import_detachable_audit.sql` sudah dijalankan. Tanpa migrasi itu, batch yang sudah diputuskan tetap ditolak untuk dihapus. Baris **Tunda** yang belum diterapkan ikut hilang bersama CSV.
 
 ## Kolom wajib
 
@@ -61,4 +61,4 @@ Kolom `judul`, `kode_inventaris`, dan `kata_kunci` pada sebagian instalasi masih
 
 ## Prasyarat skema
 
-Importer memerlukan `migrations/005_catalog_import.sql`, `migrations/013_catalog_structure_stage1.sql`, dan `migrations/018_web_import_batch_separation.sql`. Mulai paket 3.1.71, ketiganya terdaftar di manifest Update Center dan dijalankan otomatis saat pembaruan; tombol **Periksa & Lengkapi** juga dapat menjalankannya pada instalasi yang sudah memakai manifest tersebut.
+Importer memerlukan `migrations/005_catalog_import.sql`, `migrations/013_catalog_structure_stage1.sql`, dan `migrations/018_web_import_batch_separation.sql`. Mulai paket 3.1.71, ketiganya terdaftar di manifest Update Center dan dijalankan otomatis saat pembaruan; tombol **Periksa & Lengkapi** juga dapat menjalankannya pada instalasi yang sudah memakai manifest tersebut. `migrations/019_import_detachable_audit.sql` bersifat opsional dan additif: tanpa itu, batch yang sudah diproses tidak bisa dihapus.

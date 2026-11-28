@@ -10,7 +10,7 @@ Panduan ini mulai dari **unggah CSV** di Goah → Metadata Importer → **Import
 4. Buka langkah **Moderasi** dan periksa setiap entri: lokasi penyimpanan sekarang, padanan bahasa/aksara/alas tulis, kandidat duplikat, struktur, identitas, serta **riwayat lokasi historis**.
 5. Pilih **Buat entri baru**, **Merge**, **Tunda**, atau **Lewati**. Centang konfirmasi wajib yang muncul; keputusan tanpa konfirmasi ditolak.
 6. Setiap keputusan tercatat di `katalog_import_audit` dan `user_logs`. Batch `web` tidak muncul pada daftar batch `catalog`, dan sebaliknya.
-7. Batch yang belum diproses dapat dihapus setelah konfirmasi. Penghapusan ditolak bila ada baris sudah diputuskan, identitas tertaut, atau catatan audit.
+7. Batch dapat dihapus setelah konfirmasi. Entri katalog yang sudah dibuat tidak ikut terhapus; tautan identitas (`katalog_import_sources`) dan catatan audit (`katalog_import_audit`) tetap tersimpan bila `migrations/019_import_detachable_audit.sql` sudah dijalankan. Tanpa migrasi itu, batch yang sudah diputuskan tetap ditolak untuk dihapus. Baris **Tunda** yang belum diterapkan ikut hilang bersama CSV.
 
 ## Kolom CSV
 

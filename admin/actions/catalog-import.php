@@ -7,7 +7,7 @@ $mutating=in_array($action,['inspect','upload','review','delete_batch'],true);
 if($mutating)kandagaPost(true);
 try {
     if($action==='init') {
-        kandagaJson(true,'Konfigurasi importer.',['ready'=>kiReady(),'fields'=>kiFields(),'masters'=>kiMasters(),'batches'=>kiReady()?kiBatches(KI_ENGINE_CATALOG):[]]);
+        kandagaJson(true,'Konfigurasi importer.',['ready'=>kiReady(),'fields'=>kiFields(),'masters'=>kiMasters(),'batches'=>kiReady()?kiBatches(KI_ENGINE_CATALOG):[],'batch_delete_detachable'=>kiImportDetachable()]);
     }
     if(!kiReady())throw new InvalidArgumentException('Jalankan migrations/005_catalog_import.sql, migrations/013_catalog_structure_stage1.sql, dan migrations/018_web_import_batch_separation.sql pada database Kandaga dahulu.');
     if(in_array($action,['inspect','upload'],true)) {
@@ -53,7 +53,9 @@ try {
         $target=filter_var($_GET['target_id']??0,FILTER_VALIDATE_INT);
         if($target===false||$target<0)throw new InvalidArgumentException('ID tujuan tidak valid.');
         $snapshot=$target?kiSnapshot($target):null;
-        $audit=kiQuery('SELECT action,katalog_id,username,created_at,decision_json FROM katalog_import_audit WHERE import_row_id=? ORDER BY id DESC',[$id])->get_result()->fetch_all(MYSQLI_ASSOC);
+        $auditSql='SELECT action,katalog_id,username,created_at,decision_json FROM katalog_import_audit WHERE import_row_id=?';$auditArgs=[$id];
+        if(kiImportDetachable()){$auditSql.=' OR source_key=?';$auditArgs[]=$row['source_key'];}
+        $audit=kiQuery($auditSql.' ORDER BY id DESC',$auditArgs)->get_result()->fetch_all(MYSQLI_ASSOC);
         foreach($audit as &$item){$d=json_decode($item['decision_json'],true);$item['note']=$d['note']??'';unset($item['decision_json']);}unset($item);
         $duplicate=kiCandidates($row['draft'],$location,true);
         kandagaJson(true,'Pratinjau.',['row'=>$row,'suggestions'=>$suggestions,'candidates'=>$candidates,'duplicate'=>count($duplicate)>0,'linked'=>kiLinked($row['source_key']),'snapshot'=>$snapshot,'audit'=>$audit]);
@@ -67,7 +69,9 @@ try {
         $batch=filter_var($_POST['batch_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]]);
         if(!$batch)throw new InvalidArgumentException('ID batch tidak valid.');
         $result=kiDeleteBatch($batch,KI_ENGINE_CATALOG);
-        kandagaJson(true,'Batch katalog cetak dihapus; '.$result['rows'].' baris antrean dibersihkan.',$result);
+        $message='Batch katalog cetak dihapus; '.$result['rows'].' baris antrean dibersihkan.';
+        if($result['detachable'])$message.=' '.$result['detached_audit'].' catatan audit dan '.$result['detached_sources'].' tautan identitas tetap tersimpan.';
+        kandagaJson(true,$message,$result);
     }
     kandagaJson(false,'Aksi tidak dikenal.',[],404);
 }catch(JsonException $e){kandagaJson(false,'Format JSON tidak valid.',[],422);}catch(Throwable $e){kandagaFailure($e);}

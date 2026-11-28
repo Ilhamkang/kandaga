@@ -41,7 +41,7 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
         <div class="ds-progress mb-3"><div class="d-flex justify-content-between small mb-1"><span>Keputusan final dalam batch</span><span id="ds-progress-text">0%</span></div><div class="progress"><div id="ds-progress-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:0%"></div></div></div>
         <div class="row g-2 align-items-end"><div class="mb-3 col-md-8"><label for="ds-batch">Batch impor</label><select id="ds-batch" class="form-select"></select></div><div class="mb-3 col-md-4"><label for="ds-filter">Status</label><select id="ds-filter" class="form-select"><option value="all">Semua</option><option value="pending">Menunggu</option><option value="deferred">Ditunda</option><option value="created">Dibuat</option><option value="merged">Digabung</option><option value="rejected">Dilewati</option></select></div></div>
         <button id="ds-refresh" type="button" class="btn btn-sm btn-outline-secondary mb-3"><i class="fa-solid fa-rotate me-1"></i>Muat ulang antrean</button>
-        <button id="ds-delete-batch" type="button" class="btn btn-sm btn-outline-danger mb-3"><i class="fa-solid fa-trash me-1"></i>Hapus batch belum diproses</button>
+        <button id="ds-delete-batch" type="button" class="btn btn-sm btn-outline-danger mb-3"><i class="fa-solid fa-trash me-1"></i>Hapus batch</button>
         <div id="ds-counts" class="mb-2 small"></div>
         <div id="ds-queue" class="table-responsive"></div>
         <div id="ds-pagination" class="d-flex justify-content-between align-items-center"></div>
@@ -79,4 +79,4 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #dreamsea-importer .ds-summary button.is-active{background:#eff6ff;border-color:#2563eb}
 @media(max-width:767.98px){#dreamsea-importer .ds-step{padding:8px 4px;text-align:center}#dreamsea-importer .ds-step span{position:static;margin:0 auto 5px}#dreamsea-importer .ds-step small{display:none}#dreamsea-importer .ds-step strong{font-size:.75rem}#dreamsea-importer .ds-summary{grid-template-columns:repeat(2,minmax(0,1fr))}#ds-modal .modal-dialog{margin:8px}}
 </style>
-<script src="<?= BASE_URL ?>/admin/assets/js/dreamsea-importer.js?v=3.1.71-web-history"></script>
+<script src="<?= BASE_URL ?>/admin/assets/js/dreamsea-importer.js?v=3.1.72-web-detachable"></script>

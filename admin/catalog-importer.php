@@ -48,7 +48,7 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
    <div class="ki-progress mb-3"><div class="d-flex justify-content-between small mb-1"><span>Keputusan final dalam batch</span><span id="ki-progress-text">0%</span></div><div class="progress"><div id="ki-progress-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:0%"></div></div></div>
    <div class="row g-2 align-items-end"><div class="mb-3 col-md-8"><label for="ki-batch">Batch impor</label><select id="ki-batch" class="form-select"></select></div><div class="mb-3 col-md-4"><label for="ki-filter">Status moderasi</label><select id="ki-filter" class="form-select"><option value="all">Semua</option><option value="pending">Menunggu</option><option value="deferred">Ditunda</option><option value="created">Dibuat</option><option value="merged">Digabung</option><option value="rejected">Dilewati</option></select></div></div>
    <button id="ki-refresh" type="button" class="btn btn-sm btn-outline-secondary mb-3"><i class="fa-solid fa-rotate me-1"></i>Muat ulang antrean</button>
-    <button id="ki-delete-batch" type="button" class="btn btn-sm btn-outline-danger mb-3"><i class="fa-solid fa-trash me-1"></i>Hapus batch belum diproses</button>
+    <button id="ki-delete-batch" type="button" class="btn btn-sm btn-outline-danger mb-3"><i class="fa-solid fa-trash me-1"></i>Hapus batch</button>
    <div id="ki-counts" class="mb-2 small"></div><div id="ki-queue" class="table-responsive"></div><div id="ki-pagination" class="d-flex justify-content-between align-items-center"></div>
    </div>
   </div>
@@ -88,4 +88,4 @@ if (!defined('KANDAGA_GOAH_PANEL')) {
 #ki-modal .ki-review-toolbar{display:flex;gap:8px;flex-wrap:wrap;background:#f8fafc}
 @media(max-width:767.98px){#catalog-importer .ki-step{padding:8px 4px;text-align:center}#catalog-importer .ki-step span{position:static;margin:0 auto 5px}#catalog-importer .ki-step small{display:none}#catalog-importer .ki-step strong{font-size:.75rem;overflow-wrap:normal;word-break:normal}#catalog-importer .ki-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
-<script src="<?= BASE_URL ?>/admin/assets/js/catalog-importer.js?v=3.1.71-catalog-history"></script>
+<script src="<?= BASE_URL ?>/admin/assets/js/catalog-importer.js?v=3.1.72-catalog-detachable"></script>

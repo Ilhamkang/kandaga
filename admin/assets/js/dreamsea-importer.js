@@ -135,7 +135,10 @@
   }
   async function deleteBatch(){
     const id=Number($id('ds-batch').value);if(!id)throw new Error('Pilih batch Importer Web terlebih dahulu.');
-    if(!window.confirm('Hapus batch Importer Web #'+id+' beserta seluruh baris antreannya? Baris yang sudah diputuskan, identitas tertaut, dan catatan audit membuat penghapusan ditolak.'))return;
+    const text=config?.batch_delete_detachable
+      ? 'Hapus batch Importer Web #'+id+' beserta seluruh baris antreannya? Entri katalog yang sudah dibuat tetap tersimpan, termasuk tautan identitas dan catatan audit. Baris yang ditunda dan belum diterapkan akan ikut hilang.'
+      : 'Hapus batch Importer Web #'+id+' beserta seluruh baris antreannya? Baris yang sudah diputuskan, identitas tertaut, dan catatan audit membuat penghapusan ditolak.';
+    if(!window.confirm(text))return;
     const fd=new FormData();fd.set('batch_id',id);
     const result=await api('delete_batch',{},fd);current=null;preview=null;page=1;await init();message(result.message);
   }
